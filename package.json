@@ -1,0 +1,40 @@
+{
+  "name": "awesome-graphql-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "prettier": {
+    "printWidth": 90,
+    "useTabs": true,
+    "semi": false,
+    "singleQuote": true,
+    "quoteProps": "consistent",
+    "trailingComma": "all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "eslint": "^6.6.0",
+    "eslint-config-react-app": "^5.0.2",
+    "graphql-tag": "^2.10.1",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "@types/node-fetch": "^2.5.3",
+    "graphql": "^14.5.8"
+  }
+}
