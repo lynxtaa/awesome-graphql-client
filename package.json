@@ -15,6 +15,7 @@
     "prebuild": "rimraf dist/",
     "build": "tsc",
     "lint": "eslint --ext .js,.ts src/",
+    "release": "standard-version",
     "check-pretty": "prettier \"src/**/*\" \"*.{js,json}\" --check",
     "test": "jest"
   },
@@ -72,6 +73,7 @@
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "rimraf": "^3.0.2",
+    "standard-version": "^8.0.1",
     "typescript": "^3.9.6",
     "whatwg-fetch": "^3.2.0"
   }
