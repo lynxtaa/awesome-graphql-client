@@ -1,15 +1,17 @@
 {
   "name": "awesome-graphql-client",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "description": "GraphQL Client with file upload support for NodeJS and browser",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "src",
-    "LICENSE"
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
+    "prepublishOnly": "npm run build",
     "prebuild": "rimraf dist/",
     "build": "tsc",
     "lint": "eslint --ext .js,.ts src/",
@@ -22,7 +24,15 @@
     "semi": false,
     "singleQuote": true,
     "quoteProps": "consistent",
-    "trailingComma": "all"
+    "trailingComma": "all",
+    "overrides": [
+      {
+        "files": "*.md",
+        "options": {
+          "useTabs": false
+        }
+      }
+    ]
   },
   "jest": {
     "clearMocks": true,
