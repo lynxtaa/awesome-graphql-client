@@ -5,11 +5,10 @@
   "main": "index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "prebuild": "rimraf dist/",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "lint": "eslint --ext .js,.ts src/",
+    "test": "jest"
   },
   "prettier": {
     "printWidth": 90,
@@ -19,22 +18,42 @@
     "quoteProps": "consistent",
     "trailingComma": "all"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/jest": "^24.0.23",
-    "eslint": "^6.6.0",
-    "eslint-config-react-app": "^5.0.2",
-    "graphql-tag": "^2.10.1",
-    "husky": "^3.1.0",
-    "jest": "^24.9.0",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^2.0.1",
-    "typescript": "^3.7.2"
+  "jest": {
+    "clearMocks": true,
+    "rootDir": "src",
+    "coverageDirectory": "<rootDir>/../coverage",
+    "setupFiles": [
+      "<rootDir>/test/fetch-polyfill.ts"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTests.ts"
+    ]
   },
+  "keywords": [],
+  "author": "Alex Kondratyuk",
+  "license": "ISC",
   "dependencies": {
-    "@types/node-fetch": "^2.5.3",
-    "graphql": "^14.5.8"
+    "extract-files": "^8.1.0",
+    "graphql": "^15.3.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/extract-files": "^8.1.0",
+    "@types/jest": "^26.0.4",
+    "@types/node-fetch": "^2.5.7",
+    "@typescript-eslint/eslint-plugin": "^3.6.0",
+    "@typescript-eslint/parser": "^3.6.0",
+    "babel-jest": "^26.1.0",
+    "eslint": "^7.4.0",
+    "graphql-tag": "^2.10.4",
+    "husky": "^4.2.5",
+    "jest": "^26.1.0",
+    "msw": "^0.19.5",
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.6",
+    "whatwg-fetch": "^3.2.0"
   }
 }
