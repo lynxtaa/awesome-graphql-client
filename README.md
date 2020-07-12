@@ -14,7 +14,11 @@ GraphQL Client with file upload support for NodeJS and browser
 ## Install
 
 ```sh
+# Install client
 npm install awesome-graphql-client
+
+# Install graphql if not present
+npm install graphql
 ```
 
 ## Quick Start
