@@ -7,12 +7,13 @@
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
-		"module": "esnext",
+		"module": "CommonJS",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"outDir": "dist",
 		"declaration": true,
-		"declarationMap": true
+		"declarationMap": true,
+		"noUnusedLocals": true
 	},
 	"include": ["src"]
 }

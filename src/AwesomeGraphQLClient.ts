@@ -1,6 +1,6 @@
 import { extractFiles } from 'extract-files'
 import { DocumentNode } from 'graphql'
-import { print } from 'graphql/language/printer'
+import { print } from 'graphql'
 
 import GraphQLRequestError from './GraphQLRequestError'
 import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'
@@ -8,26 +8,20 @@ import isResponseJSON from './util/isResponseJSON'
 
 export type GraphQLQuery = string | DocumentNode
 
-type FetchOptions = Omit<RequestInit, 'headers' | 'method' | 'body'> & {
-	headers?: Record<string, string>
-}
-
-type FetchFunction = (url: string, options?: RequestInit) => Promise<Response>
-
-interface ClientOptions {
-	endpoint: string
-	fetch?: FetchFunction
-	FormData?: any
-	fetchOptions?: FetchOptions
-}
-
-export default class AwesomeGraphQLClient {
-	fetch: FetchFunction
+export default class AwesomeGraphQLClient<
+	FetchOptions extends { headers?: any } = RequestInit
+> {
+	fetch: (url: string, options?: FetchOptions) => Promise<any>
 	FormData: any
 	endpoint: string
-	fetchOptions: FetchOptions
+	fetchOptions?: FetchOptions
 
-	constructor(config: ClientOptions) {
+	constructor(config: {
+		endpoint: string
+		fetch?: (url: string, options?: any) => Promise<any>
+		FormData?: any
+		fetchOptions?: FetchOptions
+	}) {
 		if (!config.endpoint) {
 			throw new Error('endpoint is required')
 		}
@@ -40,7 +34,7 @@ export default class AwesomeGraphQLClient {
 
 		this.endpoint = config.endpoint
 		this.fetch = config.fetch || fetch
-		this.fetchOptions = config.fetchOptions || {}
+		this.fetchOptions = config.fetchOptions
 		this.FormData =
 			config.FormData || (typeof FormData !== 'undefined' ? FormData : undefined)
 	}
@@ -85,6 +79,10 @@ export default class AwesomeGraphQLClient {
 		return form
 	}
 
+	setFetchOptions(fetchOptions: FetchOptions): void {
+		this.fetchOptions = fetchOptions
+	}
+
 	async rawRequest<
 		TData extends Record<string, unknown>,
 		TVariables extends Record<string, unknown> = Record<string, unknown>
@@ -100,7 +98,7 @@ export default class AwesomeGraphQLClient {
 
 			const body = this.createRequestBody(queryAsString, variables)
 
-			const response = await this.fetch(this.endpoint, {
+			const response: Response = await this.fetch(this.endpoint, {
 				...this.fetchOptions,
 				...fetchOptions,
 				method: 'POST',
@@ -110,7 +108,7 @@ export default class AwesomeGraphQLClient {
 					...fetchOptions?.headers,
 					...(typeof body === 'string' ? { 'Content-Type': 'application/json' } : {}),
 				},
-			})
+			} as any)
 
 			if (!response.ok) {
 				if (isResponseJSON(response)) {

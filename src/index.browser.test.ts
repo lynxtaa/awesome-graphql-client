@@ -1,7 +1,15 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import gql from 'graphql-tag'
 
 import { AwesomeGraphQLClient } from './index'
 import { server, graphql, rest } from './test/server'
+
+if (typeof fetch === 'undefined') {
+	require('whatwg-fetch')
+}
 
 it('sends GraphQL request without variables', async () => {
 	type GetUsers = {
@@ -133,6 +141,52 @@ it('send GraphQL Upload request', async () => {
 	})
 
 	expect(data).toEqual({ uploadFile: true })
+})
+
+it('sends additional headers', async () => {
+	type GetUsers = {
+		users: { id: number; login: string }[]
+	}
+
+	const users = { users: [{ id: 10, login: 'admin' }] }
+
+	let headers: Headers = new Headers()
+
+	server.use(
+		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => {
+			headers = req.headers
+
+			return res(ctx.data(users))
+		}),
+	)
+
+	const query = gql`
+		query GetUsers {
+			users {
+				id
+				login
+			}
+		}
+	`
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: '/api/graphql',
+		fetchOptions: { headers: { 'X-Secret': 'secret' } },
+	})
+
+	await client.request<GetUsers>(query)
+
+	expect(headers.get('X-Secret')).toBe('secret')
+
+	client.setFetchOptions({ headers: { 'X-Secret': 'secret-2' } })
+
+	await client.request<GetUsers>(query)
+
+	expect(headers.get('X-Secret')).toBe('secret-2')
+
+	await client.request<GetUsers>(query, {}, { headers: { 'X-Secret': 'secret-3' } })
+
+	expect(headers.get('X-Secret')).toBe('secret-3')
 })
 
 it('throw an error in no endpoint provided', () => {

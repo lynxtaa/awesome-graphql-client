@@ -13,6 +13,7 @@
 		"@typescript-eslint/explicit-module-boundary-types": [
 			"warn",
 			{ "allowArgumentsExplicitlyTypedAsAny": true }
-		]
+		],
+		"@typescript-eslint/no-extra-semi": "off"
 	}
 }
