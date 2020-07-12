@@ -31,7 +31,7 @@
   },
   "keywords": [],
   "author": "Alex Kondratyuk",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "extract-files": "^8.1.0",
     "graphql": "^15.3.0"
