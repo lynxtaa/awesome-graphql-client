@@ -1,13 +1,13 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "ESNext",
 		"lib": ["ESNext", "DOM"],
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
-		"module": "CommonJS",
+		"module": "ESNext",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"outDir": "dist",
