@@ -26,7 +26,7 @@
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "rimraf dist/",
-    "build": "microbundle --globals graphql/language/printer=GraphQLPrinter",
+    "build": "microbundle",
     "lint": "eslint --ext .js,.ts src/",
     "release": "standard-version",
     "check-pretty": "prettier \"src/**/*\" \"*.{js,json}\" --check",
@@ -55,9 +55,6 @@
     "setupFilesAfterEnv": [
       "<rootDir>/jest/setupTests.ts"
     ]
-  },
-  "peerDependencies": {
-    "graphql": "14.x || 15.x"
   },
   "dependencies": {
     "extract-files": "^8.1.0"

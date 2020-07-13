@@ -2,8 +2,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 import { extractFiles } from 'extract-files'
-import { DocumentNode } from 'graphql/language/ast'
-import { print } from 'graphql/language/printer'
 
 import formatGetRequestUrl from './util/formatGetRequestUrl'
 import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'
@@ -11,15 +9,15 @@ import isResponseJSON from './util/isResponseJSON'
 
 import GraphQLRequestError from './GraphQLRequestError'
 
-export type GraphQLQuery = string | DocumentNode
-
 export default class AwesomeGraphQLClient<
+	TQuery = string,
 	FetchOptions extends { [key: string]: any } = RequestInit
 > {
-	fetch: (url: string, options?: FetchOptions) => Promise<any>
-	FormData: any
 	endpoint: string
+	fetch: (url: string, options?: FetchOptions) => Promise<any>
 	fetchOptions?: FetchOptions
+	formatQuery?: (query: TQuery) => string
+	FormData: any
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -30,6 +28,8 @@ export default class AwesomeGraphQLClient<
 		FormData?: any
 		/** Overrides for fetch options */
 		fetchOptions?: FetchOptions
+		/** Custom query formatter */
+		formatQuery?: (query: TQuery) => string
 	}) {
 		if (!config.endpoint) {
 			throw new Error('endpoint is required')
@@ -44,8 +44,11 @@ export default class AwesomeGraphQLClient<
 		this.endpoint = config.endpoint
 		this.fetch = config.fetch || fetch
 		this.fetchOptions = config.fetchOptions
+
 		this.FormData =
 			config.FormData || (typeof FormData !== 'undefined' ? FormData : undefined)
+
+		this.formatQuery = config.formatQuery
 	}
 
 	private createRequestBody(query: string, variables?: {}): string | FormData {
@@ -118,14 +121,18 @@ export default class AwesomeGraphQLClient<
 	 * @param fetchOptions overrides for fetch options
 	 */
 	async requestSafe<TData extends {}, TVariables extends {} = {}>(
-		query: GraphQLQuery,
+		query: TQuery,
 		variables?: TVariables,
 		fetchOptions?: FetchOptions,
 	): Promise<
 		{ data: TData; response: Response } | { error: GraphQLRequestError | Error }
 	> {
 		try {
-			query = typeof query === 'string' ? query : print(query)
+			const queryAsString = this.formatQuery ? this.formatQuery(query) : query
+
+			if (typeof queryAsString !== 'string') {
+				throw new Error('Query should be a string, otherwise provide formatQuery option')
+			}
 
 			const options = {
 				method: 'POST',
@@ -142,12 +149,12 @@ export default class AwesomeGraphQLClient<
 			if (options.method.toUpperCase() === 'GET') {
 				const url = formatGetRequestUrl({
 					endpoint: this.endpoint,
-					query,
+					query: queryAsString,
 					variables,
 				})
 				response = await this.fetch(url, options as any)
 			} else {
-				const body = this.createRequestBody(query, variables)
+				const body = this.createRequestBody(queryAsString, variables)
 
 				response = await this.fetch(this.endpoint, {
 					...options,
@@ -165,7 +172,7 @@ export default class AwesomeGraphQLClient<
 
 					if (errors?.[0]?.message) {
 						throw new GraphQLRequestError({
-							query,
+							query: queryAsString,
 							variables,
 							response,
 							message: errors[0].message,
@@ -174,7 +181,7 @@ export default class AwesomeGraphQLClient<
 				}
 
 				throw new GraphQLRequestError({
-					query,
+					query: queryAsString,
 					variables,
 					response,
 					message: `Http Status ${response.status}`,
@@ -185,7 +192,7 @@ export default class AwesomeGraphQLClient<
 
 			if (errors?.[0]) {
 				throw new GraphQLRequestError({
-					query,
+					query: queryAsString,
 					variables,
 					response,
 					message: errors[0].message,
@@ -209,7 +216,7 @@ export default class AwesomeGraphQLClient<
 	 * @param fetchOptions overrides for fetch options
 	 */
 	async request<TData extends {}, TVariables extends {} = {}>(
-		query: GraphQLQuery,
+		query: TQuery,
 		variables?: TVariables,
 		fetchOptions?: FetchOptions,
 	): Promise<TData> {

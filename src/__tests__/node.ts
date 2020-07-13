@@ -2,6 +2,7 @@
  * @jest-environment node
  */
 
+import { print, DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import FormData from 'form-data'
 import { createReadStream } from 'fs'
@@ -10,6 +11,8 @@ import { join } from 'path'
 
 import { AwesomeGraphQLClient } from '../index'
 import { server, rest } from '../jest/server'
+
+const formatQuery = (query: DocumentNode) => print(query)
 
 it('throws if no Fetch polyfill provided', () => {
 	expect(() => new AwesomeGraphQLClient({ endpoint: '/' })).toThrow(
@@ -28,6 +31,7 @@ it('throws on file upload mutation if no FormData polyfill provided', async () =
 	const client = new AwesomeGraphQLClient({
 		endpoint: 'http://localhost:1234/api/graphql',
 		fetch,
+		formatQuery,
 	})
 
 	const query = gql`
@@ -61,6 +65,7 @@ it('uses provided polyfills', async () => {
 		endpoint: 'http://localhost:1234/api/graphql',
 		fetch,
 		FormData,
+		formatQuery,
 	})
 
 	const query = gql`

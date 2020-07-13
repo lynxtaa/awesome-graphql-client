@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import { print, DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 
 import { AwesomeGraphQLClient } from '../index'
@@ -10,6 +11,8 @@ import { server, graphql, rest } from '../jest/server'
 if (typeof fetch === 'undefined') {
 	require('whatwg-fetch')
 }
+
+const formatQuery = (query: DocumentNode) => print(query)
 
 it('sends GraphQL request without variables', async () => {
 	interface GetUsers {
@@ -22,7 +25,7 @@ it('sends GraphQL request without variables', async () => {
 		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', formatQuery })
 
 	const query = gql`
 		query GetUsers {
@@ -56,7 +59,7 @@ it('sends GraphQL request with variables', async () => {
 		}),
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', formatQuery })
 
 	const query = gql`
 		query GetUser {
@@ -86,6 +89,7 @@ it('sends GraphQL GET request without variables', async () => {
 	const client = new AwesomeGraphQLClient({
 		endpoint: 'http://localhost/graphql',
 		fetchOptions: { method: 'GET' },
+		formatQuery,
 	})
 
 	const query = gql`
@@ -120,7 +124,10 @@ it('sends GraphQL GET request with variables', async () => {
 		}),
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: 'http://localhost/api/graphql' })
+	const client = new AwesomeGraphQLClient({
+		endpoint: 'http://localhost/api/graphql',
+		formatQuery,
+	})
 
 	const query = gql`
 		query GetUser {
@@ -203,7 +210,7 @@ it('send GraphQL Upload request', async () => {
 		}),
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', formatQuery })
 
 	const query = gql`
 		mutation UploadFile($file: Upload!) {
@@ -247,6 +254,7 @@ it('sends additional headers', async () => {
 	const client = new AwesomeGraphQLClient({
 		endpoint: '/api/graphql',
 		fetchOptions: { headers: { 'X-Secret': 'secret' } },
+		formatQuery,
 	})
 
 	await client.request<GetUsers>(query)
@@ -275,7 +283,7 @@ it('throw an error in no endpoint provided', () => {
 it('throws an error if response is not OK', async () => {
 	server.use(rest.post('*', (req, res, ctx) => res(ctx.status(404))))
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', formatQuery })
 
 	const query = gql`
 		query GetUsers {
@@ -298,7 +306,7 @@ it('throws an error if response is not OK and has errors', async () => {
 		),
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', formatQuery })
 
 	const query = gql`
 		query GetUsers {
@@ -321,7 +329,7 @@ it('throws an error if response is OK but has errors', async () => {
 		),
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', formatQuery })
 
 	const query = gql`
 		query GetUsers {
