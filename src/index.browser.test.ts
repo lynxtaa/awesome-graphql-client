@@ -72,6 +72,74 @@ it('sends GraphQL request with variables', async () => {
 	expect(data).toEqual({ user: { id: 10, login: 'admin' } })
 })
 
+it('sends GraphQL GET request without variables', async () => {
+	interface GetUsers {
+		users: { id: number; login: string }[]
+	}
+
+	const users = { users: [{ id: 10, login: 'admin' }] }
+
+	server.use(
+		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
+	)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: 'http://localhost/graphql',
+		fetchOptions: { method: 'GET' },
+	})
+
+	const query = gql`
+		query GetUsers {
+			users {
+				id
+				login
+			}
+		}
+	`
+
+	const data = await client.request<GetUsers>(query)
+
+	expect(data).toEqual(users)
+})
+
+it('sends GraphQL GET request with variables', async () => {
+	interface GetUser {
+		user: { id: number; login: string } | null
+	}
+
+	interface GetUserVariables {
+		id: number
+	}
+
+	const users = [{ id: 10, login: 'admin' }]
+
+	server.use(
+		graphql.query<GetUser, GetUserVariables>('GetUser', (req, res, ctx) => {
+			const user = users.find((user) => user.id === req.variables.id) || null
+			return res(ctx.data({ user }))
+		}),
+	)
+
+	const client = new AwesomeGraphQLClient({ endpoint: 'http://localhost/api/graphql' })
+
+	const query = gql`
+		query GetUser {
+			user {
+				id
+				login
+			}
+		}
+	`
+
+	const data = await client.request<GetUser, GetUserVariables>(
+		query,
+		{ id: 10 },
+		{ method: 'GET' },
+	)
+
+	expect(data).toEqual({ user: { id: 10, login: 'admin' } })
+})
+
 it('sends GraphQL request as string', async () => {
 	interface GetUsers {
 		users: { id: number; login: string }[]

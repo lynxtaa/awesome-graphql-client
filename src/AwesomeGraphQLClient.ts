@@ -5,14 +5,16 @@ import { extractFiles } from 'extract-files'
 import { DocumentNode } from 'graphql'
 import { print } from 'graphql'
 
-import GraphQLRequestError from './GraphQLRequestError'
+import formatGetRequestUrl from './util/formatGetRequestUrl'
 import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'
 import isResponseJSON from './util/isResponseJSON'
+
+import GraphQLRequestError from './GraphQLRequestError'
 
 export type GraphQLQuery = string | DocumentNode
 
 export default class AwesomeGraphQLClient<
-	FetchOptions extends { headers?: any } = RequestInit
+	FetchOptions extends { [key: string]: any } = RequestInit
 > {
 	fetch: (url: string, options?: FetchOptions) => Promise<any>
 	FormData: any
@@ -116,21 +118,39 @@ export default class AwesomeGraphQLClient<
 		{ data: TData; response: Response } | { error: GraphQLRequestError | Error }
 	> {
 		try {
-			const queryAsString: string = typeof query === 'string' ? query : print(query)
+			query = typeof query === 'string' ? query : print(query)
 
-			const body = this.createRequestBody(queryAsString, variables)
-
-			const response: Response = await this.fetch(this.endpoint, {
+			const options = {
+				method: 'POST',
 				...this.fetchOptions,
 				...fetchOptions,
-				method: 'POST',
-				body,
 				headers: {
 					...this.fetchOptions?.headers,
 					...fetchOptions?.headers,
-					...(typeof body === 'string' ? { 'Content-Type': 'application/json' } : {}),
 				},
-			} as any)
+			}
+
+			let response: Response
+
+			if (options.method.toUpperCase() === 'GET') {
+				const url = formatGetRequestUrl({
+					endpoint: this.endpoint,
+					query,
+					variables,
+				})
+				response = await this.fetch(url, options as any)
+			} else {
+				const body = this.createRequestBody(query, variables)
+
+				response = await this.fetch(this.endpoint, {
+					...options,
+					body,
+					headers:
+						typeof body === 'string'
+							? { ...options.headers, 'Content-Type': 'application/json' }
+							: options.headers,
+				} as any)
+			}
 
 			if (!response.ok) {
 				if (isResponseJSON(response)) {
@@ -138,7 +158,7 @@ export default class AwesomeGraphQLClient<
 
 					if (errors?.[0]?.message) {
 						throw new GraphQLRequestError({
-							query: queryAsString,
+							query,
 							variables,
 							response,
 							message: errors[0].message,
@@ -147,7 +167,7 @@ export default class AwesomeGraphQLClient<
 				}
 
 				throw new GraphQLRequestError({
-					query: queryAsString,
+					query,
 					variables,
 					response,
 					message: `Http Status ${response.status}`,
@@ -158,7 +178,7 @@ export default class AwesomeGraphQLClient<
 
 			if (errors?.[0]) {
 				throw new GraphQLRequestError({
-					query: queryAsString,
+					query,
 					variables,
 					response,
 					message: errors[0].message,
