@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
 import { extractFiles } from 'extract-files'
-import { DocumentNode } from 'graphql'
-import { print } from 'graphql'
+import { DocumentNode } from 'graphql/language/ast'
+import { print } from 'graphql/language/printer'
 
 import formatGetRequestUrl from './util/formatGetRequestUrl'
 import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'

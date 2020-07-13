@@ -50,7 +50,7 @@
     "rootDir": "src",
     "coverageDirectory": "<rootDir>/../coverage",
     "setupFilesAfterEnv": [
-      "<rootDir>/test/setupTests.ts"
+      "<rootDir>/jest/setupTests.ts"
     ]
   },
   "peerDependencies": {

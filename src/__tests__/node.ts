@@ -3,13 +3,13 @@
  */
 
 import gql from 'graphql-tag'
+import FormData from 'form-data'
 import { createReadStream } from 'fs'
+import fetch from 'node-fetch'
 import { join } from 'path'
 
-import { AwesomeGraphQLClient } from './index'
-import FormData from 'form-data'
-import fetch from 'node-fetch'
-import { server, rest } from './test/server'
+import { AwesomeGraphQLClient } from '../index'
+import { server, rest } from '../jest/server'
 
 it('throws if no Fetch polyfill provided', () => {
 	expect(() => new AwesomeGraphQLClient({ endpoint: '/' })).toThrow(
@@ -38,7 +38,7 @@ it('throws on file upload mutation if no FormData polyfill provided', async () =
 
 	await expect(
 		client.request<UploadFile, UploadFileVariables>(query, {
-			file: createReadStream(join(__dirname, './index.ts')),
+			file: createReadStream(join(__dirname, '../index.ts')),
 		}),
 	).rejects.toThrow(/FormData must be polyfilled/)
 })
@@ -70,7 +70,7 @@ it('uses provided polyfills', async () => {
 	`
 
 	const data = await client.request<UploadFile, UploadFileVariables>(query, {
-		file: createReadStream(join(__dirname, './index.ts')),
+		file: createReadStream(join(__dirname, '../index.ts')),
 	})
 
 	expect(data).toEqual({ uploadFile: true })

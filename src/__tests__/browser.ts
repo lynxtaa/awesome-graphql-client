@@ -4,8 +4,8 @@
 
 import gql from 'graphql-tag'
 
-import { AwesomeGraphQLClient } from './index'
-import { server, graphql, rest } from './test/server'
+import { AwesomeGraphQLClient } from '../index'
+import { server, graphql, rest } from '../jest/server'
 
 if (typeof fetch === 'undefined') {
 	require('whatwg-fetch')
