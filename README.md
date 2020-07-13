@@ -50,17 +50,15 @@ const UploadUserAvatar = gql`
   }
 `
 
-const file = document.querySelector('input#avatar').files[0]
-
 client
   .request(GetUsers)
   .then((data) =>
     client.request(UploadUserAvatar, {
       id: data.users[0].id,
-      file,
+      file: document.querySelector('input#avatar').files[0],
     }),
   )
-  .then((data) => console.log(data))
+  .then((data) => console.log(data.updateUser.id))
   .catch((error) => console.log(error))
 ```
 
@@ -74,10 +72,9 @@ import gql from 'graphql-tag'
 import fetch from 'node-fetch'
 
 const client = new AwesomeGraphQLClient({
-  endpoint: '/graphql',
+  endpoint: 'http://localhost:8080/graphql',
   fetch,
-  // FormData is required only if you're using file upload
-  FormData,
+  FormData, // Required only if you're using file upload
 })
 
 const UploadUserAvatar = gql`
@@ -90,19 +87,76 @@ const UploadUserAvatar = gql`
 
 client
   .request(UploadUserAvatar, { file: createReadStream('./avatar.img'), userId: 10 })
-  .then((data) => console.log(data))
+  .then((data) => console.log(data.updateUser.id))
   .catch((error) => console.log(error))
 ```
 
-### Typescript
+## Table of Contents
+
+- API
+  - [AwesomeGraphQLClient](#AwesomeGraphQLClient)
+  - [GraphQLRequestError](#GraphQLRequestError)
+- Examples
+  - [Typescript](#Typescript)
+  - [GraphQL GET Requests](#GraphQL-GET-Requests)
+
+## API
+
+## `AwesomeGraphQLClient`
+
+**Usage**:
+
+```js
+import { AwesomeGraphQLClient } from 'awesome-graphql-client'
+const client = new AwesomeGraphQLClient(config)
+```
+
+### `config` properties
+
+- `endpoint`: String - The URL to your GraphQL endpoint (required)
+- `fetch`: Function - Fetch polyfill (necessary in NodeJS, see [example](#NodeJS))
+- `FormData` Object: FormData polyfill (necessary in NodeJS if you are using file upload, see [example](#NodeJS))
+- `fetchOptions` Object: Overrides for fetch options
+
+### `client` methods
+
+- `client.setFetchOptions(fetchOptions)`: Sets fetch options. See examples below
+- `client.getFetchOptions()`: Returns current fetch options
+- `client.request(query, variables?, fetchOptions?): Promise<data>`: Sends GraphQL Request and returns data or throws an error. Query can be a string or an AST node from `graphql-tag`
+- `client.requestSafe(query, variables?, fetchOptions?): Promise<{ data, response } | { error }>`: Sends GraphQL Request and returns object with 'data' and 'response' fields or with a single 'error' field. See examples below. _Notice: this function never throws_.
+
+## `GraphQLRequestError`
+
+```js
+import { GraphQLRequestError } from 'awesome-graphql-client'
+
+client.request(query).catch((error) => {
+  console.log(error.message)
+
+  if (error instanceof GraphQLRequestError) {
+    console.log(
+      JSON.stringify(
+        { query: error.query, variables: error.variables, status: error.response.status },
+        null,
+        '  ',
+      ),
+    )
+  }
+})
+```
+
+## Examples
+
+## `Typescript`
 
 ```ts
-type getUser = {
+interface getUser {
   user: { id: number; login: string } | null
 }
-type getUserVariables = { id: 10 }
+interface getUserVariables {
+  id: 10
+}
 
-// Query can be a string or compiled GraphQL AST
 const query = gql`
   query getUser($id: Int!) {
     user {
@@ -112,8 +166,28 @@ const query = gql`
   }
 `
 
+// request
 client
   .request<getUser, getUserVariables>(query, { id: 10 })
   .then((data) => console.log(data))
   .catch((error) => console.log(error))
+
+// requestRaw
+client
+  .requestRaw<getUser, getUserVariables>(query, { id: 10 })
+  .then((result) => {
+    if ('error' in result) {
+      throw result.error
+    }
+    console.log(`Status ${result.response.status}`, `Data ${result.data.user}`)
+  })
+```
+
+## `GraphQL GET Requests`
+
+```js
+client
+  .request(query, variables, { method: 'GET' })
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err))
 ```

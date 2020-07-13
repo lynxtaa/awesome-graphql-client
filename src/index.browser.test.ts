@@ -262,6 +262,10 @@ it('sends additional headers', async () => {
 	await client.request<GetUsers>(query, {}, { headers: { 'X-Secret': 'secret-3' } })
 
 	expect(headers.get('X-Secret')).toBe('secret-3')
+
+	expect(client.getFetchOptions()).toEqual({
+		headers: { 'X-Secret': 'secret-2' },
+	})
 })
 
 it('throw an error in no endpoint provided', () => {

@@ -95,12 +95,19 @@ export default class AwesomeGraphQLClient<
 	}
 
 	/**
+	 * Returns current overrides for fetch options
+	 */
+	getFetchOptions(): FetchOptions | undefined {
+		return this.fetchOptions
+	}
+
+	/**
 	 * Sends GraphQL Request and returns object with 'data' and 'response' fields
 	 * or with a single 'error' field.
 	 * Notice: this function never throws
 	 *
 	 * @example
-	 * const result = await rawRequest(...)
+	 * const result = await requestSafe(...)
 	 * if ('error' in result) {
 	 *   throw result.error
 	 * }
@@ -110,7 +117,7 @@ export default class AwesomeGraphQLClient<
 	 * @param variables variables
 	 * @param fetchOptions overrides for fetch options
 	 */
-	async rawRequest<TData extends {}, TVariables extends {} = {}>(
+	async requestSafe<TData extends {}, TVariables extends {} = {}>(
 		query: GraphQLQuery,
 		variables?: TVariables,
 		fetchOptions?: FetchOptions,
@@ -206,7 +213,7 @@ export default class AwesomeGraphQLClient<
 		variables?: TVariables,
 		fetchOptions?: FetchOptions,
 	): Promise<TData> {
-		const result = await this.rawRequest<TData, TVariables>(
+		const result = await this.requestSafe<TData, TVariables>(
 			query,
 			variables,
 			fetchOptions,
