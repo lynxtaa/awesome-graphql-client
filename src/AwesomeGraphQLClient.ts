@@ -20,9 +20,13 @@ export default class AwesomeGraphQLClient<
 	fetchOptions?: FetchOptions
 
 	constructor(config: {
+		/** GraphQL endpoint */
 		endpoint: string
+		/** Fetch polyfill if necessary */
 		fetch?: (url: string, options?: any) => Promise<any>
+		/** FormData polyfill if necessary */
 		FormData?: any
+		/** Overrides for fetch options */
 		fetchOptions?: FetchOptions
 	}) {
 		if (!config.endpoint) {
@@ -79,10 +83,31 @@ export default class AwesomeGraphQLClient<
 		return form
 	}
 
+	/**
+	 * Sets new overrides for fetch options
+	 *
+	 * @param fetchOptions new overrides for fetch options
+	 */
 	setFetchOptions(fetchOptions: FetchOptions): void {
 		this.fetchOptions = fetchOptions
 	}
 
+	/**
+	 * Sends GraphQL Request and returns object with 'data' and 'response' fields
+	 * or with a single 'error' field.
+	 * Notice: this function never throws
+	 *
+	 * @example
+	 * const result = await rawRequest(...)
+	 * if ('error' in result) {
+	 *   throw result.error
+	 * }
+	 * console.log(result.data)
+	 *
+	 * @param query query
+	 * @param variables variables
+	 * @param fetchOptions overrides for fetch options
+	 */
 	async rawRequest<TData extends {}, TVariables extends {} = {}>(
 		query: GraphQLQuery,
 		variables?: TVariables,
@@ -146,6 +171,16 @@ export default class AwesomeGraphQLClient<
 		}
 	}
 
+	/**
+	 * Makes GraphQL request and returns data or throws an error
+	 *
+	 * @example
+	 * const data = await request(...)
+	 *
+	 * @param query query
+	 * @param variables variables
+	 * @param fetchOptions overrides for fetch options
+	 */
 	async request<TData extends {}, TVariables extends {} = {}>(
 		query: GraphQLQuery,
 		variables?: TVariables,
