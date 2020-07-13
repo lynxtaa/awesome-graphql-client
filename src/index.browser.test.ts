@@ -12,7 +12,7 @@ if (typeof fetch === 'undefined') {
 }
 
 it('sends GraphQL request without variables', async () => {
-	type GetUsers = {
+	interface GetUsers {
 		users: { id: number; login: string }[]
 	}
 
@@ -39,11 +39,13 @@ it('sends GraphQL request without variables', async () => {
 })
 
 it('sends GraphQL request with variables', async () => {
-	type GetUser = {
+	interface GetUser {
 		user: { id: number; login: string } | null
 	}
 
-	type GetUserVariables = { id: number }
+	interface GetUserVariables {
+		id: number
+	}
 
 	const users = [{ id: 10, login: 'admin' }]
 
@@ -71,7 +73,7 @@ it('sends GraphQL request with variables', async () => {
 })
 
 it('sends GraphQL request as string', async () => {
-	type GetUsers = {
+	interface GetUsers {
 		users: { id: number; login: string }[]
 	}
 
@@ -98,8 +100,13 @@ it('sends GraphQL request as string', async () => {
 })
 
 it('send GraphQL Upload request', async () => {
-	type UploadFile = { uploadFile: boolean }
-	type UploadFileVariables = { file: File }
+	interface UploadFile {
+		uploadFile: boolean
+	}
+
+	interface UploadFileVariables {
+		file: File
+	}
 
 	server.use(
 		rest.post('/api/graphql', (req, res, ctx) => {
@@ -144,7 +151,7 @@ it('send GraphQL Upload request', async () => {
 })
 
 it('sends additional headers', async () => {
-	type GetUsers = {
+	interface GetUsers {
 		users: { id: number; login: string }[]
 	}
 

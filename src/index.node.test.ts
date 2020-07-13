@@ -18,8 +18,12 @@ it('throws if no Fetch polyfill provided', () => {
 })
 
 it('throws on file upload mutation if no FormData polyfill provided', async () => {
-	type UploadFile = { uploadFile: boolean }
-	type UploadFileVariables = { file: any }
+	interface UploadFile {
+		uploadFile: boolean
+	}
+	interface UploadFileVariables {
+		file: any
+	}
 
 	const client = new AwesomeGraphQLClient({
 		endpoint: 'http://localhost:1234/api/graphql',
@@ -40,8 +44,12 @@ it('throws on file upload mutation if no FormData polyfill provided', async () =
 })
 
 it('uses provided polyfills', async () => {
-	type UploadFile = { uploadFile: boolean }
-	type UploadFileVariables = { file: any }
+	interface UploadFile {
+		uploadFile: boolean
+	}
+	interface UploadFileVariables {
+		file: any
+	}
 
 	server.use(
 		rest.post('http://localhost:1234/api/graphql', (req, res, ctx) =>

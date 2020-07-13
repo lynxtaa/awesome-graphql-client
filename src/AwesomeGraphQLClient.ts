@@ -1,3 +1,6 @@
+// https://github.com/microsoft/TypeScript/issues/15300
+/* eslint-disable @typescript-eslint/ban-types */
+
 import { extractFiles } from 'extract-files'
 import { DocumentNode } from 'graphql'
 import { print } from 'graphql'
@@ -39,10 +42,7 @@ export default class AwesomeGraphQLClient<
 			config.FormData || (typeof FormData !== 'undefined' ? FormData : undefined)
 	}
 
-	private createRequestBody(
-		query: string,
-		variables?: Record<string, unknown>,
-	): string | FormData {
+	private createRequestBody(query: string, variables?: {}): string | FormData {
 		const { clone, files } = extractFiles(
 			{ query, variables },
 			'',
@@ -83,10 +83,7 @@ export default class AwesomeGraphQLClient<
 		this.fetchOptions = fetchOptions
 	}
 
-	async rawRequest<
-		TData extends Record<string, unknown>,
-		TVariables extends Record<string, unknown> = Record<string, unknown>
-	>(
+	async rawRequest<TData extends {}, TVariables extends {} = {}>(
 		query: GraphQLQuery,
 		variables?: TVariables,
 		fetchOptions?: FetchOptions,
@@ -149,10 +146,7 @@ export default class AwesomeGraphQLClient<
 		}
 	}
 
-	async request<
-		TData extends Record<string, unknown>,
-		TVariables extends Record<string, unknown> = Record<string, unknown>
-	>(
+	async request<TData extends {}, TVariables extends {} = {}>(
 		query: GraphQLQuery,
 		variables?: TVariables,
 		fetchOptions?: FetchOptions,
