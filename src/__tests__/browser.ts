@@ -5,7 +5,7 @@
 import { print, DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 
-import { AwesomeGraphQLClient } from '../index'
+import { AwesomeGraphQLClient, GraphQLRequestError } from '../index'
 import { server, graphql, rest } from '../jest/server'
 
 if (typeof fetch === 'undefined') {
@@ -25,9 +25,9 @@ it('sends GraphQL request without variables', async () => {
 		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', formatQuery })
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
 
-	const query = gql`
+	const query = `
 		query GetUsers {
 			users {
 				id
@@ -147,33 +147,6 @@ it('sends GraphQL GET request with variables', async () => {
 	expect(data).toEqual({ user: { id: 10, login: 'admin' } })
 })
 
-it('sends GraphQL request as string', async () => {
-	interface GetUsers {
-		users: { id: number; login: string }[]
-	}
-
-	const users = { users: [{ id: 10, login: 'admin' }] }
-
-	server.use(
-		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
-	)
-
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
-
-	const query = `
-		query GetUsers {
-			users {
-				id
-				login
-			}
-		}
-	`
-
-	const data = await client.request<GetUsers>(query)
-
-	expect(data).toEqual(users)
-})
-
 it('send GraphQL Upload request', async () => {
 	interface UploadFile {
 		uploadFile: boolean
@@ -274,6 +247,76 @@ it('sends additional headers', async () => {
 	expect(client.getFetchOptions()).toEqual({
 		headers: { 'X-Secret': 'secret-2' },
 	})
+})
+
+it('requestSafe returns data and response on success', async () => {
+	interface GetUsers {
+		users: { id: number; login: string }[]
+	}
+	interface UpdateUser {
+		user: { id: number }
+	}
+
+	const users = { users: [{ id: 10, login: 'admin' }] }
+
+	server.use(
+		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
+
+		graphql.mutation<UpdateUser>('UpdateUser', (req, res, ctx) =>
+			res(ctx.errors([{ message: 'Forbidden' }])),
+		),
+	)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: '/api/graphql',
+		formatQuery,
+	})
+
+	const getUsersResult = await client.requestSafe<GetUsers>(gql`
+		query GetUsers {
+			users {
+				id
+				login
+			}
+		}
+	`)
+
+	expect(getUsersResult).toEqual({
+		data: users,
+		response: expect.any(Response),
+	})
+})
+
+it('requestSafe returns error on fail', async () => {
+	interface GetUsers {
+		users: { id: number; login: string }[]
+	}
+
+	server.use(
+		graphql.query<GetUsers>('GetUsers', (req, res, ctx) =>
+			res(ctx.errors([{ message: 'Forbidden' }])),
+		),
+	)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: '/api/graphql',
+		formatQuery,
+	})
+
+	const getUsersResult = await client.requestSafe<GetUsers>(gql`
+		query GetUsers {
+			users {
+				id
+				login
+			}
+		}
+	`)
+
+	expect(getUsersResult).toEqual({ error: expect.any(GraphQLRequestError) })
+
+	if ('error' in getUsersResult) {
+		expect(getUsersResult.error.message).toBe('GraphQL Request Error: Forbidden')
+	}
 })
 
 it('throw an error in no endpoint provided', () => {

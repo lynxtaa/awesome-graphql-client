@@ -3,6 +3,7 @@
 
 import { extractFiles } from 'extract-files'
 
+import assert from './util/assert'
 import formatGetRequestUrl from './util/formatGetRequestUrl'
 import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'
 import isResponseJSON from './util/isResponseJSON'
@@ -31,15 +32,12 @@ export default class AwesomeGraphQLClient<
 		/** Custom query formatter */
 		formatQuery?: (query: TQuery) => string
 	}) {
-		if (!config.endpoint) {
-			throw new Error('endpoint is required')
-		}
+		assert(config.endpoint, 'endpoint is required')
 
-		if (!config.fetch && typeof fetch === 'undefined') {
-			throw new Error(
-				'Fetch must be polyfilled or passed in new AwesomeGraphQLClient({ fetch })',
-			)
-		}
+		assert(
+			config.fetch || typeof fetch !== 'undefined',
+			'Fetch must be polyfilled or passed in new AwesomeGraphQLClient({ fetch })',
+		)
 
 		this.endpoint = config.endpoint
 		this.fetch = config.fetch || fetch
@@ -63,11 +61,10 @@ export default class AwesomeGraphQLClient<
 			return operationJSON
 		}
 
-		if (!this.FormData) {
-			throw new Error(
-				'FormData must be polyfilled or passed in new AwesomeGraphQLClient({ FormData })',
-			)
-		}
+		assert(
+			this.FormData,
+			'FormData must be polyfilled or passed in new AwesomeGraphQLClient({ FormData })',
+		)
 
 		const form = new this.FormData()
 
@@ -82,7 +79,7 @@ export default class AwesomeGraphQLClient<
 
 		i = 0
 		files.forEach((paths, file) => {
-			form.append(`${++i}`, file as any)
+			form.append(`${++i}`, file)
 		})
 
 		return form
@@ -130,9 +127,10 @@ export default class AwesomeGraphQLClient<
 		try {
 			const queryAsString = this.formatQuery ? this.formatQuery(query) : query
 
-			if (typeof queryAsString !== 'string') {
-				throw new Error('Query should be a string, otherwise provide formatQuery option')
-			}
+			assert(
+				typeof queryAsString === 'string',
+				`Query should be a string, not ${typeof queryAsString}. Otherwise provide formatQuery option`,
+			)
 
 			const options = {
 				method: 'POST',
