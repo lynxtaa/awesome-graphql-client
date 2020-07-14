@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.2.0...v0.3.0) (2020-07-14)
+
+
+### Features
+
+* add getFetchOptions method ([16881f7](https://github.com/lynxtaa/awesome-graphql-client/commit/16881f72c7a1f1f6ab441ac288d67999bb34ed8d))
+* support custom query formatter ([f084aec](https://github.com/lynxtaa/awesome-graphql-client/commit/f084aece575a84d8d30539de28a22c4891e9dee9))
+
 ## [0.2.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.1.1...v0.2.0) (2020-07-13)
 
 
