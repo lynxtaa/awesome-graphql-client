@@ -10,10 +10,10 @@
 		"module": "ESNext",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
-		"outDir": "dist",
 		"declaration": true,
 		"declarationMap": true,
-		"noUnusedLocals": true
+		"noUnusedLocals": true,
+		"noEmit": true
 	},
 	"include": ["src"]
 }

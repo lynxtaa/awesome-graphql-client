@@ -1,5 +1,5 @@
 /**
- * Returns URL for GraphQL Get Requests:
+ * Returns URL for GraphQL GET Requests:
  * https://graphql.org/learn/serving-over-http/#get-request
  */
 export default function formatGetRequestUrl({
@@ -15,7 +15,7 @@ export default function formatGetRequestUrl({
 
 	url.searchParams.append('query', query)
 
-	if (variables) {
+	if (variables && Object.keys(variables).length > 0) {
 		url.searchParams.append('variables', JSON.stringify(variables))
 	}
 

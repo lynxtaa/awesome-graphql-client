@@ -92,7 +92,9 @@ client
   - [GraphQLRequestError](#GraphQLRequestError)
 - Examples
   - [Typescript](#Typescript)
+  - [Error Handling](#Error-Handling)
   - [GraphQL GET Requests](#GraphQL-GET-Requests)
+  - [GraphQL Tag](#GraphQL-Tag)
 
 ## API
 
@@ -107,42 +109,31 @@ const client = new AwesomeGraphQLClient(config)
 
 ### `config` properties
 
-- `endpoint`: _String_ - The URL to your GraphQL endpoint (required)
+- `endpoint`: _string_ - The URL to your GraphQL endpoint (required)
 - `fetch`: _Function_ - Fetch polyfill (necessary in NodeJS, see [example](#NodeJS))
-- `fetchOptions`: _Object_ - Overrides for fetch options
-- `FormData`: _Object_ - FormData polyfill (necessary in NodeJS if you are using file upload, see [example](#NodeJS))
+- `fetchOptions`: _object_ - Overrides for fetch options
+- `FormData`: _object_ - FormData polyfill (necessary in NodeJS if you are using file upload, see [example](#NodeJS))
 - `formatQuery`: _function(query: any): string_ - Custom query formatter (see [example](#GraphQL-Tag))
 
 ### `client` methods
 
 - `client.setFetchOptions(fetchOptions)`: Sets fetch options. See examples below
 - `client.getFetchOptions()`: Returns current fetch options
-- `client.request(query, variables?, fetchOptions?): Promise<data>`: Sends GraphQL Request and returns data or throws an error. Query can be a string or an AST node from `graphql-tag`
+- `client.request(query, variables?, fetchOptions?): Promise<data>`: Sends GraphQL Request and returns data or throws an error
 - `client.requestSafe(query, variables?, fetchOptions?): Promise<{ data, response } | { error }>`: Sends GraphQL Request and returns object with 'data' and 'response' fields or with a single 'error' field. See examples below. _Notice: this function never throws_.
 
 ## `GraphQLRequestError`
 
-```js
-import { GraphQLRequestError } from 'awesome-graphql-client'
+### `instance` fields
 
-client.request(query).catch((error) => {
-  console.log(error.message)
-
-  if (error instanceof GraphQLRequestError) {
-    console.log(
-      JSON.stringify(
-        { query: error.query, variables: error.variables, status: error.response.status },
-        null,
-        '  ',
-      ),
-    )
-  }
-})
-```
+- `message`: _string_ - Error message
+- `query`: _string_ - GraphQL query
+- `variables`: _string | undefined_ - GraphQL variables
+- `response`: _Response_ - response returned from fetch
 
 ## Examples
 
-## `Typescript`
+## Typescript
 
 ```ts
 interface getUser {
@@ -167,7 +158,7 @@ client
   .catch((error) => console.log(error))
 
 client
-  .requestRaw<getUser, getUserVariables>(query, { id: 10 })
+  .requestSafe<getUser, getUserVariables>(query, { id: 10 })
   .then((result) => {
     if ('error' in result) {
       throw result.error
@@ -176,7 +167,30 @@ client
   })
 ```
 
-## `GraphQL GET Requests`
+## Error Handling
+
+```js
+import { GraphQLRequestError } from 'awesome-graphql-client'
+
+function handleError(error: GraphQLRequestError | unknown) {
+  if (error instanceof GraphQLRequestError) {
+    // GraphQLRequestError always has a response, query and message fields
+    const { query, variables, response, message } = error
+
+    console.log(
+      JSON.stringify({ message, query, variables, status: response.status }, null, '  '),
+    )
+  } else {
+    console.log(error)
+  }
+}
+
+client.request(query).catch(handleError)
+```
+
+## GraphQL GET Requests
+
+Internally it uses [URL API](https://developer.mozilla.org/ru/docs/Web/API/URL/URL). Consider [polyfilling URL standard](https://github.com/zloirock/core-js#url-and-urlsearchparams) for this feature to work in IE
 
 ```js
 client
@@ -185,7 +199,7 @@ client
   .catch((err) => console.log(err))
 ```
 
-## `GraphQL Tag`
+## GraphQL Tag
 
 ```js
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
