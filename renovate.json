@@ -1,3 +1,10 @@
 {
-	"extends": ["config:base"]
+	"extends": ["config:base", ":preserveSemverRanges"],
+	"assignees": ["lynxtaa"],
+	"timezone": "Europe/Moscow",
+	"schedule": "every saturday",
+	"lockFileMaintenance": {
+		"enabled": true,
+		"schedule": "on the first day of the month"
+	}
 }
