@@ -40,7 +40,7 @@ export default class AwesomeGraphQLClient<
 		)
 
 		this.endpoint = config.endpoint
-		this.fetch = config.fetch || fetch
+		this.fetch = config.fetch || fetch.bind(null)
 		this.fetchOptions = config.fetchOptions
 
 		this.FormData =
