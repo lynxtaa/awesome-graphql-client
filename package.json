@@ -26,8 +26,8 @@
   "unpkg": "dist/index.umd.js",
   "scripts": {
     "prepublishOnly": "npm run build",
-    "prebuild": "rimraf dist/",
-    "build": "microbundle",
+    "prebuild": "rimraf dist/*",
+    "build": "microbundle build --tsconfig tsconfig.build.json",
     "check": "npm run check:pretty && npm run check:types && npm run check:lint",
     "check:lint": "eslint --ext .js,.ts src/",
     "check:pretty": "prettier \"src/**/*\" \"*.{js,json}\" --check",
