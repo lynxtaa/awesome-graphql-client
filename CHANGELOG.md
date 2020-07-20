@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.2](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.3.1...v0.3.2) (2020-07-20)
+
+
+### Bug Fixes
+
+* fixed fetch crash in browser ([ce476f5](https://github.com/lynxtaa/awesome-graphql-client/commit/ce476f5f0259bd7221a26508d4bf042a5bb58e69))
+
 ### [0.3.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.3.0...v0.3.1) (2020-07-20)
 
 ## [0.3.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.2.0...v0.3.0) (2020-07-14)
