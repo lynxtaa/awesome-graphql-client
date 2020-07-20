@@ -14,11 +14,11 @@ export default class AwesomeGraphQLClient<
 	TQuery = string,
 	FetchOptions extends { [key: string]: any } = RequestInit
 > {
-	endpoint: string
-	fetch: (url: string, options?: FetchOptions) => Promise<any>
-	fetchOptions?: FetchOptions
-	formatQuery?: (query: TQuery) => string
-	FormData: any
+	private endpoint: string
+	private fetch: (url: string, options?: FetchOptions) => Promise<any>
+	private fetchOptions?: FetchOptions
+	private formatQuery?: (query: TQuery) => string
+	private FormData: any
 
 	constructor(config: {
 		/** GraphQL endpoint */
