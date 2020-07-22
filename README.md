@@ -201,6 +201,8 @@ client
 
 ## GraphQL Tag
 
+### Approach #1: Use `formatQuery`
+
 ```js
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 import { DocumentNode } from 'graphql/language/ast'
@@ -213,9 +215,40 @@ const client = new AwesomeGraphQLClient({
 })
 
 const query = gql`
-  query getUser($id: Int!) {
-    user {
-      id
+  query me {
+    me {
+      login
+    }
+  }
+`
+
+client
+  .request(query)
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err))
+```
+
+### Approach #2: Use fake `graphql-tag`
+
+Recommended approach if you're using `graphql-tag` only for syntax highlighting and static analysis such as linting and types generation. It has less computational cost and makes overall smaller bundles. GraphQL fragments are supported too.
+
+```js
+// gql.js - returns query as a string
+export default (strings, ...values) =>
+  strings
+    .reduce((prev, curr, i) => prev + curr + (i in values ? values[i] : ''), '')
+    .trim()
+
+// main.js
+import { AwesomeGraphQLClient } from 'awesome-graphql-client'
+import gql from './gql'
+
+const client = new AwesomeGraphQLClient({ endpoint: '/graphql' })
+
+const query = gql`
+  query me {
+    me {
+      login
     }
   }
 `
