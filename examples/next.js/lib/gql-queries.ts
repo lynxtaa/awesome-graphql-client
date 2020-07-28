@@ -4,23 +4,33 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetCountries
+// GraphQL query operation: GetCharacters
 // ====================================================
 
-export interface GetCountries_Country {
+export interface GetCharacters_characters_results {
   /**
-   * ISO 3166-1 alpha-2 codes are two-letter country codes defined in ISO 3166-1, part of the ISO 3166 standard published by the International Organization for Standardization (ISO), to represent countries, dependent territories, and special areas of geographical interest. https: // en.m.wikipedia.org/wiki/ISO_3166-1_alpha-2
+   * The id of the character.
    */
-  alpha2Code: string;
-  name: string;
+  id: string | null;
+  /**
+   * The name of the character.
+   */
+  name: string | null;
 }
 
-export interface GetCountries {
-  Country: (GetCountries_Country | null)[] | null;
+export interface GetCharacters_characters {
+  results: (GetCharacters_characters_results | null)[] | null;
 }
 
-export interface GetCountriesVariables {
-  nameStartsWith?: string | null;
+export interface GetCharacters {
+  /**
+   * Get the list of all characters
+   */
+  characters: GetCharacters_characters | null;
+}
+
+export interface GetCharactersVariables {
+  name?: string | null;
 }
 
 /* tslint:disable */
