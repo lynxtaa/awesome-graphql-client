@@ -1,0 +1,26 @@
+{
+  "name": "next-js-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "download:schema": "npx apollo client:download-schema --endpoint=https://countries-274616.ew.r.appspot.com schema.json",
+    "generate:types": "npx apollo client:codegen --target typescript --no-addTypename --outputFlat --customScalarsPrefix Gql ./lib/gql-queries.ts"
+  },
+  "dependencies": {
+    "awesome-graphql-client": "0.3.2",
+    "graphql": "15.3.0",
+    "graphql-tag": "2.10.4",
+    "next": "9.5.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "swr": "0.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "14.0.26",
+    "@types/react": "16.9.43",
+    "typescript": "3.9.7"
+  }
+}
