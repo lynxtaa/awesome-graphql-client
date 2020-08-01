@@ -1,5 +1,5 @@
 {
-	"extends": ["config:base", ":preserveSemverRanges"],
+	"extends": ["config:base"],
 	"assignees": ["lynxtaa"],
 	"timezone": "Europe/Moscow",
 	"schedule": "every saturday",
