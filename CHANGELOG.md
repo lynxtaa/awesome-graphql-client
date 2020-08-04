@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.3.2...v0.4.0) (2020-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency extract-files to v9 ([#4](https://github.com/lynxtaa/awesome-graphql-client/issues/4)) ([240bbeb](https://github.com/lynxtaa/awesome-graphql-client/commit/240bbebc6efdec712d27ccfbbd6a8e77f57489c9))
+
 ### [0.3.2](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.3.1...v0.3.2) (2020-07-20)
 
 
