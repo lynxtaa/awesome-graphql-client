@@ -1,0 +1,9 @@
+{
+	"clearMocks": true,
+	"setupFiles": ["whatwg-fetch"],
+	"setupFilesAfterEnv": ["./jest/setupTests.ts"],
+	"transform": {
+		"^.+\\.[jt]sx?$": "babel-jest",
+		"^.+\\.css$": "./jest/cssTransform.ts"
+	}
+}

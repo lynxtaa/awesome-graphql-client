@@ -36,10 +36,12 @@ export default function Home({ initialData }: Props) {
 
 	return (
 		<div>
+			<label htmlFor="filter">Enter name: </label>
 			<input
 				value={filter}
+				id="filter"
+				name="filter"
 				onChange={(event) => setFilter(event.target.value)}
-				placeholder="Enter name"
 			/>
 			{data ? (
 				<ul>
