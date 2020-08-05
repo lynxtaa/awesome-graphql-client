@@ -95,7 +95,7 @@ client
   - [gql](#approach-2-use-fake-graphql-tag)
 - Examples
   - [Typescript](#typescript)
-  - [Error Handling](#error-handling)
+  - [Error Logging](#error-logging)
   - [GraphQL GET Requests](#graphql-get-requests)
   - [GraphQL Tag](#graphql-tag)
   - [Cookies in NodeJS](#cookies-in-nodejs)
@@ -119,6 +119,7 @@ const client = new AwesomeGraphQLClient(config)
 - `fetchOptions`: _object_ - Overrides for fetch options
 - `FormData`: _object_ - FormData polyfill (necessary in NodeJS if you are using file upload, see [example](#nodejs))
 - `formatQuery`: _function(query: any): string_ - Custom query formatter (see [example](#graphql-tag))
+- `onError`: _function(error: GraphQLRequestError | Error): void_ - Provided callback will be called before throwing an error (see [example](#error-logging))
 
 ### `client` methods
 
@@ -172,25 +173,24 @@ client
   })
 ```
 
-## Error Handling
+## Error Logging
 
 ```js
-import { GraphQLRequestError } from 'awesome-graphql-client'
+import { AwesomeGraphQLClient, GraphQLRequestError } from 'awesome-graphql-client'
 
-function handleError(error: GraphQLRequestError | unknown) {
-  if (error instanceof GraphQLRequestError) {
-    // GraphQLRequestError always has a response, query and message fields
-    const { query, variables, response, message } = error
-
-    console.log(
-      JSON.stringify({ message, query, variables, status: response.status }, null, '  '),
-    )
-  } else {
-    console.log(error)
-  }
-}
-
-client.request(query).catch(handleError)
+const client = new AwesomeGraphQLClient({
+  endpoint: '/graphql',
+  onError(error) {
+    if (error instanceof GraphQLRequestError) {
+      console.error(error.message)
+      console.groupCollapsed('Operation:')
+      console.log({ query: error.query, variables: error.variables })
+      console.groupEnd()
+    } else {
+      console.error(error)
+    }
+  },
+})
 ```
 
 ## GraphQL GET Requests

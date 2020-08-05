@@ -20,6 +20,7 @@ export default class AwesomeGraphQLClient<
 	private fetchOptions?: TFetchOptions
 	private formatQuery?: (query: TQuery) => string
 	private FormData: any
+	private onError?: (error: GraphQLRequestError | Error) => void
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -32,6 +33,8 @@ export default class AwesomeGraphQLClient<
 		fetchOptions?: TFetchOptions
 		/** Custom query formatter */
 		formatQuery?: (query: TQuery) => string
+		/** Callback will be called on error  */
+		onError?: (error: GraphQLRequestError | Error) => void
 	}) {
 		assert(config.endpoint, 'endpoint is required')
 
@@ -48,6 +51,7 @@ export default class AwesomeGraphQLClient<
 			config.FormData || (typeof FormData !== 'undefined' ? FormData : undefined)
 
 		this.formatQuery = config.formatQuery
+		this.onError = config.onError
 	}
 
 	private createRequestBody(query: string, variables?: {}): string | FormData {
@@ -201,6 +205,14 @@ export default class AwesomeGraphQLClient<
 
 			return { data, response }
 		} catch (error) {
+			if (this.onError) {
+				try {
+					this.onError(error)
+				} catch (err) {
+					return { error }
+				}
+			}
+
 			return { error }
 		}
 	}

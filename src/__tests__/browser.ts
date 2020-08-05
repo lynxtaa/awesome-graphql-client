@@ -405,3 +405,58 @@ it('throws an error if response is OK but has errors', async () => {
 		'GraphQL Request Error: Not Authorized',
 	)
 })
+
+it('calls onError hook if provided', async () => {
+	server.use(
+		graphql.query('GetUsers', (req, res, ctx) =>
+			res(ctx.errors([{ message: 'Not Authorized' }])),
+		),
+	)
+
+	const onError = jest.fn()
+
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', onError })
+
+	const query = gql`
+		query GetUsers {
+			users {
+				id
+				login
+			}
+		}
+	`
+
+	await expect(client.request(query)).rejects.toThrow(
+		'GraphQL Request Error: Not Authorized',
+	)
+
+	expect(onError).toHaveBeenCalledWith(expect.any(GraphQLRequestError))
+	expect(onError).toHaveBeenCalledTimes(1)
+})
+
+it('ignores errors thrown inside onError hook', async () => {
+	server.use(
+		graphql.query('GetUsers', (req, res, ctx) =>
+			res(ctx.errors([{ message: 'Not Authorized' }])),
+		),
+	)
+
+	const onError = jest.fn().mockImplementation(() => {
+		throw new Error('💣')
+	})
+
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', onError })
+
+	const query = gql`
+		query GetUsers {
+			users {
+				id
+				login
+			}
+		}
+	`
+
+	await expect(client.request(query)).rejects.toThrow(
+		'GraphQL Request Error: Not Authorized',
+	)
+})
