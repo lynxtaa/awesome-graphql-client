@@ -55,7 +55,7 @@
     "husky": "4.2.5",
     "jest": "26.2.2",
     "microbundle": "0.12.3",
-    "msw": "0.20.1",
+    "msw": "0.20.3",
     "node-fetch": "2.6.0",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
