@@ -2,9 +2,9 @@
 	"extends": ["config:base"],
 	"assignees": ["lynxtaa"],
 	"timezone": "Europe/Moscow",
-	"schedule": "every saturday",
+	"schedule": "after 10am every saturday",
 	"lockFileMaintenance": {
 		"enabled": true,
-		"schedule": "on the first day of the month"
+		"schedule": ["after 10am on the first day of the month"]
 	}
 }
