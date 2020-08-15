@@ -60,7 +60,7 @@
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
     "rimraf": "3.0.2",
-    "standard-version": "8.0.2",
+    "standard-version": "9.0.0",
     "typescript": "3.9.7",
     "whatwg-fetch": "3.4.0"
   }
