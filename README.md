@@ -28,7 +28,7 @@ import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 
 const client = new AwesomeGraphQLClient({ endpoint: '/graphql' })
 
-// Also query be a compiled GraphQL AST (see example below)
+// Also query can be an output from graphql-tag (see examples below)
 const GetUsers = `
   query getUsers {
     users {
@@ -71,6 +71,7 @@ const client = new AwesomeGraphQLClient({
   FormData, // Required only if you're using file upload
 })
 
+// Also query can be an output from graphql-tag (see examples below)
 const UploadUserAvatar = `
   mutation uploadUserAvatar($userId: Int!, $file: Upload!) {
     updateUser(id: $userId, input: { avatar: $file }) {
@@ -88,14 +89,14 @@ client
 ## Table of Contents
 
 - API
-  - [AwesomeGraphQLClient](#AwesomeGraphQLClient)
-  - [GraphQLRequestError](#GraphQLRequestError)
-  - [gql](#Approach-2-Use-fake-graphql-tag)
+  - [AwesomeGraphQLClient](#awesomegraphqlclient)
+  - [GraphQLRequestError](#graphqlrequesterror)
+  - [gql](#approach-2-use-fake-graphql-tag)
 - Examples
-  - [Typescript](#Typescript)
-  - [Error Handling](#Error-Handling)
-  - [GraphQL GET Requests](#GraphQL-GET-Requests)
-  - [GraphQL Tag](#GraphQL-Tag)
+  - [Typescript](#typescript)
+  - [Error Handling](#error-handling)
+  - [GraphQL GET Requests](#graphql-get-requests)
+  - [GraphQL Tag](#graphql-tag)
 
 ## API
 
@@ -111,10 +112,10 @@ const client = new AwesomeGraphQLClient(config)
 ### `config` properties
 
 - `endpoint`: _string_ - The URL to your GraphQL endpoint (required)
-- `fetch`: _Function_ - Fetch polyfill (necessary in NodeJS, see [example](#NodeJS))
+- `fetch`: _Function_ - Fetch polyfill (necessary in NodeJS, see [example](#nodejs))
 - `fetchOptions`: _object_ - Overrides for fetch options
-- `FormData`: _object_ - FormData polyfill (necessary in NodeJS if you are using file upload, see [example](#NodeJS))
-- `formatQuery`: _function(query: any): string_ - Custom query formatter (see [example](#GraphQL-Tag))
+- `FormData`: _object_ - FormData polyfill (necessary in NodeJS if you are using file upload, see [example](#nodejs))
+- `formatQuery`: _function(query: any): string_ - Custom query formatter (see [example](#graphql-tag))
 
 ### `client` methods
 

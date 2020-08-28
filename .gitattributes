@@ -1,0 +1,2 @@
+* text=auto eol=lf
+*.{bat,[bB][aA][tT]} text eol=crlf
