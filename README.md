@@ -1,8 +1,21 @@
-# Awesome GraphQL Client
-
-GraphQL Client with file upload support for NodeJS and browser
-
-![CI/CD](https://github.com/lynxtaa/awesome-graphql-client/workflows/CI/CD/badge.svg) [![npm version](https://badge.fury.io/js/awesome-graphql-client.svg)](https://badge.fury.io/js/awesome-graphql-client) [![Codecov](https://img.shields.io/codecov/c/github/lynxtaa/awesome-graphql-client)](https://codecov.io/gh/lynxtaa/awesome-graphql-client)
+<div align="center">
+  <a href="https://github.com/lynxtaa/awesome-graphql-client">
+    <img width="180" height="180" src="logo.svg">
+  </a>
+  <br>
+  <br>
+  <img alt="CI/CD" src="https://github.com/lynxtaa/awesome-graphql-client/workflows/CI/CD/badge.svg">
+  <a href="https://badge.fury.io/js/awesome-graphql-client">
+    <img alt="npm version" src="https://badge.fury.io/js/awesome-graphql-client.svg">
+  </a>
+  <a href="https://codecov.io/gh/lynxtaa/awesome-graphql-client" alt="npm version">
+    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/lynxtaa/awesome-graphql-client">
+  </a>
+  <br>
+  <br>
+  <h1>Awesome GraphQL Client</h1>
+  <p>GraphQL Client with file upload support for NodeJS and browser</p>
+</div>
 
 ## Features
 
