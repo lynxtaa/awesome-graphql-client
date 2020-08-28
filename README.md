@@ -90,6 +90,7 @@ client
 - API
   - [AwesomeGraphQLClient](#AwesomeGraphQLClient)
   - [GraphQLRequestError](#GraphQLRequestError)
+  - [gql](#Approach-2-Use-fake-graphql-tag)
 - Examples
   - [Typescript](#Typescript)
   - [Error Handling](#Error-Handling)
@@ -211,7 +212,8 @@ import gql from 'graphql-tag'
 
 const client = new AwesomeGraphQLClient({
   endpoint: '/graphql',
-  formatQuery: (query: DocumentNode) => print(query),
+  formatQuery: (query: DocumentNode | string) =>
+    typeof query === 'string' ? query : print(query),
 })
 
 const query = gql`
@@ -233,15 +235,7 @@ client
 Recommended approach if you're using `graphql-tag` only for syntax highlighting and static analysis such as linting and types generation. It has less computational cost and makes overall smaller bundles. GraphQL fragments are supported too.
 
 ```js
-// gql.js - returns query as a string
-export default (strings, ...values) =>
-  strings
-    .reduce((prev, curr, i) => prev + curr + (i in values ? values[i] : ''), '')
-    .trim()
-
-// main.js
-import { AwesomeGraphQLClient } from 'awesome-graphql-client'
-import gql from './gql'
+import { AwesomeGraphQLClient, gql } from 'awesome-graphql-client'
 
 const client = new AwesomeGraphQLClient({ endpoint: '/graphql' })
 

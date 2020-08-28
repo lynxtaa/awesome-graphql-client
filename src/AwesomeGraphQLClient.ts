@@ -150,7 +150,7 @@ export default class AwesomeGraphQLClient<
 					query: queryAsString,
 					variables,
 				})
-				response = await this.fetch(url, options as any)
+				response = await this.fetch(url, options as FetchOptions)
 			} else {
 				const body = this.createRequestBody(queryAsString, variables)
 
@@ -161,7 +161,7 @@ export default class AwesomeGraphQLClient<
 						typeof body === 'string'
 							? { ...options.headers, 'Content-Type': 'application/json' }
 							: options.headers,
-				} as any)
+				} as FetchOptions)
 			}
 
 			if (!response.ok) {
