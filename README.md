@@ -97,6 +97,7 @@ client
   - [Error Handling](#error-handling)
   - [GraphQL GET Requests](#graphql-get-requests)
   - [GraphQL Tag](#graphql-tag)
+  - [Cookies in NodeJS](#cookies-in-nodejs)
   - [More Examples](#more-examples)
 
 ## API
@@ -253,6 +254,18 @@ client
   .request(query)
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
+```
+
+## Cookies in NodeJS
+
+```js
+const { AwesomeGraphQLClient } = require('awesome-graphql-client')
+const nodeFetch = require('node-fetch')
+
+const client = new AwesomeGraphQLClient({
+  endpoint: 'http://localhost:8080/graphql',
+  fetch: require('fetch-cookie')(nodeFetch),
+})
 ```
 
 ## More Examples
