@@ -60,10 +60,10 @@ client
 ### NodeJS
 
 ```js
-import { AwesomeGraphQLClient } from 'awesome-graphql-client'
-import FormData from 'form-data'
-import { createReadStream } from 'fs'
-import fetch from 'node-fetch'
+const { AwesomeGraphQLClient } = require('awesome-graphql-client')
+const FormData = require('form-data')
+const { createReadStream } = require('fs')
+const fetch = require('node-fetch')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
@@ -97,6 +97,7 @@ client
   - [Error Handling](#error-handling)
   - [GraphQL GET Requests](#graphql-get-requests)
   - [GraphQL Tag](#graphql-tag)
+  - [More Examples](#more-examples)
 
 ## API
 
@@ -253,3 +254,7 @@ client
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
 ```
+
+## More Examples
+
+[https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples](https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples)
