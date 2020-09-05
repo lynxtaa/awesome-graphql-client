@@ -28,12 +28,16 @@
     "prepublishOnly": "npm run build",
     "prebuild": "rimraf dist/*",
     "build": "microbundle build --tsconfig tsconfig.build.json",
-    "check": "npm run check:pretty && npm run check:types && npm run check:lint",
-    "check:lint": "eslint --ext .js,.ts src/",
-    "check:pretty": "prettier \"src/**/*\" \"*.{js,json}\" --check",
-    "check:types": "tsc",
+    "validate": "npm run check-format && npm run check-types && npm run lint",
+    "lint": "eslint --ext .js,.ts src/",
+    "prettier": "prettier \"src/**/*\" \"*.{js,json}\"",
+    "check-format": "npm run prettier -- --check",
+    "format": "npm run prettier -- --write",
+    "check-types": "tsc",
     "release": "standard-version",
-    "test": "jest"
+    "test": "is-ci \"test:coverage\" \"test:watch\"",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "extract-files": "9.0.0"
@@ -53,6 +57,7 @@
     "graphql": "15.3.0",
     "graphql-tag": "2.11.0",
     "husky": "4.2.5",
+    "is-ci-cli": "^2.1.2",
     "jest": "26.4.2",
     "microbundle": "0.12.3",
     "msw": "0.20.5",
