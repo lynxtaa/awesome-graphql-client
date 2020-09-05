@@ -61,7 +61,7 @@
     "jest": "26.4.2",
     "microbundle": "0.12.3",
     "msw": "0.20.5",
-    "node-fetch": "2.6.0",
+    "node-fetch": "2.6.1",
     "prettier": "2.1.1",
     "pretty-quick": "3.0.0",
     "rimraf": "3.0.2",
