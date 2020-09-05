@@ -57,7 +57,7 @@
     "graphql": "15.3.0",
     "graphql-tag": "2.11.0",
     "husky": "4.2.5",
-    "is-ci-cli": "^2.1.2",
+    "is-ci-cli": "2.1.2",
     "jest": "26.4.2",
     "microbundle": "0.12.3",
     "msw": "0.20.5",
