@@ -24,6 +24,11 @@
   "types": "dist/index.d.ts",
   "module": "dist/index.m.js",
   "unpkg": "dist/index.umd.js",
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "rimraf dist/*",
