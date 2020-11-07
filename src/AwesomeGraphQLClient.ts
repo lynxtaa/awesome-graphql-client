@@ -3,12 +3,11 @@
 
 import { extractFiles } from 'extract-files'
 
+import GraphQLRequestError from './GraphQLRequestError'
 import assert from './util/assert'
 import formatGetRequestUrl from './util/formatGetRequestUrl'
 import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'
 import isResponseJSON from './util/isResponseJSON'
-
-import GraphQLRequestError from './GraphQLRequestError'
 
 export default class AwesomeGraphQLClient<
 	TQuery = string,
@@ -150,18 +149,18 @@ export default class AwesomeGraphQLClient<
 					query: queryAsString,
 					variables,
 				})
-				response = await this.fetch(url, options as FetchOptions)
+				response = await this.fetch(url, (options as unknown) as FetchOptions)
 			} else {
 				const body = this.createRequestBody(queryAsString, variables)
 
-				response = await this.fetch(this.endpoint, {
+				response = await this.fetch(this.endpoint, ({
 					...options,
 					body,
 					headers:
 						typeof body === 'string'
 							? { ...options.headers, 'Content-Type': 'application/json' }
 							: options.headers,
-				} as FetchOptions)
+				} as unknown) as FetchOptions)
 			}
 
 			if (!response.ok) {

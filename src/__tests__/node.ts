@@ -2,10 +2,11 @@
  * @jest-environment node
  */
 
-import FormData from 'form-data'
 import { createReadStream } from 'fs'
-import fetch from 'node-fetch'
 import { join } from 'path'
+
+import FormData from 'form-data'
+import fetch from 'node-fetch'
 
 import { AwesomeGraphQLClient } from '../index'
 import { server, rest } from '../jest/server'
