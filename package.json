@@ -1,6 +1,6 @@
 {
   "name": "awesome-graphql-client",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "GraphQL Client with file upload support for NodeJS and browser",
   "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
   "repository": "https://github.com/lynxtaa/awesome-graphql-client.git",
