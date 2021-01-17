@@ -1,10 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
-import { GetCharacters, GetCharactersVariables } from '../lib/gql-queries'
 import { server, graphql } from '../jest/testServer'
-
+import { GetCharacters, GetCharactersVariables } from '../lib/gql-queries'
 import Home from '../pages/index'
+
+const withProvider = ({ children }: { children?: React.ReactNode }) => (
+	<QueryClientProvider client={new QueryClient()}>{children}</QueryClientProvider>
+)
 
 it('renders and filters list', async () => {
 	server.use(
@@ -28,7 +32,7 @@ it('renders and filters list', async () => {
 		),
 	)
 
-	render(<Home initialData={{ characters: { results: [] } }} />)
+	render(<Home />, { wrapper: withProvider })
 
 	await screen.findByText('Rick Sanchez')
 
