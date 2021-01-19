@@ -1,4 +1,4 @@
-export interface Headers {
+interface Headers {
 	get(name: string): string | null
 }
 
