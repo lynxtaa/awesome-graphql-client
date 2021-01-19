@@ -8,14 +8,16 @@ import assert from './util/assert'
 import formatGetRequestUrl from './util/formatGetRequestUrl'
 import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'
 import isResponseJSON from './util/isResponseJSON'
+import { RequestResult } from './util/types'
 
 export default class AwesomeGraphQLClient<
 	TQuery = string,
-	FetchOptions extends { [key: string]: any } = RequestInit
+	TFetchOptions extends { [key: string]: any } = RequestInit,
+	TRequestResult extends RequestResult = Response
 > {
 	private endpoint: string
-	private fetch: (url: string, options?: FetchOptions) => Promise<any>
-	private fetchOptions?: FetchOptions
+	private fetch: (url: string, options?: TFetchOptions) => Promise<TRequestResult>
+	private fetchOptions?: TFetchOptions
 	private formatQuery?: (query: TQuery) => string
 	private FormData: any
 
@@ -23,11 +25,11 @@ export default class AwesomeGraphQLClient<
 		/** GraphQL endpoint */
 		endpoint: string
 		/** Fetch polyfill if necessary */
-		fetch?: (url: string, options?: any) => Promise<any>
+		fetch?: (url: string, options?: any) => Promise<TRequestResult>
 		/** FormData polyfill if necessary */
 		FormData?: any
 		/** Overrides for fetch options */
-		fetchOptions?: FetchOptions
+		fetchOptions?: TFetchOptions
 		/** Custom query formatter */
 		formatQuery?: (query: TQuery) => string
 	}) {
@@ -39,7 +41,7 @@ export default class AwesomeGraphQLClient<
 		)
 
 		this.endpoint = config.endpoint
-		this.fetch = config.fetch || fetch.bind(null)
+		this.fetch = config.fetch || (fetch.bind(null) as any)
 		this.fetchOptions = config.fetchOptions
 
 		this.FormData =
@@ -89,14 +91,14 @@ export default class AwesomeGraphQLClient<
 	 *
 	 * @param fetchOptions new overrides for fetch options
 	 */
-	setFetchOptions(fetchOptions: FetchOptions): void {
+	setFetchOptions(fetchOptions: TFetchOptions): void {
 		this.fetchOptions = fetchOptions
 	}
 
 	/**
 	 * Returns current overrides for fetch options
 	 */
-	getFetchOptions(): FetchOptions | undefined {
+	getFetchOptions(): TFetchOptions | undefined {
 		return this.fetchOptions
 	}
 
@@ -119,9 +121,10 @@ export default class AwesomeGraphQLClient<
 	async requestSafe<TData extends {}, TVariables extends {} = {}>(
 		query: TQuery,
 		variables?: TVariables,
-		fetchOptions?: FetchOptions,
+		fetchOptions?: TFetchOptions,
 	): Promise<
-		{ data: TData; response: Response } | { error: GraphQLRequestError | Error }
+		| { data: TData; response: TRequestResult }
+		| { error: GraphQLRequestError<TRequestResult> | Error }
 	> {
 		try {
 			const queryAsString = this.formatQuery ? this.formatQuery(query) : query
@@ -141,7 +144,7 @@ export default class AwesomeGraphQLClient<
 				},
 			}
 
-			let response: Response
+			let response: TRequestResult | Response
 
 			if (options.method.toUpperCase() === 'GET') {
 				const url = formatGetRequestUrl({
@@ -149,7 +152,7 @@ export default class AwesomeGraphQLClient<
 					query: queryAsString,
 					variables,
 				})
-				response = await this.fetch(url, (options as unknown) as FetchOptions)
+				response = await this.fetch(url, (options as unknown) as TFetchOptions)
 			} else {
 				const body = this.createRequestBody(queryAsString, variables)
 
@@ -160,11 +163,11 @@ export default class AwesomeGraphQLClient<
 						typeof body === 'string'
 							? { ...options.headers, 'Content-Type': 'application/json' }
 							: options.headers,
-				} as unknown) as FetchOptions)
+				} as unknown) as TFetchOptions)
 			}
 
 			if (!response.ok) {
-				if (isResponseJSON(response)) {
+				if (isResponseJSON(response as any)) {
 					const { errors } = await response.json()
 
 					if (errors?.[0]?.message) {
@@ -215,7 +218,7 @@ export default class AwesomeGraphQLClient<
 	async request<TData extends {}, TVariables extends {} = {}>(
 		query: TQuery,
 		variables?: TVariables,
-		fetchOptions?: FetchOptions,
+		fetchOptions?: TFetchOptions,
 	): Promise<TData> {
 		const result = await this.requestSafe<TData, TVariables>(
 			query,
