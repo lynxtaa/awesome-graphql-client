@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.6.1...v0.7.0) (2021-01-20)
+
+
+### Features
+
+* add onError hook ([31765fb](https://github.com/lynxtaa/awesome-graphql-client/commit/31765fb5adbc05df8de4f6051b2a22d3359277a8))
+
+
+### Bug Fixes
+
+* improve typings for node-fetch ([#56](https://github.com/lynxtaa/awesome-graphql-client/issues/56)) ([62a02ab](https://github.com/lynxtaa/awesome-graphql-client/commit/62a02ab703db73dfa0332897af794e368912af82))
+
 ### [0.6.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.6.0...v0.6.1) (2021-01-17)
 
 ## [0.6.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.5.0...v0.6.0) (2020-12-18)
