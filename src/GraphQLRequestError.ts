@@ -1,16 +1,23 @@
-interface GraphQLRequestErrorOptions {
+import { RequestResult } from './util/types'
+
+export default class GraphQLRequestError<
+	TResponse extends RequestResult = Response
+> extends Error {
 	query: string
 	variables?: Record<string, unknown>
-	response: Response
-	message: string
-}
+	response: TResponse
 
-export default class GraphQLRequestError extends Error {
-	query: string
-	variables?: Record<string, unknown>
-	response: Response
-
-	constructor({ query, variables, response, message }: GraphQLRequestErrorOptions) {
+	constructor({
+		query,
+		variables,
+		response,
+		message,
+	}: {
+		query: string
+		variables?: Record<string, unknown>
+		response: TResponse
+		message: string
+	}) {
 		super(`GraphQL Request Error: ${message}`)
 
 		this.query = query
