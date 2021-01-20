@@ -1,6 +1,3 @@
-// https://github.com/microsoft/TypeScript/issues/15300
-/* eslint-disable @typescript-eslint/ban-types */
-
 import { extractFiles } from 'extract-files'
 
 import GraphQLRequestError from './GraphQLRequestError'
@@ -12,7 +9,7 @@ import { RequestResult } from './util/types'
 
 export default class AwesomeGraphQLClient<
 	TQuery = string,
-	TFetchOptions extends { [key: string]: any } = RequestInit,
+	TFetchOptions extends Record<string, any> = RequestInit,
 	TRequestResult extends RequestResult = Response
 > {
 	private endpoint: string
@@ -54,7 +51,10 @@ export default class AwesomeGraphQLClient<
 		this.onError = config.onError
 	}
 
-	private createRequestBody(query: string, variables?: {}): string | FormData {
+	private createRequestBody(
+		query: string,
+		variables?: Record<string, unknown>,
+	): string | FormData {
 		const { clone, files } = extractFiles(
 			{ query, variables },
 			'',
@@ -122,7 +122,12 @@ export default class AwesomeGraphQLClient<
 	 * @param variables variables
 	 * @param fetchOptions overrides for fetch options
 	 */
-	async requestSafe<TData extends {}, TVariables extends {} = {}>(
+	async requestSafe<
+		// Should be "any" and not "unknown" to be compatible with interfaces
+		// https://github.com/microsoft/TypeScript/issues/15300#issuecomment-702872440
+		TData extends Record<string, any>,
+		TVariables extends Record<string, any> = Record<string, any>
+	>(
 		query: TQuery,
 		variables?: TVariables,
 		fetchOptions?: TFetchOptions,
@@ -227,11 +232,10 @@ export default class AwesomeGraphQLClient<
 	 * @param variables variables
 	 * @param fetchOptions overrides for fetch options
 	 */
-	async request<TData extends {}, TVariables extends {} = {}>(
-		query: TQuery,
-		variables?: TVariables,
-		fetchOptions?: TFetchOptions,
-	): Promise<TData> {
+	async request<
+		TData extends Record<string, any>,
+		TVariables extends Record<string, any> = Record<string, any>
+	>(query: TQuery, variables?: TVariables, fetchOptions?: TFetchOptions): Promise<TData> {
 		const result = await this.requestSafe<TData, TVariables>(
 			query,
 			variables,

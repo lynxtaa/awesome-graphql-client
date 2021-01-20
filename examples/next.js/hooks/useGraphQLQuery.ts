@@ -3,13 +3,15 @@ import { useQuery, UseQueryOptions, QueryObserverResult } from 'react-query'
 
 import graphQLClient from '../lib/graphQLClient'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export function useGraphQLQuery<TData extends {}, TVariables extends {} = {}>(
+export function useGraphQLQuery<
+	TData extends Record<string, any>,
+	TVariables extends Record<string, any> = Record<string, any>
+>(
 	query: string,
 	variables?: TVariables,
-	options?: UseQueryOptions<TData, GraphQLRequestError>,
-): QueryObserverResult<TData, GraphQLRequestError> {
-	return useQuery<TData, GraphQLRequestError>(
+	options?: UseQueryOptions<TData, GraphQLRequestError | Error>,
+): QueryObserverResult<TData, GraphQLRequestError | Error> {
+	return useQuery<TData, GraphQLRequestError | Error>(
 		[query, variables],
 		() => graphQLClient.request<TData, TVariables>(query, variables),
 		options,
