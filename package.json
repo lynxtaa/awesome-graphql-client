@@ -40,7 +40,7 @@
     "format": "npm run prettier -- --write",
     "check-types": "tsc",
     "release": "standard-version",
-    "test": "is-ci \"test:coverage\" \"test:watch\"",
+    "test": "is-ci-cli \"test:coverage\" \"test:watch\"",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
   },
