@@ -14,7 +14,7 @@ class AuthContainer {
 	tokenType: string
 	expiresAt: number
 
-	private resolvers: [() => void, (error: Error) => void][]
+	private refreshTokenPromise: Promise<void> | null
 
 	constructor({
 		endpoint,
@@ -30,7 +30,7 @@ class AuthContainer {
 		this.accessToken = accessToken
 		this.tokenType = tokenType
 		this.expiresAt = expiresAt
-		this.resolvers = []
+		this.refreshTokenPromise = null
 
 		this.client = new AwesomeGraphQLClient<string, FetchOptions>({
 			endpoint,
@@ -91,30 +91,24 @@ class AuthContainer {
 			}
 		}
 
-		return new Promise<void>(async (resolve, reject) => {
-			this.resolvers.push([resolve, reject])
-
-			// First refresh call
-			if (this.resolvers.length === 0) {
-				try {
-					const data = await this.client.request<RefreshType>(
-						Refresh,
-						{},
-						{ skipRefresh: true }, // preventing infinite refresh loop
-					)
-
+		if (!this.refreshTokenPromise) {
+			this.refreshTokenPromise = this.client
+				.request<RefreshType>(
+					Refresh,
+					{},
+					{ skipRefresh: true }, // preventing infinite refresh loop
+				)
+				.then((data) => {
 					this.accessToken = data.refresh.accessToken
 					this.tokenType = data.refresh.tokenType
 					this.expiresAt = Date.now() + data.refresh.expiresIn * 1000
+				})
+				.finally(() => {
+					this.refreshTokenPromise = null
+				})
+		}
 
-					this.resolvers.forEach(([resolve]) => resolve())
-				} catch (error) {
-					this.resolvers.forEach(([, reject]) => reject(error))
-				} finally {
-					this.resolvers = []
-				}
-			}
-		})
+		return this.refreshTokenPromise
 	}
 }
 
