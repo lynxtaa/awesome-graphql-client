@@ -10,7 +10,7 @@ import fetch from 'node-fetch'
 
 import { AwesomeGraphQLClient } from '../index'
 import { server, rest } from '../jest/server'
-import gql from '../util/gql'
+import { gql } from '../util/gql'
 
 it('throws if no Fetch polyfill provided', () => {
 	expect(() => new AwesomeGraphQLClient({ endpoint: '/' })).toThrow(

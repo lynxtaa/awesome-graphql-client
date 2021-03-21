@@ -1,13 +1,13 @@
 import { extractFiles } from 'extract-files'
 
-import GraphQLRequestError from './GraphQLRequestError'
-import assert from './util/assert'
-import formatGetRequestUrl from './util/formatGetRequestUrl'
-import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'
-import isResponseJSON from './util/isResponseJSON'
+import { GraphQLRequestError } from './GraphQLRequestError'
+import { assert } from './util/assert'
+import { formatGetRequestUrl } from './util/formatGetRequestUrl'
+import { isExtractableFileEnhanced } from './util/isExtractableFileEnhanced'
+import { isResponseJSON } from './util/isResponseJSON'
 import { RequestResult } from './util/types'
 
-export default class AwesomeGraphQLClient<
+export class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends Record<string, any> = RequestInit,
 	TRequestResult extends RequestResult = Response

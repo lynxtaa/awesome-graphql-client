@@ -2,7 +2,7 @@
  * Returns URL for GraphQL GET Requests:
  * https://graphql.org/learn/serving-over-http/#get-request
  */
-export default function formatGetRequestUrl({
+export function formatGetRequestUrl({
 	endpoint,
 	query,
 	variables,
