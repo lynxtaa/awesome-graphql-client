@@ -7,7 +7,7 @@ import graphqlTag from 'graphql-tag'
 
 import { AwesomeGraphQLClient, GraphQLRequestError } from '../index'
 import { server, graphql, rest } from '../jest/server'
-import gql from '../util/gql'
+import { gql } from '../util/gql'
 
 if (typeof fetch === 'undefined') {
 	require('whatwg-fetch')

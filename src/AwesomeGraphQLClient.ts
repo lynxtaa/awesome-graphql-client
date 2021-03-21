@@ -1,9 +1,8 @@
-import { extractFiles } from 'extract-files'
-
 import GraphQLRequestError from './GraphQLRequestError'
 import assert from './util/assert'
+import { extractFiles } from './util/extractFiles'
 import formatGetRequestUrl from './util/formatGetRequestUrl'
-import isExtractableFileEnhanced from './util/isExtractableFileEnhanced'
+import { isFile, Upload } from './util/isFile'
 import isResponseJSON from './util/isResponseJSON'
 import { RequestResult } from './util/types'
 
@@ -18,6 +17,7 @@ export default class AwesomeGraphQLClient<
 	private formatQuery?: (query: TQuery) => string
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
+	private isFile: (value: unknown) => value is Upload
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -32,6 +32,8 @@ export default class AwesomeGraphQLClient<
 		formatQuery?: (query: TQuery) => string
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
+		/** Check if value is a file */
+		isFile?: (value: unknown) => value is Upload
 	}) {
 		assert(config.endpoint, 'endpoint is required')
 
@@ -49,17 +51,15 @@ export default class AwesomeGraphQLClient<
 
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
+		this.isFile = config.isFile || isFile
 	}
 
 	private createRequestBody(
 		query: string,
 		variables?: Record<string, unknown>,
 	): string | FormData {
-		const { clone, files } = extractFiles(
-			{ query, variables },
-			'',
-			isExtractableFileEnhanced,
-		)
+		const { clone, files } = extractFiles({ query, variables }, this.isFile)
+
 		const operationJSON = JSON.stringify(clone)
 
 		if (!files.size) {

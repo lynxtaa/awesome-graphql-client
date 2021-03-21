@@ -5,9 +5,7 @@
  * It has less computational cost and makes overall smaller bundles. See:
  * https://github.com/lynxtaa/awesome-graphql-client#approach-2-use-fake-graphql-tag
  */
-const gql = (strings: TemplateStringsArray, ...values: any[]): string =>
+export const gql = (strings: TemplateStringsArray, ...values: any[]): string =>
 	strings
 		.reduce((prev, curr, i) => prev + curr + (i in values ? values[i] : ''), '')
 		.trim()
-
-export default gql
