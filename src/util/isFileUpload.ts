@@ -1,15 +1,15 @@
-export type StreamLike = { pipe: () => any }
+export type StreamLike = { pipe: (...args: unknown[]) => unknown }
 
 /** Uploadable file */
-export type Upload = File | Blob | Buffer | StreamLike
+export type FileUpload = File | Blob | Buffer | StreamLike
 
 /**
- * Returns true if value should be considered as file.
+ * Returns true if value is a file.
  * Supports File, Blob, Buffer and stream-like instances
  *
  * @param value incoming value
  */
-export function isFile(value: any): value is Upload {
+export function isFileUpload(value: any): value is FileUpload {
 	return (
 		(typeof File !== 'undefined' && value instanceof File) ||
 		(typeof Blob !== 'undefined' && value instanceof Blob) ||

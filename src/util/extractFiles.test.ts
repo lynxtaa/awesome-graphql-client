@@ -1,5 +1,5 @@
 import { extractFiles } from './extractFiles'
-import { isFile } from './isFile'
+import { isFileUpload } from './isFileUpload'
 
 it("don't touch non-files", () => {
 	const variables = {
@@ -15,7 +15,7 @@ it("don't touch non-files", () => {
 			date: new Date(),
 		},
 	}
-	const { clone, files } = extractFiles({ query: '', variables }, isFile)
+	const { clone, files } = extractFiles({ query: '', variables }, isFileUpload)
 	expect(clone).toEqual({ query: '', variables })
 	expect(files.size).toBe(0)
 })
@@ -33,7 +33,7 @@ it('works with FileList', () => {
 		d: { a: fileList },
 	}
 
-	const { clone, files } = extractFiles({ query: '', variables }, isFile)
+	const { clone, files } = extractFiles({ query: '', variables }, isFileUpload)
 	expect(clone).toEqual({
 		query: '',
 		variables: {
@@ -67,7 +67,7 @@ it.each([
 		h: [[file2, file3]],
 	}
 
-	const { clone, files } = extractFiles({ query: '', variables }, isFile)
+	const { clone, files } = extractFiles({ query: '', variables }, isFileUpload)
 	expect(clone).toEqual({
 		query: '',
 		variables: {
@@ -106,7 +106,7 @@ describe('handles circular dependencies', () => {
 		a.b = b
 		b.a = a
 
-		expect(() => extractFiles({ a, b }, isFile)).toThrowError(
+		expect(() => extractFiles({ a, b }, isFileUpload)).toThrowError(
 			'Circular dependency detected in a.b.a',
 		)
 	})
@@ -119,7 +119,7 @@ describe('handles circular dependencies', () => {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		b.c[0]!.e = b
 
-		expect(() => extractFiles({ b }, isFile)).toThrowError(
+		expect(() => extractFiles({ b }, isFileUpload)).toThrowError(
 			'Circular dependency detected in b.c.0.e',
 		)
 	})
@@ -132,7 +132,7 @@ describe('handles circular dependencies', () => {
 			c: [a, a, a],
 		}
 
-		const { clone, files } = extractFiles(variables, isFile)
+		const { clone, files } = extractFiles(variables, isFileUpload)
 		expect(files.size).toBe(0)
 		expect(clone).toEqual(variables)
 	})

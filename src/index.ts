@@ -1,6 +1,6 @@
 import AwesomeGraphQLClient from './AwesomeGraphQLClient'
 import GraphQLRequestError from './GraphQLRequestError'
 import { gql } from './util/gql'
-import { Upload, isFile } from './util/isFile'
+import { FileUpload, isFileUpload } from './util/isFileUpload'
 
-export { AwesomeGraphQLClient, GraphQLRequestError, gql, isFile, Upload }
+export { AwesomeGraphQLClient, GraphQLRequestError, gql, isFileUpload, FileUpload }

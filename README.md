@@ -100,7 +100,7 @@ client
   - [GraphQL GET Requests](#graphql-get-requests)
   - [GraphQL Tag](#graphql-tag)
   - [Cookies in NodeJS](#cookies-in-nodejs)
-  - [Custom _isFile_ Predicate](#custom-isfile-predicate)
+  - [Custom _isFileUpload_ Predicate](#custom-isfileupload-predicate)
   - [More Examples](#more-examples)
 
 ## API
@@ -122,7 +122,7 @@ const client = new AwesomeGraphQLClient(config)
 - `FormData`: _object_ - FormData polyfill (necessary in NodeJS if you are using file upload, see [example](#nodejs))
 - `formatQuery`: _function(query: any): string_ - Custom query formatter (see [example](#graphql-tag))
 - `onError`: _function(error: GraphQLRequestError | Error): void_ - Provided callback will be called before throwing an error (see [example](#error-logging))
-- `isFile`: _function(value: unknown): boolean_ - Custom predicate function for checking if value should be considered as file (see [example](#custom-isfile-predicate))
+- `isFileUpload`: _function(value: unknown): boolean_ - Custom predicate function for checking if value is a file (see [example](#custom-isfileupload-predicate))
 
 ### `client` methods
 
@@ -272,17 +272,16 @@ const client = new AwesomeGraphQLClient({
 })
 ```
 
-## Custom _isFile_ Predicate
+## Custom _isFileUpload_ Predicate
 
 ```js
-const { AwesomeGraphQLClient, isFile } = require('awesome-graphql-client')
+const { AwesomeGraphQLClient, isFileUpload } = require('awesome-graphql-client')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  // By default File, Blob, Buffer and stream-like instances
-  // are considered as files. You can expand this behaviour by adding
-  // a custom predicate
-  isFile: (value) => isFile(value) || value instanceof MyCustomFile,
+  // By default File, Blob, Buffer and stream-like instances are considered as files.
+  // You can expand this behaviour by adding a custom predicate
+  isFileUpload: (value) => isFileUpload(value) || value instanceof MyCustomFile,
 })
 ```
 

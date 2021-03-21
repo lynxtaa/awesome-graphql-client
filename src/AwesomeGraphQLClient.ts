@@ -2,7 +2,7 @@ import GraphQLRequestError from './GraphQLRequestError'
 import assert from './util/assert'
 import { extractFiles } from './util/extractFiles'
 import formatGetRequestUrl from './util/formatGetRequestUrl'
-import { isFile, Upload } from './util/isFile'
+import { isFileUpload, FileUpload } from './util/isFileUpload'
 import isResponseJSON from './util/isResponseJSON'
 import { RequestResult } from './util/types'
 
@@ -10,7 +10,7 @@ export default class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends Record<string, any> = RequestInit,
 	TRequestResult extends RequestResult = Response,
-	TFileUpload = Upload
+	TFileUpload = FileUpload
 > {
 	private endpoint: string
 	private fetch: (url: string, options?: TFetchOptions) => Promise<TRequestResult>
@@ -18,7 +18,7 @@ export default class AwesomeGraphQLClient<
 	private formatQuery?: (query: TQuery) => string
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
-	private isFile: (value: unknown) => value is TFileUpload
+	private isFileUpload: (value: unknown) => value is TFileUpload
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -34,7 +34,7 @@ export default class AwesomeGraphQLClient<
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
 		/** Check if value is a file */
-		isFile?: (value: unknown) => value is TFileUpload
+		isFileUpload?: (value: unknown) => value is TFileUpload
 	}) {
 		assert(config.endpoint, 'endpoint is required')
 
@@ -52,14 +52,14 @@ export default class AwesomeGraphQLClient<
 
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
-		this.isFile = config.isFile || (isFile as any)
+		this.isFileUpload = config.isFileUpload || (isFileUpload as any)
 	}
 
 	private createRequestBody(
 		query: string,
 		variables?: Record<string, unknown>,
 	): string | FormData {
-		const { clone, files } = extractFiles({ query, variables }, this.isFile)
+		const { clone, files } = extractFiles({ query, variables }, this.isFileUpload)
 
 		const operationJSON = JSON.stringify(clone)
 
