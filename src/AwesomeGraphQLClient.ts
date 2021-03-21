@@ -3,14 +3,15 @@ import { extractFiles } from 'extract-files'
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
 import { formatGetRequestUrl } from './util/formatGetRequestUrl'
-import { isExtractableFileEnhanced } from './util/isExtractableFileEnhanced'
+import { isFileUpload, FileUpload } from './util/isFileUpload'
 import { isResponseJSON } from './util/isResponseJSON'
 import { RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends Record<string, any> = RequestInit,
-	TRequestResult extends RequestResult = Response
+	TRequestResult extends RequestResult = Response,
+	TFileUpload = FileUpload
 > {
 	private endpoint: string
 	private fetch: (url: string, options?: TFetchOptions) => Promise<TRequestResult>
@@ -18,6 +19,7 @@ export class AwesomeGraphQLClient<
 	private formatQuery?: (query: TQuery) => string
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
+	private isFileUpload: (value: unknown) => value is TFileUpload
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -32,12 +34,29 @@ export class AwesomeGraphQLClient<
 		formatQuery?: (query: TQuery) => string
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
+		/** Custom predicate function for checking if value is a file */
+		isFileUpload?: (value: unknown) => value is TFileUpload
 	}) {
 		assert(config.endpoint, 'endpoint is required')
 
 		assert(
 			config.fetch || typeof fetch !== 'undefined',
 			'Fetch must be polyfilled or passed in new AwesomeGraphQLClient({ fetch })',
+		)
+
+		assert(
+			!config.formatQuery || typeof config.formatQuery === 'function',
+			'Invalid config value: `formatQuery` must be a function',
+		)
+
+		assert(
+			!config.onError || typeof config.onError === 'function',
+			'Invalid config value: `onError` must be a function',
+		)
+
+		assert(
+			!config.isFileUpload || typeof config.isFileUpload === 'function',
+			'Invalid config value: `isFileUpload` should be a function',
 		)
 
 		this.endpoint = config.endpoint
@@ -49,17 +68,14 @@ export class AwesomeGraphQLClient<
 
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
+		this.isFileUpload = config.isFileUpload || (isFileUpload as any)
 	}
 
 	private createRequestBody(
 		query: string,
 		variables?: Record<string, unknown>,
 	): string | FormData {
-		const { clone, files } = extractFiles(
-			{ query, variables },
-			'',
-			isExtractableFileEnhanced,
-		)
+		const { clone, files } = extractFiles({ query, variables }, '', this.isFileUpload)
 		const operationJSON = JSON.stringify(clone)
 
 		if (!files.size) {

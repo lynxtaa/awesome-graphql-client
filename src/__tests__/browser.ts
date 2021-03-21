@@ -462,3 +462,55 @@ it('ignores errors thrown inside onError hook', async () => {
 		'GraphQL Request Error: Not Authorized',
 	)
 })
+
+it('uses provided `isFileUpload` implementation', async () => {
+	const query = gql`
+		mutation UploadFile($file: Upload!) {
+			uploadFile(file: $file)
+		}
+	`
+
+	class MyFile {
+		filename: string
+		constructor(filename: string) {
+			this.filename = filename
+		}
+		toString() {
+			return this.filename
+		}
+	}
+
+	server.use(
+		rest.post('/api/graphql', (req, res, ctx) => {
+			const form = req.body as FormData
+
+			const operations = form.get('operations')
+			const map = form.get('map')
+
+			if (typeof operations !== 'string' || typeof map !== 'string') {
+				return res(ctx.status(400))
+			}
+
+			expect(JSON.parse(operations)).toEqual({
+				query,
+				variables: { file: null },
+			})
+
+			expect(JSON.parse(map)).toEqual({ 1: ['variables.file'] })
+			expect(form.get('1')).toBe('image.png')
+
+			return res(ctx.json({ data: { uploadFile: true } }))
+		}),
+	)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: '/api/graphql',
+		isFileUpload: (value): value is MyFile => value instanceof MyFile,
+	})
+
+	const data = await client.request(query, {
+		file: new MyFile('image.png'),
+	})
+
+	expect(data).toEqual({ uploadFile: true })
+})
