@@ -107,7 +107,7 @@ describe('handles circular dependencies', () => {
 		b.a = a
 
 		expect(() => extractFiles({ a, b }, isFile)).toThrowError(
-			'Circular dependency detected: a → b → a',
+			'Circular dependency detected in a.b.a',
 		)
 	})
 
@@ -120,7 +120,7 @@ describe('handles circular dependencies', () => {
 		b.c[0]!.e = b
 
 		expect(() => extractFiles({ b }, isFile)).toThrowError(
-			'Circular dependency detected: b → c → 0 → e',
+			'Circular dependency detected in b.c.0.e',
 		)
 	})
 

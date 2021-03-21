@@ -36,7 +36,7 @@ export function extractFiles<TUpload>(
 			target[currentPath] = null
 		} else if (isArray(value) || isPlainObject(value)) {
 			if (stackSet.has(value)) {
-				throw new Error(`Circular dependency detected: ${paths.join(' → ')}`)
+				throw new Error(`Circular dependency detected in ${paths.join('.')}`)
 			}
 			stackSet.add(value)
 
