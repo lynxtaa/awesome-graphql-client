@@ -123,4 +123,17 @@ describe('handles circular dependencies', () => {
 			'Circular dependency detected: b → c → 0 → e',
 		)
 	})
+
+	it('no circular dependencies', () => {
+		const a = {}
+		const variables = {
+			a,
+			b: { b: a, c: a },
+			c: [a, a, a],
+		}
+
+		const { clone, files } = extractFiles(variables, isFile)
+		expect(files.size).toBe(0)
+		expect(clone).toEqual(variables)
+	})
 })
