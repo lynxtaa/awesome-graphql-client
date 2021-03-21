@@ -9,7 +9,8 @@ import { RequestResult } from './util/types'
 export default class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends Record<string, any> = RequestInit,
-	TRequestResult extends RequestResult = Response
+	TRequestResult extends RequestResult = Response,
+	TFileUpload = Upload
 > {
 	private endpoint: string
 	private fetch: (url: string, options?: TFetchOptions) => Promise<TRequestResult>
@@ -17,7 +18,7 @@ export default class AwesomeGraphQLClient<
 	private formatQuery?: (query: TQuery) => string
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
-	private isFile: (value: unknown) => value is Upload
+	private isFile: (value: unknown) => value is TFileUpload
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -33,7 +34,7 @@ export default class AwesomeGraphQLClient<
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
 		/** Check if value is a file */
-		isFile?: (value: unknown) => value is Upload
+		isFile?: (value: unknown) => value is TFileUpload
 	}) {
 		assert(config.endpoint, 'endpoint is required')
 
@@ -51,7 +52,7 @@ export default class AwesomeGraphQLClient<
 
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
-		this.isFile = config.isFile || isFile
+		this.isFile = config.isFile || (isFile as any)
 	}
 
 	private createRequestBody(
