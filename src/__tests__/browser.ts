@@ -26,6 +26,8 @@ it('sends GraphQL request without variables', async () => {
 
 	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
 
+	expect(client.getEndpoint()).toBe('/api/graphql')
+
 	const query = `
 		query GetUsers {
 			users {

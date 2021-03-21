@@ -91,6 +91,13 @@ export default class AwesomeGraphQLClient<
 	}
 
 	/**
+	 * Returns current GraphQL endpoint
+	 */
+	getEndpoint(): string {
+		return this.endpoint
+	}
+
+	/**
 	 * Sets new overrides for fetch options
 	 *
 	 * @param fetchOptions new overrides for fetch options
