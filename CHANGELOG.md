@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.7.0...v0.8.0) (2021-03-22)
+
+
+### Features
+
+* add getEndpoint method ([35ad864](https://github.com/lynxtaa/awesome-graphql-client/commit/35ad8641ec7e6cbd94ef758707350d11afcd187b))
+* bundle extract-files ([#65](https://github.com/lynxtaa/awesome-graphql-client/issues/65)) ([38a6140](https://github.com/lynxtaa/awesome-graphql-client/commit/38a6140fd9a6e76c9aa49f3ba059cb676f326f69))
+
 ## [0.7.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.6.1...v0.7.0) (2021-01-20)
 
 
