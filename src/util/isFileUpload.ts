@@ -4,16 +4,22 @@ export type StreamLike = { pipe: (...args: unknown[]) => unknown }
 export type FileUpload = File | Blob | Buffer | StreamLike
 
 /**
+ * Duck-typing if value is a stream
+ * https://github.com/sindresorhus/is-stream/blob/3750505b0727f6df54324784fe369365ef78841e/index.js#L3
+ *
+ * @param value incoming value
+ */
+const isStreamLike = (value: any): value is StreamLike =>
+	typeof value === 'object' && value !== null && typeof value.pipe === 'function'
+
+/**
  * Returns true if value is a file.
  * Supports File, Blob, Buffer and stream-like instances
  *
  * @param value incoming value
  */
-export function isFileUpload(value: any): value is FileUpload {
-	return (
-		(typeof File !== 'undefined' && value instanceof File) ||
-		(typeof Blob !== 'undefined' && value instanceof Blob) ||
-		(typeof Buffer !== 'undefined' && Buffer.isBuffer(value)) ||
-		(typeof value === 'object' && value !== null && typeof value.pipe === 'function')
-	)
-}
+export const isFileUpload = (value: unknown): value is FileUpload =>
+	(typeof File !== 'undefined' && value instanceof File) ||
+	(typeof Blob !== 'undefined' && value instanceof Blob) ||
+	(typeof Buffer !== 'undefined' && value instanceof Buffer) ||
+	isStreamLike(value)

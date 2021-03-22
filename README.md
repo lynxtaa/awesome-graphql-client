@@ -94,6 +94,7 @@ client
   - [AwesomeGraphQLClient](#awesomegraphqlclient)
   - [GraphQLRequestError](#graphqlrequesterror)
   - [gql](#approach-2-use-fake-graphql-tag)
+  - [isFileUpload](#custom-isfileupload-predicate)
 - Examples
   - [Typescript](#typescript)
   - [Error Logging](#error-logging)
@@ -126,8 +127,9 @@ const client = new AwesomeGraphQLClient(config)
 
 ### `client` methods
 
-- `client.setFetchOptions(fetchOptions)`: Sets fetch options. See examples below
+- `client.setFetchOptions(fetchOptions: FetchOptions)`: Sets fetch options. See examples below
 - `client.getFetchOptions()`: Returns current fetch options
+- `client.getEnpoint(): string`: Returns current GraphQL endpoint
 - `client.request(query, variables?, fetchOptions?): Promise<data>`: Sends GraphQL Request and returns data or throws an error
 - `client.requestSafe(query, variables?, fetchOptions?): Promise<{ data, response } | { error }>`: Sends GraphQL Request and returns object with 'data' and 'response' fields or with a single 'error' field. See examples below. _Notice: this function never throws_.
 

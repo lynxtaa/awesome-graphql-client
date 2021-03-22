@@ -1,12 +1,12 @@
-import GraphQLRequestError from './GraphQLRequestError'
-import assert from './util/assert'
+import { GraphQLRequestError } from './GraphQLRequestError'
+import { assert } from './util/assert'
 import { extractFiles } from './util/extractFiles'
-import formatGetRequestUrl from './util/formatGetRequestUrl'
+import { formatGetRequestUrl } from './util/formatGetRequestUrl'
 import { isFileUpload, FileUpload } from './util/isFileUpload'
-import isResponseJSON from './util/isResponseJSON'
+import { isResponseJSON } from './util/isResponseJSON'
 import { RequestResult } from './util/types'
 
-export default class AwesomeGraphQLClient<
+export class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends Record<string, any> = RequestInit,
 	TRequestResult extends RequestResult = Response,
@@ -33,7 +33,7 @@ export default class AwesomeGraphQLClient<
 		formatQuery?: (query: TQuery) => string
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
-		/** Check if value is a file */
+		/** Custom predicate function for checking if value is a file */
 		isFileUpload?: (value: unknown) => value is TFileUpload
 	}) {
 		assert(config.endpoint, 'endpoint is required')
@@ -41,6 +41,21 @@ export default class AwesomeGraphQLClient<
 		assert(
 			config.fetch || typeof fetch !== 'undefined',
 			'Fetch must be polyfilled or passed in new AwesomeGraphQLClient({ fetch })',
+		)
+
+		assert(
+			!config.formatQuery || typeof config.formatQuery === 'function',
+			'Invalid config value: `formatQuery` must be a function',
+		)
+
+		assert(
+			!config.onError || typeof config.onError === 'function',
+			'Invalid config value: `onError` must be a function',
+		)
+
+		assert(
+			!config.isFileUpload || typeof config.isFileUpload === 'function',
+			'Invalid config value: `isFileUpload` should be a function',
 		)
 
 		this.endpoint = config.endpoint
@@ -89,6 +104,13 @@ export default class AwesomeGraphQLClient<
 		})
 
 		return form
+	}
+
+	/**
+	 * Returns current GraphQL endpoint
+	 */
+	getEndpoint(): string {
+		return this.endpoint
 	}
 
 	/**

@@ -1,6 +1,6 @@
 import { RequestResult } from './util/types'
 
-export default class GraphQLRequestError<
+export class GraphQLRequestError<
 	TResponse extends RequestResult = Response
 > extends Error {
 	query: string
