@@ -94,6 +94,7 @@ client
   - [AwesomeGraphQLClient](#awesomegraphqlclient)
   - [GraphQLRequestError](#graphqlrequesterror)
   - [gql](#approach-2-use-fake-graphql-tag)
+  - [isFileUpload](#custom-isfileupload-predicate)
 - Examples
   - [Typescript](#typescript)
   - [Error Logging](#error-logging)
