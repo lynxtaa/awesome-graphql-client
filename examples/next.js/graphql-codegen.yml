@@ -1,0 +1,15 @@
+overwrite: true
+schema: 'https://rickandmortyapi.com/graphql'
+documents: '{hooks,lib,pages}/**/*.{ts,tsx,graphql}'
+generates:
+  lib/graphql-queries.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+      - named-operations-object
+    config:
+      errorType: Error
+      fetcher:
+        func: './gqlFetcher#gqlFetcher'
+        isReactHook: false
