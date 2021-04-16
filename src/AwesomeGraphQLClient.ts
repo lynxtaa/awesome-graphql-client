@@ -1,7 +1,6 @@
-import { extractFiles } from 'extract-files'
-
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
+import { extractFiles } from './util/extractFiles'
 import { formatGetRequestUrl } from './util/formatGetRequestUrl'
 import { isFileUpload, FileUpload } from './util/isFileUpload'
 import { isResponseJSON } from './util/isResponseJSON'
@@ -75,7 +74,8 @@ export class AwesomeGraphQLClient<
 		query: string,
 		variables?: Record<string, unknown>,
 	): string | FormData {
-		const { clone, files } = extractFiles({ query, variables }, '', this.isFileUpload)
+		const { clone, files } = extractFiles({ query, variables }, this.isFileUpload)
+
 		const operationJSON = JSON.stringify(clone)
 
 		if (!files.size) {
