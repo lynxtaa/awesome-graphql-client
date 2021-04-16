@@ -224,8 +224,4 @@ export const useGetCharactersQuery = <
       gqlFetcher<GetCharactersQuery, GetCharactersQueryVariables>(GetCharactersDocument, variables),
       options
     );
-export const namedOperations = {
-  Query: {
-    GetCharacters: 'GetCharacters'
-  }
-}
+useGetCharactersQuery.getKey = (variables?: GetCharactersQueryVariables) => ['GetCharacters', variables];

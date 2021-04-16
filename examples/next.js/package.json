@@ -18,7 +18,6 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.21.3",
-    "@graphql-codegen/named-operations-object": "^1.18.1",
     "@graphql-codegen/typescript": "1.21.1",
     "@graphql-codegen/typescript-operations": "1.17.15",
     "@graphql-codegen/typescript-react-query": "^1.2.4",

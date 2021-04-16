@@ -7,10 +7,10 @@ generates:
       - typescript
       - typescript-operations
       - typescript-react-query
-      - named-operations-object
     config:
       errorType: Error
       skipTypename: true
+      exposeQueryKeys: true
       avoidOptionals:
         field: true
         inputValue: false

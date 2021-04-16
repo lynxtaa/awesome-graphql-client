@@ -4,11 +4,7 @@ import { QueryClient } from 'react-query'
 import { dehydrate } from 'react-query/hydration'
 
 import { graphQLClient } from '../lib/graphQLClient'
-import {
-	GetCharactersDocument,
-	namedOperations,
-	useGetCharactersQuery,
-} from '../lib/graphql-queries'
+import { GetCharactersDocument, useGetCharactersQuery } from '../lib/graphql-queries'
 
 export default function Home() {
 	const [filter, setFilter] = useState('')
@@ -45,9 +41,8 @@ export default function Home() {
 export const getStaticProps: GetStaticProps = async () => {
 	const queryClient = new QueryClient()
 
-	await queryClient.prefetchQuery(
-		[namedOperations.Query.GetCharacters, { name: '' }],
-		() => graphQLClient.request(GetCharactersDocument, { name: '' }),
+	await queryClient.prefetchQuery(useGetCharactersQuery.getKey({ name: '' }), () =>
+		graphQLClient.request(GetCharactersDocument, { name: '' }),
 	)
 
 	return {
