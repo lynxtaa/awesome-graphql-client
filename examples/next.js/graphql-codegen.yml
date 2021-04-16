@@ -10,6 +10,12 @@ generates:
       - named-operations-object
     config:
       errorType: Error
+      skipTypename: true
+      avoidOptionals:
+        field: true
+        inputValue: false
+        object: false
+        defaultValue: false
       fetcher:
         func: './gqlFetcher#gqlFetcher'
         isReactHook: false
