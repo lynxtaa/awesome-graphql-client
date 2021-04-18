@@ -5,9 +5,10 @@
 import { print, DocumentNode } from 'graphql'
 import graphqlTag from 'graphql-tag'
 
-import { AwesomeGraphQLClient, GraphQLRequestError } from '../index'
-import { server, graphql, rest } from '../jest/server'
-import { gql } from '../util/gql'
+import { AwesomeGraphQLClient, GraphQLRequestError } from '../src/index'
+import { gql } from '../src/util/gql'
+
+import { server, graphql, rest } from './jest/server'
 
 if (typeof fetch === 'undefined') {
 	require('whatwg-fetch')

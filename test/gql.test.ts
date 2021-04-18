@@ -1,4 +1,4 @@
-import { gql } from './gql'
+import { gql } from '../src/util/gql'
 
 it('formats query with values as a string', () => {
 	const userId = 123

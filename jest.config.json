@@ -1,6 +1,5 @@
 {
 	"clearMocks": true,
-	"rootDir": "src",
-	"coverageDirectory": "<rootDir>/../coverage",
-	"setupFilesAfterEnv": ["<rootDir>/jest/setupTests.ts"]
+	"roots": ["<rootDir>/test"],
+	"setupFilesAfterEnv": ["<rootDir>/test/jest/setupTests.ts"]
 }
