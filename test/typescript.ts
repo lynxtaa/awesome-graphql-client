@@ -45,6 +45,7 @@ export async function withVariables(): Promise<void> {
 
 export async function withoutVariables(): Promise<void> {
 	type GetUsersQuery = { users: { id: 1 }[] }
+	type GetUsersQueryVariables = Record<string, never>
 
 	const query = gql`
 		query GetUsers {
@@ -55,6 +56,9 @@ export async function withoutVariables(): Promise<void> {
 	`
 
 	const data = await client.request<GetUsersQuery>(query)
+
+	await client.request<GetUsersQuery, GetUsersQueryVariables>(query)
+	await client.request<GetUsersQuery, GetUsersQueryVariables>(query, {})
 
 	console.log(data.users)
 
