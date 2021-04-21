@@ -1,6 +1,5 @@
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { extractFiles } from 'extract-files'
-import { DocumentNode } from 'graphql'
 
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
@@ -10,7 +9,7 @@ import { isResponseJSON } from './util/isResponseJSON'
 import { RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
-	TQuery extends string | DocumentNode | TypedDocumentNode = string,
+	TQuery = string,
 	TFetchOptions extends Record<string, any> = RequestInit,
 	TRequestResult extends RequestResult = Response,
 	TFileUpload = FileUpload
