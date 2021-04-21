@@ -1,4 +1,6 @@
+import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { extractFiles } from 'extract-files'
+import { DocumentNode } from 'graphql'
 
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
@@ -8,7 +10,7 @@ import { isResponseJSON } from './util/isResponseJSON'
 import { RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
-	TQuery = string,
+	TQuery extends string | DocumentNode | TypedDocumentNode = string,
 	TFetchOptions extends Record<string, any> = RequestInit,
 	TRequestResult extends RequestResult = Response,
 	TFileUpload = FileUpload
@@ -151,7 +153,9 @@ export class AwesomeGraphQLClient<
 		TData extends Record<string, any>,
 		TVariables extends Record<string, any>
 	>(
-		query: TQuery,
+		query: TQuery extends TypedDocumentNode
+			? TypedDocumentNode<TData, TVariables>
+			: TQuery,
 		variables: TVariables,
 		fetchOptions?: TFetchOptions,
 	): Promise<
@@ -163,7 +167,9 @@ export class AwesomeGraphQLClient<
 		TData extends Record<string, any>,
 		TVariables extends Record<any, never> = Record<any, never>
 	>(
-		query: TQuery,
+		query: TQuery extends TypedDocumentNode
+			? TypedDocumentNode<TData, TVariables>
+			: TQuery,
 		variables?: TVariables,
 		fetchOptions?: TFetchOptions,
 	): Promise<
@@ -175,7 +181,9 @@ export class AwesomeGraphQLClient<
 		TData extends Record<string, any>,
 		TVariables extends Record<string, any> = Record<string, any>
 	>(
-		query: TQuery,
+		query: TQuery extends TypedDocumentNode
+			? TypedDocumentNode<TData, TVariables>
+			: TQuery,
 		variables?: TVariables,
 		fetchOptions?: TFetchOptions,
 	): Promise<
@@ -183,7 +191,7 @@ export class AwesomeGraphQLClient<
 		| { error: GraphQLRequestError<TRequestResult> | Error }
 	> {
 		try {
-			const queryAsString = this.formatQuery ? this.formatQuery(query) : query
+			const queryAsString = this.formatQuery ? this.formatQuery(query as TQuery) : query
 
 			assert(
 				typeof queryAsString === 'string',
@@ -282,17 +290,35 @@ export class AwesomeGraphQLClient<
 	async request<
 		TData extends Record<string, any>,
 		TVariables extends Record<string, any>
-	>(query: TQuery, variables: TVariables, fetchOptions?: TFetchOptions): Promise<TData>
+	>(
+		query: TQuery extends TypedDocumentNode
+			? TypedDocumentNode<TData, TVariables>
+			: TQuery,
+		variables: TVariables,
+		fetchOptions?: TFetchOptions,
+	): Promise<TData>
 
 	async request<
 		TData extends Record<string, any>,
 		TVariables extends Record<any, never> = Record<any, never>
-	>(query: TQuery, variables?: TVariables, fetchOptions?: TFetchOptions): Promise<TData>
+	>(
+		query: TQuery extends TypedDocumentNode
+			? TypedDocumentNode<TData, TVariables>
+			: TQuery,
+		variables?: TVariables,
+		fetchOptions?: TFetchOptions,
+	): Promise<TData>
 
 	async request<
 		TData extends Record<string, any>,
 		TVariables extends Record<string, any>
-	>(query: TQuery, variables: TVariables, fetchOptions?: TFetchOptions): Promise<TData> {
+	>(
+		query: TQuery extends TypedDocumentNode
+			? TypedDocumentNode<TData, TVariables>
+			: TQuery,
+		variables: TVariables,
+		fetchOptions?: TFetchOptions,
+	): Promise<TData> {
 		const result = await this.requestSafe<TData, TVariables>(
 			query,
 			variables,
