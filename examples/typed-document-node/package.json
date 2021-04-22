@@ -12,6 +12,7 @@
     "@graphql-codegen/typed-document-node": "^1.18.5",
     "@graphql-codegen/typescript": "1.21.1",
     "@graphql-codegen/typescript-operations": "1.17.15",
+    "@graphql-typed-document-node/core": "^3.1.0",
     "@types/node": "14.14.37",
     "@types/node-fetch": "^2.5.10",
     "typescript": "4.2.3"

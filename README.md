@@ -194,6 +194,7 @@ query getUser($id: Int!) {
 
 ```ts
 // index.ts
+import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 import { print } from 'graphql/language/printer'
 
