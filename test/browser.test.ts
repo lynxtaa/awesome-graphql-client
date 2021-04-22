@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { print, DocumentNode } from 'graphql'
 import graphqlTag from 'graphql-tag'
 
@@ -105,6 +106,41 @@ it('supports custom query formatter', async () => {
 	const data = await client.request<GetUsers>(query)
 
 	expect(data).toEqual(users)
+})
+
+it('supports TypedDocumentNode', async () => {
+	type GetUserQuery = {
+		user: { id: number; login: string } | null
+	}
+
+	type GetUserQueryVariables = { id: number }
+
+	const user = { user: { id: 10, login: 'admin' } }
+
+	server.use(
+		graphql.query<GetUserQuery>('GetUser', (req, res, ctx) => res(ctx.data(user))),
+	)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: '/api/graphql',
+		formatQuery: (query: TypedDocumentNode) => print(query),
+	})
+
+	const GetUserDocument: TypedDocumentNode<
+		GetUserQuery,
+		GetUserQueryVariables
+	> = graphqlTag`
+		query GetUser($id: Int!) {
+			user(id: $id) {
+				id
+				login
+			}
+		}
+	`
+
+	const data = await client.request(GetUserDocument, { id: 123 })
+
+	expect(data).toEqual(user)
 })
 
 it('sends GraphQL GET request without variables', async () => {
