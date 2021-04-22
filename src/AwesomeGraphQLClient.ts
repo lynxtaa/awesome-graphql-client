@@ -150,35 +150,7 @@ export class AwesomeGraphQLClient<
 		// Should be "any" and not "unknown" to be compatible with interfaces
 		// https://github.com/microsoft/TypeScript/issues/15300#issuecomment-702872440
 		TData extends Record<string, any>,
-		TVariables extends Record<string, any>
-	>(
-		query: TQuery extends TypedDocumentNode
-			? TypedDocumentNode<TData, TVariables>
-			: TQuery,
-		variables: TVariables,
-		fetchOptions?: TFetchOptions,
-	): Promise<
-		| { data: TData; response: TRequestResult }
-		| { error: GraphQLRequestError<TRequestResult> | Error }
-	>
-
-	async requestSafe<
-		TData extends Record<string, any>,
-		TVariables extends Record<any, never> = Record<any, never>
-	>(
-		query: TQuery extends TypedDocumentNode
-			? TypedDocumentNode<TData, TVariables>
-			: TQuery,
-		variables?: TVariables,
-		fetchOptions?: TFetchOptions,
-	): Promise<
-		| { data: TData; response: TRequestResult }
-		| { error: GraphQLRequestError<TRequestResult> | Error }
-	>
-
-	async requestSafe<
-		TData extends Record<string, any>,
-		TVariables extends Record<string, any> = Record<string, any>
+		TVariables extends Record<string, any> = Record<string, never>
 	>(
 		query: TQuery extends TypedDocumentNode
 			? TypedDocumentNode<TData, TVariables>
@@ -288,34 +260,12 @@ export class AwesomeGraphQLClient<
 	 */
 	async request<
 		TData extends Record<string, any>,
-		TVariables extends Record<string, any>
-	>(
-		query: TQuery extends TypedDocumentNode
-			? TypedDocumentNode<TData, TVariables>
-			: TQuery,
-		variables: TVariables,
-		fetchOptions?: TFetchOptions,
-	): Promise<TData>
-
-	async request<
-		TData extends Record<string, any>,
-		TVariables extends Record<any, never> = Record<any, never>
+		TVariables extends Record<string, any> = Record<string, never>
 	>(
 		query: TQuery extends TypedDocumentNode
 			? TypedDocumentNode<TData, TVariables>
 			: TQuery,
 		variables?: TVariables,
-		fetchOptions?: TFetchOptions,
-	): Promise<TData>
-
-	async request<
-		TData extends Record<string, any>,
-		TVariables extends Record<string, any>
-	>(
-		query: TQuery extends TypedDocumentNode
-			? TypedDocumentNode<TData, TVariables>
-			: TQuery,
-		variables: TVariables,
 		fetchOptions?: TFetchOptions,
 	): Promise<TData> {
 		const result = await this.requestSafe<TData, TVariables>(

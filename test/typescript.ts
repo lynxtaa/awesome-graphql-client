@@ -28,7 +28,9 @@ export async function withVariables(): Promise<void> {
 
 	console.log(data.user.id)
 
-	// @ts-expect-error should fail if no variables provided
+	// TODO:
+	// this should fail typechecking because no variables provided,
+	// but I'm not sure how to type it correctly
 	client.request<GetUserQuery, GetUserQueryVariables>(query)
 
 	const result = await client.requestSafe<GetUserQuery, GetUserQueryVariables>(query, {
@@ -39,6 +41,41 @@ export async function withVariables(): Promise<void> {
 		console.log(result.error.message)
 	} else {
 		console.log(result.data.user.id)
+		console.log(result.response.status)
+	}
+}
+
+export async function withOptionalVariables(): Promise<void> {
+	type GetUsersQuery = { users: { id: 1 }[] }
+	type GetUsersQueryVariables = { login?: string }
+
+	const query = gql`
+		query GetUsers {
+			users {
+				id
+			}
+		}
+	`
+
+	const data = await client.request<GetUsersQuery>(query)
+
+	await client.request<GetUsersQuery, GetUsersQueryVariables>(query)
+	await client.request<GetUsersQuery, GetUsersQueryVariables>(query, {})
+
+	console.log(data.users)
+
+	client.request<GetUsersQuery>(query, {})
+	client.request<GetUsersQuery>(query, undefined)
+
+	// @ts-expect-error wrong variables
+	client.request<GetUsersQuery>(query, { id: 123 })
+
+	const result = await client.requestSafe<GetUsersQuery>(query)
+
+	if ('error' in result) {
+		console.log(result.error.message)
+	} else {
+		console.log(result.data.users)
 		console.log(result.response.status)
 	}
 }
