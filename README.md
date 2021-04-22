@@ -151,7 +151,7 @@ interface getUser {
   user: { id: number; login: string } | null
 }
 interface getUserVariables {
-  id: 10
+  id: number
 }
 
 const query = `
@@ -177,6 +177,41 @@ client
     console.log(`Status ${result.response.status}`, `Data ${result.data.user}`)
   })
 ```
+
+### Typescript with TypedDocumentNode (even better!)
+
+You can generate types from queries by using [GraphQL Code Generator](https://www.graphql-code-generator.com/) with [TypedDocumentNode plugin](https://github.com/dotansimha/graphql-typed-document-node)
+
+```graphql
+# queries.graphql
+query getUser($id: Int!) {
+  user {
+    id
+    login
+  }
+}
+```
+
+```ts
+// index.ts
+import { AwesomeGraphQLClient } from 'awesome-graphql-client'
+import { print } from 'graphql/language/printer'
+
+import { GetCharactersDocument } from './generated'
+
+const gqlClient = new AwesomeGraphQLClient({
+  endpoint: 'https://rickandmortyapi.com/graphql',
+  formatQuery: (query: TypedDocumentNode) => print(query),
+})
+
+// AwesomeGraphQLClient will infer all types from the passed query automagically:
+gqlClient
+  .request(GetCharactersDocument, { name: 'Rick' })
+  .then((data) => console.log(data))
+  .catch((error) => console.log(error))
+```
+
+Check out full example at [examples/typed-document-node](https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples/typed-document-node)
 
 ## Error Logging
 
@@ -213,7 +248,7 @@ client
 
 ### Approach #1: Use `formatQuery`
 
-```js
+```ts
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 import { DocumentNode } from 'graphql/language/ast'
 import { print } from 'graphql/language/printer'
@@ -261,6 +296,10 @@ client
   .then((data) => console.log(data))
   .catch((err) => console.log(err))
 ```
+
+### Approach #3: Use TypedDocumentNode instead
+
+Perfect for Typescript projects. See [example above](#typescript-with-typeddocumentnode-even-better)
 
 ## Cookies in NodeJS
 

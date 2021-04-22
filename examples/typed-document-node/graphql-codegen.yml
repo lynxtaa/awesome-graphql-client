@@ -1,0 +1,16 @@
+overwrite: true
+schema: 'https://rickandmortyapi.com/graphql'
+documents: 'src/**/*.{ts,tsx,graphql}'
+generates:
+  src/gql-documents.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
+    config:
+      skipTypename: true
+      avoidOptionals:
+        field: true
+        inputValue: false
+        object: false
+        defaultValue: false
