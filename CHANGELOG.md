@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.9.0...v0.9.1) (2021-10-07)
+
+
+### Bug Fixes
+
+* support relative urls for GraphQL GET requests ([#73](https://github.com/lynxtaa/awesome-graphql-client/issues/73)) ([ee41339](https://github.com/lynxtaa/awesome-graphql-client/commit/ee41339667eba7a7626e7d3de84e29ef00ab160f))
+
 ## [0.9.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.8.0...v0.9.0) (2021-04-22)
 
 
