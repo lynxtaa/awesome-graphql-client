@@ -33,7 +33,7 @@
     "build": "microbundle build --tsconfig tsconfig.build.json",
     "validate": "npm run check-format && npm run check-types && npm run lint",
     "lint": "eslint --ext .js,.ts src test",
-    "prettier": "prettier \"{src,test}/**/*\" \"*.{js,json}\"",
+    "prettier": "prettier \"{src,test}/**/*\" \"*.{js,json,md}\"",
     "check-format": "npm run prettier -- --check",
     "format": "npm run prettier -- --write",
     "check-types": "tsc",

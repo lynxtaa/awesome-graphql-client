@@ -191,7 +191,7 @@ it('sends GraphQL GET request with variables', async () => {
 		}),
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: 'http://localhost/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
 
 	const query = gql`
 		query GetUser {
