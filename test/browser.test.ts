@@ -342,6 +342,7 @@ it('requestSafe returns data and response on success', async () => {
 	`)
 
 	expect(getUsersResult).toEqual({
+		ok: true,
 		data: users,
 		response: expect.any(Response),
 	})
@@ -369,9 +370,9 @@ it('requestSafe returns error on fail', async () => {
 		}
 	`)
 
-	expect(getUsersResult).toEqual({ error: expect.any(GraphQLRequestError) })
+	expect(getUsersResult).toEqual({ ok: false, error: expect.any(GraphQLRequestError) })
 
-	if ('error' in getUsersResult) {
+	if (!getUsersResult.ok) {
 		expect(getUsersResult.error.message).toBe('GraphQL Request Error: Forbidden')
 	}
 })

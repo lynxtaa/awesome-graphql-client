@@ -131,13 +131,13 @@ export class AwesomeGraphQLClient<
 	}
 
 	/**
-	 * Sends GraphQL Request and returns object with 'data' and 'response' fields
-	 * or with a single 'error' field.
+	 * Sends GraphQL Request and returns object with 'ok: true', 'data' and 'response' fields
+	 * or with 'ok: false' and 'error' fields.
 	 * Notice: this function never throws
 	 *
 	 * @example
 	 * const result = await requestSafe(...)
-	 * if ('error' in result) {
+	 * if (!result.ok) {
 	 *   throw result.error
 	 * }
 	 * console.log(result.data)
@@ -158,8 +158,8 @@ export class AwesomeGraphQLClient<
 		variables?: TVariables,
 		fetchOptions?: TFetchOptions,
 	): Promise<
-		| { data: TData; response: TRequestResult }
-		| { error: GraphQLRequestError<TRequestResult> | Error }
+		| { ok: true; data: TData; response: TRequestResult }
+		| { ok: false; error: GraphQLRequestError<TRequestResult> | Error }
 	> {
 		try {
 			const queryAsString = this.formatQuery ? this.formatQuery(query as TQuery) : query
@@ -234,17 +234,17 @@ export class AwesomeGraphQLClient<
 				})
 			}
 
-			return { data, response }
+			return { ok: true, data, response }
 		} catch (error) {
 			if (this.onError) {
 				try {
 					this.onError(error)
 				} catch (err) {
-					return { error }
+					return { ok: false, error }
 				}
 			}
 
-			return { error }
+			return { ok: false, error }
 		}
 	}
 
@@ -274,7 +274,7 @@ export class AwesomeGraphQLClient<
 			fetchOptions,
 		)
 
-		if ('error' in result) {
+		if (!result.ok) {
 			throw result.error
 		}
 

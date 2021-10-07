@@ -37,7 +37,7 @@ export async function withVariables(): Promise<void> {
 		id: 1,
 	})
 
-	if ('error' in result) {
+	if (!result.ok) {
 		console.log(result.error.message)
 	} else {
 		console.log(result.data.user.id)
@@ -72,7 +72,7 @@ export async function withOptionalVariables(): Promise<void> {
 
 	const result = await client.requestSafe<GetUsersQuery>(query)
 
-	if ('error' in result) {
+	if (!result.ok) {
 		console.log(result.error.message)
 	} else {
 		console.log(result.data.users)
@@ -107,7 +107,7 @@ export async function withoutVariables(): Promise<void> {
 
 	const result = await client.requestSafe<GetUsersQuery>(query)
 
-	if ('error' in result) {
+	if (!result.ok) {
 		console.log(result.error.message)
 	} else {
 		console.log(result.data.users)
