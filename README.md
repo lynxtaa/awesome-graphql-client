@@ -249,7 +249,7 @@ const client = new AwesomeGraphQLClient({
 
 ## GraphQL GET Requests
 
-Internally it uses [URL API](https://developer.mozilla.org/ru/docs/Web/API/URL/URL). Consider [polyfilling URL standard](https://github.com/zloirock/core-js#url-and-urlsearchparams) for this feature to work in IE
+Internally it uses [URLSearchParams API](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams). Consider [polyfilling URL standard](https://github.com/zloirock/core-js#url-and-urlsearchparams) for this feature to work in IE
 
 ```js
 client
