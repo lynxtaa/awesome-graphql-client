@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.9.1...v0.10.0) (2021-10-22)
+
+
+### Features
+
+* add 'ok' field to safe result ([a08d20c](https://github.com/lynxtaa/awesome-graphql-client/commit/a08d20c9601b1ef61412893475638e5653b13a07))
+* support promises for file upload ([ab88336](https://github.com/lynxtaa/awesome-graphql-client/commit/ab8833650ed97619410b09a8759a452920288b22))
+
 ### [0.9.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.9.0...v0.9.1) (2021-10-07)
 
 
