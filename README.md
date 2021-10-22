@@ -334,7 +334,7 @@ const { AwesomeGraphQLClient, isFileUpload } = require('awesome-graphql-client')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  // By default File, Blob, Buffer and stream-like instances are considered as files.
+  // By default File, Blob, Buffer, Promise and stream-like instances are considered as files.
   // You can expand this behaviour by adding a custom predicate
   isFileUpload: (value) => isFileUpload(value) || value instanceof MyCustomFile,
 })
