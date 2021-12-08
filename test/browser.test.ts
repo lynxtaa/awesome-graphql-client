@@ -22,9 +22,7 @@ it('sends GraphQL request without variables', async () => {
 
 	const users = { users: [{ id: 10, login: 'admin' }] }
 
-	server.use(
-		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
-	)
+	server.use(graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))))
 
 	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
 
@@ -57,7 +55,7 @@ it('sends GraphQL request with variables', async () => {
 
 	server.use(
 		graphql.query<GetUser, GetUserVariables>('GetUser', (req, res, ctx) => {
-			const user = users.find((user) => user.id === req.variables.id) || null
+			const user = users.find(user => user.id === req.variables.id) || null
 			return res(ctx.data({ user }))
 		}),
 	)
@@ -85,9 +83,7 @@ it('supports custom query formatter', async () => {
 
 	const users = { users: [{ id: 10, login: 'admin' }] }
 
-	server.use(
-		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
-	)
+	server.use(graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))))
 
 	const client = new AwesomeGraphQLClient({
 		endpoint: '/api/graphql',
@@ -150,9 +146,7 @@ it('sends GraphQL GET request without variables', async () => {
 
 	const users = { users: [{ id: 10, login: 'admin' }] }
 
-	server.use(
-		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
-	)
+	server.use(graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))))
 
 	const client = new AwesomeGraphQLClient({
 		endpoint: 'http://localhost/graphql',
@@ -186,7 +180,7 @@ it('sends GraphQL GET request with variables', async () => {
 
 	server.use(
 		graphql.query<GetUser, GetUserVariables>('GetUser', (req, res, ctx) => {
-			const user = users.find((user) => user.id === req.variables.id) || null
+			const user = users.find(user => user.id === req.variables.id) || null
 			return res(ctx.data({ user }))
 		}),
 	)

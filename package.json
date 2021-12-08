@@ -27,6 +27,7 @@
   "simple-git-hooks": {
     "pre-commit": "npx pretty-quick --staged"
   },
+  "prettier": "@lynxtaa/prettier-config",
   "scripts": {
     "prepublishOnly": "npm run build",
     "prebuild": "rimraf dist/*",
@@ -47,6 +48,7 @@
     "@babel/plugin-transform-modules-commonjs": "7.13.8",
     "@babel/preset-typescript": "7.13.0",
     "@graphql-typed-document-node/core": "3.1.0",
+    "@lynxtaa/prettier-config": "^0.1.1",
     "@types/extract-files": "8.1.0",
     "@types/jest": "26.0.22",
     "@types/node-fetch": "2.5.10",
@@ -64,8 +66,8 @@
     "microbundle": "0.13.0",
     "msw": "0.28.1",
     "node-fetch": "2.6.1",
-    "prettier": "2.2.1",
-    "pretty-quick": "3.1.0",
+    "prettier": "2.5.1",
+    "pretty-quick": "3.1.2",
     "rimraf": "3.0.2",
     "simple-git-hooks": "^2.3.1",
     "standard-version": "9.2.0",

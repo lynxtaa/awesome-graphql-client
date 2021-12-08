@@ -62,14 +62,14 @@ const UploadUserAvatar = `
 
 client
   .request(GetUsers)
-  .then((data) =>
+  .then(data =>
     client.request(UploadUserAvatar, {
       id: data.users[0].id,
       file: document.querySelector('input#avatar').files[0],
     }),
   )
-  .then((data) => console.log(data.updateUser.id))
-  .catch((error) => console.log(error))
+  .then(data => console.log(data.updateUser.id))
+  .catch(error => console.log(error))
 ```
 
 ### NodeJS
@@ -97,8 +97,8 @@ const UploadUserAvatar = `
 
 client
   .request(UploadUserAvatar, { file: createReadStream('./avatar.img'), userId: 10 })
-  .then((data) => console.log(data.updateUser.id))
-  .catch((error) => console.log(error))
+  .then(data => console.log(data.updateUser.id))
+  .catch(error => console.log(error))
 ```
 
 ## Table of Contents
@@ -178,17 +178,15 @@ const query = `
 
 client
   .request<getUser, getUserVariables>(query, { id: 10 })
-  .then((data) => console.log(data))
-  .catch((error) => console.log(error))
+  .then(data => console.log(data))
+  .catch(error => console.log(error))
 
-client
-  .requestSafe<getUser, getUserVariables>(query, { id: 10 })
-  .then((result) => {
-    if (!result.ok) {
-      throw result.error
-    }
-    console.log(`Status ${result.response.status}`, `Data ${result.data.user}`)
-  })
+client.requestSafe<getUser, getUserVariables>(query, { id: 10 }).then(result => {
+  if (!result.ok) {
+    throw result.error
+  }
+  console.log(`Status ${result.response.status}`, `Data ${result.data.user}`)
+})
 ```
 
 ### Typescript with TypedDocumentNode (even better!)
@@ -221,8 +219,8 @@ const gqlClient = new AwesomeGraphQLClient({
 // AwesomeGraphQLClient will infer all types from the passed query automagically:
 gqlClient
   .request(GetCharactersDocument, { name: 'Rick' })
-  .then((data) => console.log(data))
-  .catch((error) => console.log(error))
+  .then(data => console.log(data))
+  .catch(error => console.log(error))
 ```
 
 Check out full example at [examples/typed-document-node](https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples/typed-document-node)
@@ -254,8 +252,8 @@ Internally it uses [URLSearchParams API](https://developer.mozilla.org/en-US/doc
 ```js
 client
   .request(query, variables, { method: 'GET' })
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err))
+  .then(data => console.log(data))
+  .catch(err => console.log(err))
 ```
 
 ## GraphQL Tag
@@ -284,8 +282,8 @@ const query = gql`
 
 client
   .request(query)
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err))
+  .then(data => console.log(data))
+  .catch(err => console.log(err))
 ```
 
 ### Approach #2: Use fake `graphql-tag`
@@ -307,8 +305,8 @@ const query = gql`
 
 client
   .request(query)
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err))
+  .then(data => console.log(data))
+  .catch(err => console.log(err))
 ```
 
 ### Approach #3: Use TypedDocumentNode instead
@@ -336,7 +334,7 @@ const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
   // By default File, Blob, Buffer, Promise and stream-like instances are considered as files.
   // You can expand this behaviour by adding a custom predicate
-  isFileUpload: (value) => isFileUpload(value) || value instanceof MyCustomFile,
+  isFileUpload: value => isFileUpload(value) || value instanceof MyCustomFile,
 })
 ```
 

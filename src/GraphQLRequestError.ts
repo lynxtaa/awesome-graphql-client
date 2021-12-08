@@ -1,7 +1,7 @@
 import { RequestResult } from './util/types'
 
 export class GraphQLRequestError<
-	TResponse extends RequestResult = Response
+	TResponse extends RequestResult = Response,
 > extends Error {
 	query: string
 	variables?: Record<string, unknown>

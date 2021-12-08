@@ -12,7 +12,7 @@ export class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends Record<string, any> = RequestInit,
 	TRequestResult extends RequestResult = Response,
-	TFileUpload = FileUpload
+	TFileUpload = FileUpload,
 > {
 	private endpoint: string
 	private fetch: (url: string, options?: TFetchOptions) => Promise<TRequestResult>
@@ -94,7 +94,7 @@ export class AwesomeGraphQLClient<
 
 		const map: Record<string, string[]> = {}
 		let i = 0
-		files.forEach((paths) => {
+		files.forEach(paths => {
 			map[++i] = paths
 		})
 		form.append('map', JSON.stringify(map))
@@ -150,7 +150,7 @@ export class AwesomeGraphQLClient<
 		// Should be "any" and not "unknown" to be compatible with interfaces
 		// https://github.com/microsoft/TypeScript/issues/15300#issuecomment-702872440
 		TData extends Record<string, any>,
-		TVariables extends Record<string, any> = Record<string, never>
+		TVariables extends Record<string, any> = Record<string, never>,
 	>(
 		query: TQuery extends TypedDocumentNode
 			? TypedDocumentNode<TData, TVariables>
@@ -187,18 +187,18 @@ export class AwesomeGraphQLClient<
 					query: queryAsString,
 					variables,
 				})
-				response = await this.fetch(url, (options as unknown) as TFetchOptions)
+				response = await this.fetch(url, options as unknown as TFetchOptions)
 			} else {
 				const body = this.createRequestBody(queryAsString, variables)
 
-				response = await this.fetch(this.endpoint, ({
+				response = await this.fetch(this.endpoint, {
 					...options,
 					body,
 					headers:
 						typeof body === 'string'
 							? { ...options.headers, 'Content-Type': 'application/json' }
 							: options.headers,
-				} as unknown) as TFetchOptions)
+				} as unknown as TFetchOptions)
 			}
 
 			if (!response.ok) {
@@ -260,7 +260,7 @@ export class AwesomeGraphQLClient<
 	 */
 	async request<
 		TData extends Record<string, any>,
-		TVariables extends Record<string, any> = Record<string, never>
+		TVariables extends Record<string, any> = Record<string, never>,
 	>(
 		query: TQuery extends TypedDocumentNode
 			? TypedDocumentNode<TData, TVariables>
