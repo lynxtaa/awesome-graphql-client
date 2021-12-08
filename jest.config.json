@@ -1,5 +1,18 @@
 {
-	"clearMocks": true,
+	"resetMocks": true,
 	"roots": ["<rootDir>/test"],
-	"setupFilesAfterEnv": ["<rootDir>/test/jest/setupTests.ts"]
+	"setupFilesAfterEnv": ["<rootDir>/test/jest/setupTests.ts"],
+	"transform": {
+		"\\.[jt]sx?$": [
+			"babel-jest",
+			{
+				"babelrc": false,
+				"presets": ["@babel/preset-typescript"],
+				"plugins": [
+					"@babel/plugin-transform-modules-commonjs",
+					"@babel/plugin-proposal-optional-chaining"
+				]
+			}
+		]
+	}
 }

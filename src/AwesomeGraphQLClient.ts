@@ -235,7 +235,9 @@ export class AwesomeGraphQLClient<
 			}
 
 			return { ok: true, data, response }
-		} catch (error) {
+		} catch (err) {
+			const error = err instanceof Error ? err : new Error(String(err))
+
 			if (this.onError) {
 				try {
 					this.onError(error)
