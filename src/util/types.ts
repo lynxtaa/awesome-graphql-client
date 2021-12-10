@@ -8,3 +8,9 @@ export interface RequestResult {
 	json: () => Promise<any>
 	status: number
 }
+
+export interface FetchOptions {
+	method?: string
+	headers?: Record<string, string>
+	body?: any
+}

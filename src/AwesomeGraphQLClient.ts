@@ -6,11 +6,12 @@ import { assert } from './util/assert'
 import { formatGetRequestUrl } from './util/formatGetRequestUrl'
 import { isFileUpload, FileUpload } from './util/isFileUpload'
 import { isResponseJSON } from './util/isResponseJSON'
-import { RequestResult } from './util/types'
+import { FetchOptions, RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
 	TQuery = string,
-	TFetchOptions extends Record<string, any> = RequestInit,
+	TFetchOptions extends FetchOptions = Omit<RequestInit, 'headers'> &
+		Pick<FetchOptions, 'headers'>,
 	TRequestResult extends RequestResult = Response,
 	TFileUpload = FileUpload,
 > {
@@ -177,17 +178,17 @@ export class AwesomeGraphQLClient<
 					...this.fetchOptions?.headers,
 					...fetchOptions?.headers,
 				},
-			}
+			} as TFetchOptions
 
 			let response: TRequestResult | Response
 
-			if (options.method.toUpperCase() === 'GET') {
+			if (options.method?.toUpperCase() === 'GET') {
 				const url = formatGetRequestUrl({
 					endpoint: this.endpoint,
 					query: queryAsString,
 					variables,
 				})
-				response = await this.fetch(url, options as unknown as TFetchOptions)
+				response = await this.fetch(url, options)
 			} else {
 				const body = this.createRequestBody(queryAsString, variables)
 
@@ -198,7 +199,7 @@ export class AwesomeGraphQLClient<
 						typeof body === 'string'
 							? { ...options.headers, 'Content-Type': 'application/json' }
 							: options.headers,
-				} as unknown as TFetchOptions)
+				})
 			}
 
 			if (!response.ok) {
