@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.10.0...v0.11.0) (2021-12-10)
+
+
+### Features
+
+* better typescript for custom fetch ([01ccd3e](https://github.com/lynxtaa/awesome-graphql-client/commit/01ccd3eebf00b05ac72ae46d1ff2f204f148c4f9))
+
 ## [0.10.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.9.1...v0.10.0) (2021-10-22)
 
 
