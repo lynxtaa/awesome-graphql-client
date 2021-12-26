@@ -6,12 +6,12 @@ import { assert } from './util/assert'
 import { formatGetRequestUrl } from './util/formatGetRequestUrl'
 import { isFileUpload, FileUpload } from './util/isFileUpload'
 import { isResponseJSON } from './util/isResponseJSON'
+import { normalizeHeaders } from './util/normalizeHeaders'
 import { FetchOptions, RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
 	TQuery = string,
-	TFetchOptions extends FetchOptions = Omit<RequestInit, 'headers'> &
-		Pick<FetchOptions, 'headers'>,
+	TFetchOptions extends FetchOptions = FetchOptions,
 	TRequestResult extends RequestResult = Response,
 	TFileUpload = FileUpload,
 > {
@@ -175,8 +175,8 @@ export class AwesomeGraphQLClient<
 				...this.fetchOptions,
 				...fetchOptions,
 				headers: {
-					...this.fetchOptions?.headers,
-					...fetchOptions?.headers,
+					...normalizeHeaders(this.fetchOptions?.headers),
+					...normalizeHeaders(fetchOptions?.headers),
 				},
 			} as TFetchOptions
 

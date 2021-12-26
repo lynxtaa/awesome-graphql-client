@@ -1,5 +1,6 @@
-interface Headers {
+export interface Headers {
 	get(name: string): string | null
+	forEach(callbackfn: (value: string, key: string) => void): void
 }
 
 export interface RequestResult {
@@ -11,6 +12,6 @@ export interface RequestResult {
 
 export interface FetchOptions {
 	method?: string
-	headers?: Record<string, string>
+	headers?: string[][] | Record<string, string> | Headers
 	body?: any
 }

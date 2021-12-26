@@ -78,12 +78,18 @@ client
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
 const FormData = require('form-data')
 const { createReadStream } = require('fs')
+const http = require('http')
 const fetch = require('node-fetch')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
   fetch,
   FormData, // Required only if you're using file upload
+  fetchOptions: {
+    // Using HTTP Keep-Alive will make requests ~2x faster in NodeJS:
+    // https://github.com/Ethan-Arrowood/undici-fetch/blob/main/benchmarks.md#fetch
+    agent: new http.Agent({ keepAlive: true }),
+  },
 })
 
 // Also query can be an output from graphql-tag (see examples below)
@@ -175,6 +181,10 @@ const query = `
     }
   }
 `
+
+const client = new AwesomeGraphQLClient<string, RequestInit, Response>({
+  endpoint: 'http://localhost:3000/graphql',
+})
 
 client
   .request<getUser, getUserVariables>(query, { id: 10 })

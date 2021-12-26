@@ -1,6 +1,6 @@
 {
 	"resetMocks": true,
-	"roots": ["<rootDir>/test"],
+	"roots": ["<rootDir>/test", "<rootDir>/src"],
 	"setupFilesAfterEnv": ["<rootDir>/test/jest/setupTests.ts"],
 	"transform": {
 		"\\.[jt]sx?$": [

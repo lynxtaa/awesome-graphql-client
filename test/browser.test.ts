@@ -282,7 +282,7 @@ it('sends additional headers', async () => {
 		}
 	`
 
-	const client = new AwesomeGraphQLClient({
+	const client = new AwesomeGraphQLClient<string, RequestInit>({
 		endpoint: '/api/graphql',
 		fetchOptions: { headers: { 'X-Secret': 'secret' } },
 	})
@@ -298,6 +298,10 @@ it('sends additional headers', async () => {
 	expect(headers.get('X-Secret')).toBe('secret-2')
 
 	await client.request<GetUsers>(query, {}, { headers: { 'X-Secret': 'secret-3' } })
+
+	expect(headers.get('X-Secret')).toBe('secret-3')
+
+	await client.request<GetUsers>(query, {}, { headers: [['x-secret', 'secret-3']] })
 
 	expect(headers.get('X-Secret')).toBe('secret-3')
 

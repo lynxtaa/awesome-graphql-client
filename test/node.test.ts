@@ -3,10 +3,11 @@
  */
 
 import { createReadStream } from 'fs'
+import http from 'http'
 import { join } from 'path'
 
 import FormData from 'form-data'
-import fetch from 'node-fetch'
+import fetch, { RequestInit, Response } from 'node-fetch'
 
 import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'
@@ -27,9 +28,12 @@ it('throws on file upload mutation if no FormData polyfill provided', async () =
 		file: any
 	}
 
-	const client = new AwesomeGraphQLClient({
+	const client = new AwesomeGraphQLClient<string, RequestInit, Response>({
 		endpoint: 'http://localhost:1234/api/graphql',
 		fetch,
+		fetchOptions: {
+			agent: new http.Agent({ keepAlive: true }),
+		},
 	})
 
 	const query = gql`
