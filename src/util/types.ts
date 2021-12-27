@@ -12,6 +12,6 @@ export interface RequestResult {
 
 export interface FetchOptions {
 	method?: string
-	headers?: string[][] | Record<string, string> | Headers
+	headers?: Iterable<[string, string]> | string[][] | Record<string, string> | Headers
 	body?: any
 }
