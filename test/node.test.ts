@@ -26,6 +26,8 @@ import { gql } from '../src/util/gql'
 import { createServer, TestServer } from './jest/gqlServer'
 import { streamToString } from './streamToString'
 
+const maybeDescribe = (condition: boolean) => (condition ? describe : describe.skip)
+
 let server: TestServer
 
 afterEach(async () => {
@@ -155,7 +157,7 @@ describe('node-fetch', () => {
 	})
 })
 
-describe('undici', () => {
+maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
 	it('regular request', async () => {
 		server = await createServer(
 			`
