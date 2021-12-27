@@ -1,15 +1,25 @@
 /**
  * @jest-environment jsdom
  */
+import { IncomingHttpHeaders } from 'http'
 
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { print, DocumentNode } from 'graphql'
 import graphqlTag from 'graphql-tag'
+import { GraphQLUpload, FileUpload } from 'graphql-upload'
+import mercurius from 'mercurius'
 
 import { AwesomeGraphQLClient, GraphQLRequestError } from '../src/index'
 import { gql } from '../src/util/gql'
 
-import { server, graphql, rest } from './jest/server'
+import { createServer, TestServer } from './jest/gqlServer'
+import { streamToString } from './streamToString'
+
+let server: TestServer
+
+afterEach(async () => {
+	await server?.destroy()
+})
 
 if (typeof fetch === 'undefined') {
 	require('whatwg-fetch')
@@ -20,26 +30,39 @@ it('sends GraphQL request without variables', async () => {
 		users: { id: number; login: string }[]
 	}
 
-	const users = { users: [{ id: 10, login: 'admin' }] }
+	const users = [{ id: 10, login: 'admin' }]
 
-	server.use(graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))))
+	server = await createServer(
+		`
+			type Query {
+				users: [User!]!
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: { users: () => users },
+		},
+	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint })
 
-	expect(client.getEndpoint()).toBe('/api/graphql')
+	expect(client.getEndpoint()).toBe(server.endpoint)
 
 	const query = `
-		query GetUsers {
-			users {
-				id
-				login
-			}
-		}
-	`
+		 query GetUsers {
+			 users {
+				 id
+				 login
+			 }
+		 }
+	 `
 
 	const data = await client.request<GetUsers>(query)
 
-	expect(data).toEqual(users)
+	expect(data).toEqual({ users })
 })
 
 it('sends GraphQL request with variables', async () => {
@@ -53,18 +76,28 @@ it('sends GraphQL request with variables', async () => {
 
 	const users = [{ id: 10, login: 'admin' }]
 
-	server.use(
-		graphql.query<GetUser, GetUserVariables>('GetUser', (req, res, ctx) => {
-			const user = users.find(user => user.id === req.variables.id) || null
-			return res(ctx.data({ user }))
-		}),
+	server = await createServer(
+		`
+			type Query {
+				user(id: Int!): User
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: {
+				user: (source, args) => users.find(user => user.id === args.id) ?? null,
+			},
+		},
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint })
 
 	const query = gql`
-		query GetUser {
-			user {
+		query GetUser($id: Int!) {
+			user(id: $id) {
 				id
 				login
 			}
@@ -81,27 +114,42 @@ it('supports custom query formatter', async () => {
 		users: { id: number; login: string }[]
 	}
 
-	const users = { users: [{ id: 10, login: 'admin' }] }
+	const users = [{ id: 10, login: 'admin' }]
 
-	server.use(graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))))
+	server = await createServer(
+		`
+			type Query {
+				users: [User!]!
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: {
+				users: () => users,
+			},
+		},
+	)
 
 	const client = new AwesomeGraphQLClient({
-		endpoint: '/api/graphql',
+		endpoint: server.endpoint,
 		formatQuery: (query: DocumentNode) => print(query),
 	})
 
 	const query = graphqlTag`
-		query GetUsers {
-			users {
-				id
-				login
-			}
-		}
-	`
+		 query GetUsers {
+			 users {
+				 id
+				 login
+			 }
+		 }
+	 `
 
 	const data = await client.request<GetUsers>(query)
 
-	expect(data).toEqual(users)
+	expect(data).toEqual({ users })
 })
 
 it('supports TypedDocumentNode', async () => {
@@ -111,14 +159,27 @@ it('supports TypedDocumentNode', async () => {
 
 	type GetUserQueryVariables = { id: number }
 
-	const user = { user: { id: 10, login: 'admin' } }
+	const user = { id: 10, login: 'admin' }
 
-	server.use(
-		graphql.query<GetUserQuery>('GetUser', (req, res, ctx) => res(ctx.data(user))),
+	server = await createServer(
+		`
+			type Query {
+				user(id: Int!): User
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: {
+				user: () => user,
+			},
+		},
 	)
 
 	const client = new AwesomeGraphQLClient({
-		endpoint: '/api/graphql',
+		endpoint: server.endpoint,
 		formatQuery: (query: TypedDocumentNode) => print(query),
 	})
 
@@ -126,17 +187,17 @@ it('supports TypedDocumentNode', async () => {
 		GetUserQuery,
 		GetUserQueryVariables
 	> = graphqlTag`
-		query GetUser($id: Int!) {
-			user(id: $id) {
-				id
-				login
-			}
-		}
-	`
+		 query GetUser($id: Int!) {
+			 user(id: $id) {
+				 id
+				 login
+			 }
+		 }
+	 `
 
 	const data = await client.request(GetUserDocument, { id: 123 })
 
-	expect(data).toEqual(user)
+	expect(data).toEqual({ user })
 })
 
 it('sends GraphQL GET request without variables', async () => {
@@ -144,12 +205,27 @@ it('sends GraphQL GET request without variables', async () => {
 		users: { id: number; login: string }[]
 	}
 
-	const users = { users: [{ id: 10, login: 'admin' }] }
+	const users = [{ id: 10, login: 'admin' }]
 
-	server.use(graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))))
+	server = await createServer(
+		`
+			type Query {
+				users: [User!]!
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: {
+				users: () => users,
+			},
+		},
+	)
 
 	const client = new AwesomeGraphQLClient({
-		endpoint: 'http://localhost/graphql',
+		endpoint: server.endpoint,
 		fetchOptions: { method: 'GET' },
 	})
 
@@ -164,7 +240,7 @@ it('sends GraphQL GET request without variables', async () => {
 
 	const data = await client.request<GetUsers>(query)
 
-	expect(data).toEqual(users)
+	expect(data).toEqual({ users })
 })
 
 it('sends GraphQL GET request with variables', async () => {
@@ -178,18 +254,28 @@ it('sends GraphQL GET request with variables', async () => {
 
 	const users = [{ id: 10, login: 'admin' }]
 
-	server.use(
-		graphql.query<GetUser, GetUserVariables>('GetUser', (req, res, ctx) => {
-			const user = users.find(user => user.id === req.variables.id) || null
-			return res(ctx.data({ user }))
-		}),
+	server = await createServer(
+		`
+			type Query {
+				user(id: Int!): User
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: {
+				user: (_, args) => users.find(user => user.id === args.id) ?? null,
+			},
+		},
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint })
 
 	const query = gql`
-		query GetUser {
-			user {
+		query GetUser($id: Int!) {
+			user(id: $id) {
 				id
 				login
 			}
@@ -214,34 +300,32 @@ it('send GraphQL Upload request', async () => {
 		file: File
 	}
 
-	server.use(
-		rest.post('/api/graphql', (req, res, ctx) => {
-			const form = req.body as FormData
-
-			const operations = form.get('operations')
-			const map = form.get('map')
-			const file = form.get('1')
-
-			if (typeof operations !== 'string' || typeof map !== 'string') {
-				return res(ctx.status(400))
+	server = await createServer(
+		`
+			scalar Upload
+			type Mutation {
+				uploadFile(file: Upload!): Boolean
 			}
+			type Query {
+				hello: String!
+			}
+		`,
+		{
+			Upload: GraphQLUpload as any,
+			Mutation: {
+				async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+					const { filename, createReadStream } = await file
+					expect(filename).toBe('text.txt')
+					const str = await streamToString(createReadStream())
+					expect(str).toBe('test')
 
-			expect(JSON.parse(operations)).toEqual({
-				query: expect.stringContaining('UploadFile'),
-				variables: {
-					file: null,
+					return true
 				},
-			})
-
-			expect(JSON.parse(map)).toEqual({ 1: ['variables.file'] })
-
-			expect(file).toBeInstanceOf(File)
-
-			return res(ctx.json({ data: { uploadFile: true } }))
-		}),
+			},
+		},
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint })
 
 	const query = gql`
 		mutation UploadFile($file: Upload!) {
@@ -250,7 +334,7 @@ it('send GraphQL Upload request', async () => {
 	`
 
 	const data = await client.request<UploadFile, UploadFileVariables>(query, {
-		file: new File([''], 'image.png'),
+		file: new File(['test'], 'text.txt'),
 	})
 
 	expect(data).toEqual({ uploadFile: true })
@@ -261,49 +345,52 @@ it('sends additional headers', async () => {
 		users: { id: number; login: string }[]
 	}
 
-	const users = { users: [{ id: 10, login: 'admin' }] }
+	let headers: IncomingHttpHeaders = {}
 
-	let headers: Headers = new Headers()
-
-	server.use(
-		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => {
-			headers = req.headers
-
-			return res(ctx.data(users))
-		}),
+	server = await createServer(
+		`
+			type Query {
+				hello: String!
+			}
+		`,
+		{
+			Query: {
+				hello(source, args, { reply }) {
+					headers = reply.request.headers
+					return 'world!'
+				},
+			},
+		},
 	)
 
 	const query = gql`
-		query GetUsers {
-			users {
-				id
-				login
-			}
+		query Hello {
+			hello
 		}
 	`
 
 	const client = new AwesomeGraphQLClient<string, RequestInit>({
-		endpoint: '/api/graphql',
+		endpoint: server.endpoint,
 		fetchOptions: { headers: { 'X-Secret': 'secret' } },
 	})
 
 	await client.request<GetUsers>(query)
 
-	expect(headers.get('X-Secret')).toBe('secret')
+	expect(headers['x-secret']).toBe('secret')
 
 	client.setFetchOptions({ headers: { 'X-Secret': 'secret-2' } })
 
 	await client.request<GetUsers>(query)
 
-	expect(headers.get('X-Secret')).toBe('secret-2')
+	expect(headers['x-secret']).toBe('secret-2')
 
 	await client.request<GetUsers>(query, {}, { headers: { 'X-Secret': 'secret-3' } })
 
-	expect(headers.get('X-Secret')).toBe('secret-3')
+	expect(headers['x-secret']).toBe('secret-3')
 
 	await client.request<GetUsers>(query, {}, { headers: [['x-secret', 'secret-3']] })
 
-	expect(headers.get('X-Secret')).toBe('secret-3')
+	expect(headers['x-secret']).toBe('secret-3')
 
 	expect(client.getFetchOptions()).toEqual({
 		headers: { 'X-Secret': 'secret-2' },
@@ -314,21 +401,27 @@ it('requestSafe returns data and response on success', async () => {
 	interface GetUsers {
 		users: { id: number; login: string }[]
 	}
-	interface UpdateUser {
-		user: { id: number }
-	}
 
-	const users = { users: [{ id: 10, login: 'admin' }] }
+	const users = [{ id: 10, login: 'admin' }]
 
-	server.use(
-		graphql.query<GetUsers>('GetUsers', (req, res, ctx) => res(ctx.data(users))),
-
-		graphql.mutation<UpdateUser>('UpdateUser', (req, res, ctx) =>
-			res(ctx.errors([{ message: 'Forbidden' }])),
-		),
+	server = await createServer(
+		`
+			type Query {
+				users: [User!]!
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: {
+				users: () => users,
+			},
+		},
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint })
 
 	const getUsersResult = await client.requestSafe<GetUsers>(gql`
 		query GetUsers {
@@ -341,7 +434,7 @@ it('requestSafe returns data and response on success', async () => {
 
 	expect(getUsersResult).toEqual({
 		ok: true,
-		data: users,
+		data: { users },
 		response: expect.any(Response),
 	})
 })
@@ -351,13 +444,16 @@ it('requestSafe returns error on fail', async () => {
 		users: { id: number; login: string }[]
 	}
 
-	server.use(
-		graphql.query<GetUsers>('GetUsers', (req, res, ctx) =>
-			res(ctx.errors([{ message: 'Forbidden' }])),
-		),
+	server = await createServer(
+		`
+		type Query {
+			hello: String!
+		}
+	`,
+		{},
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint })
 
 	const getUsersResult = await client.requestSafe<GetUsers>(gql`
 		query GetUsers {
@@ -371,7 +467,9 @@ it('requestSafe returns error on fail', async () => {
 	expect(getUsersResult).toEqual({ ok: false, error: expect.any(GraphQLRequestError) })
 
 	if (!getUsersResult.ok) {
-		expect(getUsersResult.error.message).toBe('GraphQL Request Error: Forbidden')
+		expect(getUsersResult.error.message).toBe(
+			'GraphQL Request Error: Cannot query field "users" on type "Query".',
+		)
 	}
 })
 
@@ -380,9 +478,16 @@ it('throw an error in no endpoint provided', () => {
 })
 
 it('throws an error if response is not OK', async () => {
-	server.use(rest.post('*', (req, res, ctx) => res(ctx.status(404))))
+	server = await createServer(
+		`
+		type Query {
+			hello: String!
+		}
+	`,
+		{},
+	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: `${server.endpoint}/404` })
 
 	const query = gql`
 		query GetUsers {
@@ -399,20 +504,29 @@ it('throws an error if response is not OK', async () => {
 })
 
 it('throws an error if response is not OK and has errors', async () => {
-	server.use(
-		graphql.query('GetUsers', (req, res, ctx) =>
-			res(ctx.status(403), ctx.errors([{ message: 'Not Authorized' }])),
-		),
+	server = await createServer(
+		`
+		type Query {
+			hello: String!
+		}
+	`,
+		{
+			Query: {
+				hello() {
+					const err = new Error('Not Authorized')
+					// https://mercurius.dev/#/docs/http?id=single-error-with-statuscode-property
+					;(err as any).statusCode = 403
+					throw err
+				},
+			},
+		},
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint })
 
 	const query = gql`
-		query GetUsers {
-			users {
-				id
-				login
-			}
+		query Hello {
+			hello
 		}
 	`
 
@@ -422,20 +536,33 @@ it('throws an error if response is not OK and has errors', async () => {
 })
 
 it('throws an error if response is OK but has errors', async () => {
-	server.use(
-		graphql.query('GetUsers', (req, res, ctx) =>
-			res(ctx.errors([{ message: 'Not Authorized' }])),
-		),
+	server = await createServer(
+		`
+		type Query {
+			hello: String!
+		}
+	`,
+		{
+			Query: {
+				hello() {
+					throw new Error('Not Authorized')
+				},
+			},
+		},
+		{
+			errorFormatter(err, ctx) {
+				const response = mercurius.defaultErrorFormatter(err, ctx)
+				response.statusCode = 200
+				return response
+			},
+		},
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql' })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint })
 
 	const query = gql`
-		query GetUsers {
-			users {
-				id
-				login
-			}
+		query Hello {
+			hello
 		}
 	`
 
@@ -445,22 +572,28 @@ it('throws an error if response is OK but has errors', async () => {
 })
 
 it('calls onError hook if provided', async () => {
-	server.use(
-		graphql.query('GetUsers', (req, res, ctx) =>
-			res(ctx.errors([{ message: 'Not Authorized' }])),
-		),
+	server = await createServer(
+		`
+		type Query {
+			hello: String!
+		}
+	`,
+		{
+			Query: {
+				hello() {
+					throw new Error('Not Authorized')
+				},
+			},
+		},
 	)
 
 	const onError = jest.fn()
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', onError })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint, onError })
 
 	const query = gql`
-		query GetUsers {
-			users {
-				id
-				login
-			}
+		query Hello {
+			hello
 		}
 	`
 
@@ -473,24 +606,30 @@ it('calls onError hook if provided', async () => {
 })
 
 it('ignores errors thrown inside onError hook', async () => {
-	server.use(
-		graphql.query('GetUsers', (req, res, ctx) =>
-			res(ctx.errors([{ message: 'Not Authorized' }])),
-		),
+	server = await createServer(
+		`
+		type Query {
+			hello: String!
+		}
+	`,
+		{
+			Query: {
+				hello() {
+					throw new Error('Not Authorized')
+				},
+			},
+		},
 	)
 
 	const onError = jest.fn().mockImplementation(() => {
 		throw new Error('💣')
 	})
 
-	const client = new AwesomeGraphQLClient({ endpoint: '/api/graphql', onError })
+	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint, onError })
 
 	const query = gql`
-		query GetUsers {
-			users {
-				id
-				login
-			}
+		query Hello {
+			hello
 		}
 	`
 
@@ -506,46 +645,39 @@ it('uses provided `isFileUpload` implementation', async () => {
 		}
 	`
 
-	class MyFile {
-		filename: string
-		constructor(filename: string) {
-			this.filename = filename
-		}
-		toString() {
-			return this.filename
-		}
-	}
+	class MyFile extends File {}
 
-	server.use(
-		rest.post('/api/graphql', (req, res, ctx) => {
-			const form = req.body as FormData
-
-			const operations = form.get('operations')
-			const map = form.get('map')
-
-			if (typeof operations !== 'string' || typeof map !== 'string') {
-				return res(ctx.status(400))
+	server = await createServer(
+		`
+			scalar Upload
+			type Mutation {
+				uploadFile(file: Upload!): Boolean
 			}
+			type Query {
+				hello: String!
+			}
+		`,
+		{
+			Upload: GraphQLUpload as any,
+			Mutation: {
+				async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+					const { createReadStream } = await file
+					const data = await streamToString(createReadStream())
+					expect(data).toBe('test')
 
-			expect(JSON.parse(operations)).toEqual({
-				query,
-				variables: { file: null },
-			})
-
-			expect(JSON.parse(map)).toEqual({ 1: ['variables.file'] })
-			expect(form.get('1')).toBe('image.png')
-
-			return res(ctx.json({ data: { uploadFile: true } }))
-		}),
+					return true
+				},
+			},
+		},
 	)
 
 	const client = new AwesomeGraphQLClient({
-		endpoint: '/api/graphql',
+		endpoint: server.endpoint,
 		isFileUpload: (value): value is MyFile => value instanceof MyFile,
 	})
 
 	const data = await client.request(query, {
-		file: new MyFile('image.png'),
+		file: new MyFile(['test'], 'text.txt'),
 	})
 
 	expect(data).toEqual({ uploadFile: true })

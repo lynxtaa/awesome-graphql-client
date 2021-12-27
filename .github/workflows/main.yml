@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: npm ci --silent
+        run: npm ci
 
       - name: Check code
         run: npm run validate
