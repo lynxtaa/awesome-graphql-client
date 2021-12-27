@@ -1,8 +1,18 @@
 import { Headers } from './types'
 
-const isHeaders = (
-	headers: Headers | string[][] | Record<string, string>,
-): headers is Headers => !Array.isArray(headers) && typeof headers.get === 'function'
+type HeadersInit =
+	| Iterable<[string, string]>
+	| Headers
+	| string[][]
+	| Record<string, string>
+
+const isHeaders = (headers: HeadersInit): headers is Headers =>
+	typeof (headers as any).get === 'function'
+
+const isIterableHeaders = (
+	headers: HeadersInit,
+): headers is Iterable<[string, string]> | string[][] =>
+	typeof (headers as any)[Symbol.iterator] === 'function'
 
 /**
  * This function will convert headers to { [key: string]: string }
@@ -11,7 +21,7 @@ const isHeaders = (
  * @param headers request headers
  */
 export function normalizeHeaders(
-	headers: Headers | string[][] | Record<string, string> | undefined,
+	headers: HeadersInit | undefined,
 ): Record<string, string> {
 	if (headers === undefined) {
 		return {}
@@ -19,21 +29,21 @@ export function normalizeHeaders(
 
 	if (isHeaders(headers)) {
 		const newHeaders: Record<string, string> = {}
-		headers.forEach((val, key) => {
-			newHeaders[key] = val
+
+		headers.forEach((value, key) => {
+			newHeaders[key] = value
 		})
 		return newHeaders
 	}
 
-	if (Array.isArray(headers)) {
-		return Object.fromEntries(
-			headers.map(([key, val]) => {
-				if (key === undefined || val === undefined) {
-					throw new Error(`Received invalid headers: ${headers}`)
-				}
-				return [key.toLowerCase(), val]
-			}),
-		)
+	if (isIterableHeaders(headers)) {
+		const newHeaders: Record<string, string> = {}
+
+		for (const [key, value] of headers) {
+			newHeaders[key.toLowerCase()] = value
+		}
+
+		return newHeaders
 	}
 
 	return Object.fromEntries(

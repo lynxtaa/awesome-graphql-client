@@ -38,9 +38,3 @@ it('supports headers as an object', () => {
 it('supports headers as undefined', () => {
 	expect(normalizeHeaders(undefined)).toEqual({})
 })
-
-it('throws if headers array is invalid', () => {
-	expect(() => normalizeHeaders([['Authorization', 'abc'], ['X-Options']])).toThrow(
-		/Received invalid headers/,
-	)
-})

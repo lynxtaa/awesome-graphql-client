@@ -107,6 +107,8 @@ client
   .catch(error => console.log(error))
 ```
 
+For even better performance check out [undici example](https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples/with-undici/with-undici.js)
+
 ## Table of Contents
 
 - API
