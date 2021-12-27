@@ -1,9 +1,9 @@
+// Using undici will result in better performance.
+// Notice: it's experimental and only Node 16 is supported
+
 import { fetch, RequestInit, Response, FormData, File } from 'undici'
 
 import { AwesomeGraphQLClient } from '../../src'
-
-// Using undici will result in better performance.
-// Notice: only Node 16 is supported
 
 const client = new AwesomeGraphQLClient<string, RequestInit, Response>({
 	endpoint: 'http://localhost:8080/graphql',
