@@ -1,6 +1,7 @@
 {
 	"resetMocks": true,
 	"roots": ["<rootDir>/test", "<rootDir>/src"],
+	"coveragePathIgnorePatterns": ["<rootDir>/test"],
 	"setupFilesAfterEnv": ["<rootDir>/test/jest/setupTests.ts"],
 	"transform": {
 		"\\.[jt]sx?$": [
