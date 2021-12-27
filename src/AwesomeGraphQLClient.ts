@@ -13,7 +13,6 @@ export class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends FetchOptions = FetchOptions,
 	TRequestResult extends RequestResult = Response,
-	TFileUpload = FileUpload,
 > {
 	private endpoint: string
 	private fetch: (url: string, options?: TFetchOptions) => Promise<TRequestResult>
@@ -21,7 +20,7 @@ export class AwesomeGraphQLClient<
 	private formatQuery?: (query: TQuery) => string
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
-	private isFileUpload: (value: unknown) => value is TFileUpload
+	private isFileUpload: (value: unknown) => boolean
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -37,7 +36,7 @@ export class AwesomeGraphQLClient<
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
 		/** Custom predicate function for checking if value is a file */
-		isFileUpload?: (value: unknown) => value is TFileUpload
+		isFileUpload?: (value: unknown) => boolean
 	}) {
 		assert(config.endpoint, 'endpoint is required')
 
@@ -70,14 +69,18 @@ export class AwesomeGraphQLClient<
 
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
-		this.isFileUpload = config.isFileUpload || (isFileUpload as any)
+		this.isFileUpload = config.isFileUpload || isFileUpload
 	}
 
 	private createRequestBody(
 		query: string,
 		variables?: Record<string, unknown>,
 	): string | FormData {
-		const { clone, files } = extractFiles({ query, variables }, '', this.isFileUpload)
+		const { clone, files } = extractFiles(
+			{ query, variables },
+			'',
+			this.isFileUpload as (value: unknown) => value is FileUpload,
+		)
 		const operationJSON = JSON.stringify(clone)
 
 		if (!files.size) {

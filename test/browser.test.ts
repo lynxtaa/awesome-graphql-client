@@ -673,7 +673,7 @@ it('uses provided `isFileUpload` implementation', async () => {
 
 	const client = new AwesomeGraphQLClient({
 		endpoint: server.endpoint,
-		isFileUpload: (value): value is MyFile => value instanceof MyFile,
+		isFileUpload: value => value instanceof MyFile,
 	})
 
 	const data = await client.request(query, {

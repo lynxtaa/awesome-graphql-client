@@ -8,17 +8,17 @@
     "gql-codegen": "graphql-codegen --config graphql-codegen.yml"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "1.21.3",
-    "@graphql-codegen/typed-document-node": "^1.18.5",
-    "@graphql-codegen/typescript": "1.21.1",
-    "@graphql-codegen/typescript-operations": "1.17.15",
-    "@graphql-typed-document-node/core": "^3.1.0",
+    "@graphql-codegen/cli": "2.3.0",
+    "@graphql-codegen/typed-document-node": "^2.2.1",
+    "@graphql-codegen/typescript": "2.4.1",
+    "@graphql-codegen/typescript-operations": "2.2.1",
+    "@graphql-typed-document-node/core": "^3.1.1",
     "@types/node": "14.14.37",
-    "@types/node-fetch": "^2.5.10",
-    "typescript": "4.2.3"
+    "@types/node-fetch": "^2.5.12",
+    "typescript": "4.5.4"
   },
   "dependencies": {
-    "graphql": "^15.5.0",
-    "node-fetch": "^2.6.1"
+    "graphql": "^16.2.0",
+    "node-fetch": "^2.6.6"
   }
 }

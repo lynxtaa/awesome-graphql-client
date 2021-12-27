@@ -2,7 +2,7 @@ import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { print } from 'graphql/language/printer'
 import fetch from 'node-fetch'
 
-import { AwesomeGraphQLClient } from '../../../src/AwesomeGraphQLClient'
+import { AwesomeGraphQLClient } from '../../../src'
 
 import { GetCharactersDocument } from './gql-documents'
 
@@ -16,7 +16,7 @@ async function main() {
 	// Client is infering types from provided document
 	// so typechecking works automagically
 	const data = await gqlClient.request(GetCharactersDocument, { name: 'Rick' })
-	console.log(data.characters?.results?.map((result) => result?.name))
+	console.log(data.characters?.results?.map(result => result?.name))
 }
 
-main().catch((err) => console.error(err))
+main().catch(err => console.error(err))
