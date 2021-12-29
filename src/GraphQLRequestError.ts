@@ -5,7 +5,7 @@ export class GraphQLRequestError<
 > extends Error {
 	query: string
 	variables?: Record<string, unknown>
-	response: TResponse
+	response!: TResponse
 
 	constructor({
 		query,
@@ -21,7 +21,14 @@ export class GraphQLRequestError<
 		super(`GraphQL Request Error: ${message}`)
 
 		this.query = query
-		this.variables = variables
-		this.response = response
+		if (variables) {
+			this.variables = variables
+		}
+
+		// Hide Response from `console.log(error)`
+		Object.defineProperty(this, 'response', {
+			enumerable: false,
+			value: response,
+		})
 	}
 }
