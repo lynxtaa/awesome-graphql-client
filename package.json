@@ -24,10 +24,6 @@
   "types": "./dist/index.d.ts",
   "module": "./dist/index.m.js",
   "unpkg": "./dist/index.umd.js",
-  "exports": {
-    "import": "./dist/index.modern.js",
-    "require": "./dist/index.js"
-  },
   "simple-git-hooks": {
     "pre-commit": "npx pretty-quick --staged"
   },
