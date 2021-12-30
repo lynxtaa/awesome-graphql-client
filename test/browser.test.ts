@@ -489,18 +489,20 @@ it('throws an error if response is not OK', async () => {
 		{},
 	)
 
-	const client = new AwesomeGraphQLClient({ endpoint: `${server.endpoint}/404` })
+	const client = new AwesomeGraphQLClient({
+		endpoint: new URL('./404', server.endpoint).toString(),
+	})
 
 	const query = gql`
-		query GetUsers {
-			users {
+		query GetUser($id: Int!) {
+			user(id: $id) {
 				id
 				login
 			}
 		}
 	`
 
-	await expect(client.request(query)).rejects.toThrow(
+	await expect(client.request(query, { id: 10 })).rejects.toThrow(
 		'GraphQL Request Error: Http Status 404',
 	)
 })

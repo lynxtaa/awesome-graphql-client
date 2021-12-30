@@ -29,6 +29,11 @@ export async function createServer(
 		res.status(204).send()
 	})
 
+	// Endpoint to test non-json errors
+	app.post('/404', (req, res) => {
+		res.status(404).send('Not Found')
+	})
+
 	await app.listen(0)
 
 	const address = app.server.address()
