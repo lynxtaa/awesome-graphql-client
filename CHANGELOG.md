@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.11.0...v0.12.0) (2022-02-11)
+
+
+### Bug Fixes
+
+* add request headers normalization ([53c008a](https://github.com/lynxtaa/awesome-graphql-client/commit/53c008a11c4ce0138ccfbb2ef0ccba522a7566b7))
+* hide response from error output ([cff8eea](https://github.com/lynxtaa/awesome-graphql-client/commit/cff8eea568d85426d2be5802d4e65dde8bd47beb))
+* remove undici from deps ([b152eb4](https://github.com/lynxtaa/awesome-graphql-client/commit/b152eb4a1cf6939368850ba5d406bad309e39c8c))
+
 ## [0.11.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.10.0...v0.11.0) (2021-12-10)
 
 
