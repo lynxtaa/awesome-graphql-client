@@ -11,7 +11,7 @@ import { FetchOptions, RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
 	TQuery = string,
-	TFetchOptions extends FetchOptions = FetchOptions,
+	TFetchOptions extends FetchOptions = RequestInit,
 	TRequestResult extends RequestResult = Response,
 > {
 	private endpoint: string

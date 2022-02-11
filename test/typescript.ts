@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 
-import fetch from 'node-fetch'
+import fetch, { RequestInit as RequestInitNF, Response as ResponseNF } from 'node-fetch'
 
 import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'
@@ -112,5 +112,24 @@ export async function withoutVariables(): Promise<void> {
 	} else {
 		console.log(result.data.users)
 		console.log(result.response.status)
+	}
+}
+
+export async function withCustomHeaders(): Promise<void> {
+	const client = new AwesomeGraphQLClient({
+		endpoint: 'http://localhost:1234/api/graphql',
+		fetch,
+	})
+
+	await client.request('', {}, { headers: { authorization: '123' } })
+
+	const client2 = new AwesomeGraphQLClient<string, RequestInitNF, ResponseNF>({
+		endpoint: 'http://localhost:1234/api/graphql',
+		fetch,
+	})
+
+	const result = await client2.requestSafe('', {}, { headers: { authorization: '123' } })
+	if (result.ok) {
+		console.log(result.response.headers.raw())
 	}
 }

@@ -184,7 +184,7 @@ const query = `
   }
 `
 
-const client = new AwesomeGraphQLClient<string, RequestInit, Response>({
+const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:3000/graphql',
 })
 
