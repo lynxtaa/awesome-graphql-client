@@ -3,7 +3,7 @@
  * Storing access-token in memory and refresh-token in httpOnly cookie
  */
 
-import { AwesomeGraphQLClient, gql } from 'awesome-graphql-client'
+import { AwesomeGraphQLClient, gql } from '../src'
 
 type FetchOptions = RequestInit & { skipRefresh?: boolean }
 
@@ -98,7 +98,7 @@ class AuthContainer {
 					{},
 					{ skipRefresh: true }, // preventing infinite refresh loop
 				)
-				.then((data) => {
+				.then(data => {
 					this.accessToken = data.refresh.accessToken
 					this.tokenType = data.refresh.tokenType
 					this.expiresAt = Date.now() + data.refresh.expiresIn * 1000

@@ -1,0 +1,24 @@
+{
+  "name": "typed-document-node-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node build/examples/typed-document-node/src/index.js",
+    "gql-codegen": "graphql-codegen --config graphql-codegen.yml"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "2.3.0",
+    "@graphql-codegen/typed-document-node": "^2.2.1",
+    "@graphql-codegen/typescript": "2.4.1",
+    "@graphql-codegen/typescript-operations": "2.2.1",
+    "@graphql-typed-document-node/core": "^3.1.1",
+    "@types/node": "14.14.37",
+    "@types/node-fetch": "^2.5.12",
+    "typescript": "4.5.4"
+  },
+  "dependencies": {
+    "graphql": "^16.2.0",
+    "node-fetch": "^2.6.6"
+  }
+}

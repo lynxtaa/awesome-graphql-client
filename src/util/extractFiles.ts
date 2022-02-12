@@ -1,8 +1,15 @@
 const isArray = (value: unknown): value is unknown[] | FileList =>
 	Array.isArray(value) || (typeof FileList !== 'undefined' && value instanceof FileList)
 
-const isPlainObject = (value: unknown): value is Record<string, unknown> =>
-	typeof value === 'object' && value !== null && value.constructor === Object
+// https://github.com/sindresorhus/is-plain-obj/blob/main/index.js
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+	if (Object.prototype.toString.call(value) !== '[object Object]') {
+		return false
+	}
+
+	const prototype = Object.getPrototypeOf(value)
+	return prototype === null || prototype === Object.prototype
+}
 
 /**
  * Parses object and detects files according to GraphQL Upload Spec:

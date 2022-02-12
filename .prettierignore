@@ -1,3 +1,4 @@
 package.json
 package-lock.json
 CHANGELOG.md
+examples/next.js/lib/graphql-queries.ts

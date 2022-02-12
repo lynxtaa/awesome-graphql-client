@@ -1,16 +1,18 @@
+import { TypedDocumentNode } from '@graphql-typed-document-node/core'
+
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
 import { extractFiles } from './util/extractFiles'
 import { formatGetRequestUrl } from './util/formatGetRequestUrl'
-import { isFileUpload, FileUpload } from './util/isFileUpload'
+import { FileUpload, isFileUpload } from './util/isFileUpload'
 import { isResponseJSON } from './util/isResponseJSON'
-import { RequestResult } from './util/types'
+import { normalizeHeaders } from './util/normalizeHeaders'
+import { FetchOptions, RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
 	TQuery = string,
-	TFetchOptions extends Record<string, any> = RequestInit,
+	TFetchOptions extends FetchOptions = RequestInit,
 	TRequestResult extends RequestResult = Response,
-	TFileUpload = FileUpload
 > {
 	private endpoint: string
 	private fetch: (url: string, options?: TFetchOptions) => Promise<TRequestResult>
@@ -18,7 +20,7 @@ export class AwesomeGraphQLClient<
 	private formatQuery?: (query: TQuery) => string
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
-	private isFileUpload: (value: unknown) => value is TFileUpload
+	private isFileUpload: (value: unknown) => boolean
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -34,7 +36,7 @@ export class AwesomeGraphQLClient<
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
 		/** Custom predicate function for checking if value is a file */
-		isFileUpload?: (value: unknown) => value is TFileUpload
+		isFileUpload?: (value: unknown) => boolean
 	}) {
 		assert(config.endpoint, 'endpoint is required')
 
@@ -67,14 +69,17 @@ export class AwesomeGraphQLClient<
 
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
-		this.isFileUpload = config.isFileUpload || (isFileUpload as any)
+		this.isFileUpload = config.isFileUpload || isFileUpload
 	}
 
 	private createRequestBody(
 		query: string,
 		variables?: Record<string, unknown>,
 	): string | FormData {
-		const { clone, files } = extractFiles({ query, variables }, this.isFileUpload)
+		const { clone, files } = extractFiles(
+			{ query, variables },
+			this.isFileUpload as (value: unknown) => value is FileUpload,
+		)
 
 		const operationJSON = JSON.stringify(clone)
 
@@ -93,7 +98,7 @@ export class AwesomeGraphQLClient<
 
 		const map: Record<string, string[]> = {}
 		let i = 0
-		files.forEach((paths) => {
+		files.forEach(paths => {
 			map[++i] = paths
 		})
 		form.append('map', JSON.stringify(map))
@@ -130,13 +135,13 @@ export class AwesomeGraphQLClient<
 	}
 
 	/**
-	 * Sends GraphQL Request and returns object with 'data' and 'response' fields
-	 * or with a single 'error' field.
+	 * Sends GraphQL Request and returns object with 'ok: true', 'data' and 'response' fields
+	 * or with 'ok: false' and 'error' fields.
 	 * Notice: this function never throws
 	 *
 	 * @example
 	 * const result = await requestSafe(...)
-	 * if ('error' in result) {
+	 * if (!result.ok) {
 	 *   throw result.error
 	 * }
 	 * console.log(result.data)
@@ -149,17 +154,19 @@ export class AwesomeGraphQLClient<
 		// Should be "any" and not "unknown" to be compatible with interfaces
 		// https://github.com/microsoft/TypeScript/issues/15300#issuecomment-702872440
 		TData extends Record<string, any>,
-		TVariables extends Record<string, any> = Record<string, any>
+		TVariables extends Record<string, any> = Record<string, never>,
 	>(
-		query: TQuery,
+		query: TQuery extends TypedDocumentNode
+			? TypedDocumentNode<TData, TVariables>
+			: TQuery,
 		variables?: TVariables,
 		fetchOptions?: TFetchOptions,
 	): Promise<
-		| { data: TData; response: TRequestResult }
-		| { error: GraphQLRequestError<TRequestResult> | Error }
+		| { ok: true; data: TData; response: TRequestResult }
+		| { ok: false; error: GraphQLRequestError<TRequestResult> | Error }
 	> {
 		try {
-			const queryAsString = this.formatQuery ? this.formatQuery(query) : query
+			const queryAsString = this.formatQuery ? this.formatQuery(query as TQuery) : query
 
 			assert(
 				typeof queryAsString === 'string',
@@ -171,31 +178,31 @@ export class AwesomeGraphQLClient<
 				...this.fetchOptions,
 				...fetchOptions,
 				headers: {
-					...this.fetchOptions?.headers,
-					...fetchOptions?.headers,
+					...normalizeHeaders(this.fetchOptions?.headers),
+					...normalizeHeaders(fetchOptions?.headers),
 				},
-			}
+			} as TFetchOptions
 
 			let response: TRequestResult | Response
 
-			if (options.method.toUpperCase() === 'GET') {
+			if (options.method?.toUpperCase() === 'GET') {
 				const url = formatGetRequestUrl({
 					endpoint: this.endpoint,
 					query: queryAsString,
 					variables,
 				})
-				response = await this.fetch(url, (options as unknown) as TFetchOptions)
+				response = await this.fetch(url, options)
 			} else {
 				const body = this.createRequestBody(queryAsString, variables)
 
-				response = await this.fetch(this.endpoint, ({
+				response = await this.fetch(this.endpoint, {
 					...options,
 					body,
 					headers:
 						typeof body === 'string'
 							? { ...options.headers, 'Content-Type': 'application/json' }
 							: options.headers,
-				} as unknown) as TFetchOptions)
+				})
 			}
 
 			if (!response.ok) {
@@ -231,17 +238,19 @@ export class AwesomeGraphQLClient<
 				})
 			}
 
-			return { data, response }
-		} catch (error) {
+			return { ok: true, data, response }
+		} catch (err) {
+			const error = err instanceof Error ? err : new Error(String(err))
+
 			if (this.onError) {
 				try {
 					this.onError(error)
 				} catch (err) {
-					return { error }
+					return { ok: false, error }
 				}
 			}
 
-			return { error }
+			return { ok: false, error }
 		}
 	}
 
@@ -257,15 +266,21 @@ export class AwesomeGraphQLClient<
 	 */
 	async request<
 		TData extends Record<string, any>,
-		TVariables extends Record<string, any> = Record<string, any>
-	>(query: TQuery, variables?: TVariables, fetchOptions?: TFetchOptions): Promise<TData> {
+		TVariables extends Record<string, any> = Record<string, never>,
+	>(
+		query: TQuery extends TypedDocumentNode
+			? TypedDocumentNode<TData, TVariables>
+			: TQuery,
+		variables?: TVariables,
+		fetchOptions?: TFetchOptions,
+	): Promise<TData> {
 		const result = await this.requestSafe<TData, TVariables>(
 			query,
 			variables,
 			fetchOptions,
 		)
 
-		if ('error' in result) {
+		if (!result.ok) {
 			throw result.error
 		}
 

@@ -1,8 +1,21 @@
-# Awesome GraphQL Client
-
-GraphQL Client with file upload support for NodeJS and browser
-
-![CI/CD](https://github.com/lynxtaa/awesome-graphql-client/workflows/CI/CD/badge.svg) [![npm version](https://badge.fury.io/js/awesome-graphql-client.svg)](https://badge.fury.io/js/awesome-graphql-client) [![Codecov](https://img.shields.io/codecov/c/github/lynxtaa/awesome-graphql-client)](https://codecov.io/gh/lynxtaa/awesome-graphql-client)
+<div align="center">
+  <a href="https://github.com/lynxtaa/awesome-graphql-client">
+    <img width="180" height="180" src="logo.svg">
+  </a>
+  <br>
+  <br>
+  <img alt="CI/CD" src="https://github.com/lynxtaa/awesome-graphql-client/workflows/CI/CD/badge.svg">
+  <a href="https://badge.fury.io/js/awesome-graphql-client">
+    <img alt="npm version" src="https://badge.fury.io/js/awesome-graphql-client.svg">
+  </a>
+  <a href="https://codecov.io/gh/lynxtaa/awesome-graphql-client" alt="npm version">
+    <img alt="Codecov" src="https://img.shields.io/codecov/c/github/lynxtaa/awesome-graphql-client">
+  </a>
+  <br>
+  <br>
+  <h1>Awesome GraphQL Client</h1>
+  <p>GraphQL Client with file upload support for NodeJS and browser</p>
+</div>
 
 ## Features
 
@@ -49,14 +62,14 @@ const UploadUserAvatar = `
 
 client
   .request(GetUsers)
-  .then((data) =>
+  .then(data =>
     client.request(UploadUserAvatar, {
       id: data.users[0].id,
       file: document.querySelector('input#avatar').files[0],
     }),
   )
-  .then((data) => console.log(data.updateUser.id))
-  .catch((error) => console.log(error))
+  .then(data => console.log(data.updateUser.id))
+  .catch(error => console.log(error))
 ```
 
 ### NodeJS
@@ -65,12 +78,18 @@ client
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
 const FormData = require('form-data')
 const { createReadStream } = require('fs')
+const http = require('http')
 const fetch = require('node-fetch')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
   fetch,
   FormData, // Required only if you're using file upload
+  fetchOptions: {
+    // Using HTTP Keep-Alive will make requests ~2x faster in NodeJS:
+    // https://github.com/Ethan-Arrowood/undici-fetch/blob/main/benchmarks.md#fetch
+    agent: new http.Agent({ keepAlive: true }),
+  },
 })
 
 // Also query can be an output from graphql-tag (see examples below)
@@ -84,9 +103,11 @@ const UploadUserAvatar = `
 
 client
   .request(UploadUserAvatar, { file: createReadStream('./avatar.img'), userId: 10 })
-  .then((data) => console.log(data.updateUser.id))
-  .catch((error) => console.log(error))
+  .then(data => console.log(data.updateUser.id))
+  .catch(error => console.log(error))
 ```
+
+For even better performance check out [undici example](https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples/with-undici/with-undici.js)
 
 ## Table of Contents
 
@@ -131,7 +152,7 @@ const client = new AwesomeGraphQLClient(config)
 - `client.getFetchOptions()`: Returns current fetch options
 - `client.getEnpoint(): string`: Returns current GraphQL endpoint
 - `client.request(query, variables?, fetchOptions?): Promise<data>`: Sends GraphQL Request and returns data or throws an error
-- `client.requestSafe(query, variables?, fetchOptions?): Promise<{ data, response } | { error }>`: Sends GraphQL Request and returns object with 'data' and 'response' fields or with a single 'error' field. See examples below. _Notice: this function never throws_.
+- `client.requestSafe(query, variables?, fetchOptions?): Promise<{ data, response } | { error }>`: Sends GraphQL Request and returns object with 'ok: true', 'data' and 'response' or with 'ok: false' and 'error' fields. See examples below. _Notice: this function never throws_.
 
 ## `GraphQLRequestError`
 
@@ -151,7 +172,7 @@ interface getUser {
   user: { id: number; login: string } | null
 }
 interface getUserVariables {
-  id: 10
+  id: number
 }
 
 const query = `
@@ -163,20 +184,58 @@ const query = `
   }
 `
 
-client
-  .request<getUser, getUserVariables>(query, { id: 10 })
-  .then((data) => console.log(data))
-  .catch((error) => console.log(error))
+const client = new AwesomeGraphQLClient({
+  endpoint: 'http://localhost:3000/graphql',
+})
 
 client
-  .requestSafe<getUser, getUserVariables>(query, { id: 10 })
-  .then((result) => {
-    if ('error' in result) {
-      throw result.error
-    }
-    console.log(`Status ${result.response.status}`, `Data ${result.data.user}`)
-  })
+  .request<getUser, getUserVariables>(query, { id: 10 })
+  .then(data => console.log(data))
+  .catch(error => console.log(error))
+
+client.requestSafe<getUser, getUserVariables>(query, { id: 10 }).then(result => {
+  if (!result.ok) {
+    throw result.error
+  }
+  console.log(`Status ${result.response.status}`, `Data ${result.data.user}`)
+})
 ```
+
+### Typescript with TypedDocumentNode (even better!)
+
+You can generate types from queries by using [GraphQL Code Generator](https://www.graphql-code-generator.com/) with [TypedDocumentNode plugin](https://github.com/dotansimha/graphql-typed-document-node)
+
+```graphql
+# queries.graphql
+query getUser($id: Int!) {
+  user {
+    id
+    login
+  }
+}
+```
+
+```ts
+// index.ts
+import { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { AwesomeGraphQLClient } from 'awesome-graphql-client'
+import { print } from 'graphql/language/printer'
+
+import { GetCharactersDocument } from './generated'
+
+const gqlClient = new AwesomeGraphQLClient({
+  endpoint: 'https://rickandmortyapi.com/graphql',
+  formatQuery: (query: TypedDocumentNode) => print(query),
+})
+
+// AwesomeGraphQLClient will infer all types from the passed query automagically:
+gqlClient
+  .request(GetCharactersDocument, { name: 'Rick' })
+  .then(data => console.log(data))
+  .catch(error => console.log(error))
+```
+
+Check out full example at [examples/typed-document-node](https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples/typed-document-node)
 
 ## Error Logging
 
@@ -200,20 +259,20 @@ const client = new AwesomeGraphQLClient({
 
 ## GraphQL GET Requests
 
-Internally it uses [URL API](https://developer.mozilla.org/ru/docs/Web/API/URL/URL). Consider [polyfilling URL standard](https://github.com/zloirock/core-js#url-and-urlsearchparams) for this feature to work in IE
+Internally it uses [URLSearchParams API](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams). Consider [polyfilling URL standard](https://github.com/zloirock/core-js#url-and-urlsearchparams) for this feature to work in IE
 
 ```js
 client
   .request(query, variables, { method: 'GET' })
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err))
+  .then(data => console.log(data))
+  .catch(err => console.log(err))
 ```
 
 ## GraphQL Tag
 
 ### Approach #1: Use `formatQuery`
 
-```js
+```ts
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 import { DocumentNode } from 'graphql/language/ast'
 import { print } from 'graphql/language/printer'
@@ -235,8 +294,8 @@ const query = gql`
 
 client
   .request(query)
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err))
+  .then(data => console.log(data))
+  .catch(err => console.log(err))
 ```
 
 ### Approach #2: Use fake `graphql-tag`
@@ -258,9 +317,13 @@ const query = gql`
 
 client
   .request(query)
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err))
+  .then(data => console.log(data))
+  .catch(err => console.log(err))
 ```
+
+### Approach #3: Use TypedDocumentNode instead
+
+Perfect for Typescript projects. See [example above](#typescript-with-typeddocumentnode-even-better)
 
 ## Cookies in NodeJS
 
@@ -281,9 +344,9 @@ const { AwesomeGraphQLClient, isFileUpload } = require('awesome-graphql-client')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  // By default File, Blob, Buffer and stream-like instances are considered as files.
+  // By default File, Blob, Buffer, Promise and stream-like instances are considered as files.
   // You can expand this behaviour by adding a custom predicate
-  isFileUpload: (value) => isFileUpload(value) || value instanceof MyCustomFile,
+  isFileUpload: value => isFileUpload(value) || value instanceof MyCustomFile,
 })
 ```
 

@@ -1,0 +1,8 @@
+query GetCharacters($name: String) {
+	characters(filter: { name: $name }) {
+		results {
+			id
+			name
+		}
+	}
+}

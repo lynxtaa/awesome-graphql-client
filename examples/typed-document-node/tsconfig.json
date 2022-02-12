@@ -8,13 +8,13 @@
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"noUncheckedIndexedAccess": true,
-		"module": "ESNext",
+		"module": "CommonJS",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"declaration": true,
 		"declarationMap": true,
 		"noUnusedLocals": true,
-		"noEmit": true
+		"outDir": "build"
 	},
-	"include": ["src", "test"]
+	"include": ["src"]
 }

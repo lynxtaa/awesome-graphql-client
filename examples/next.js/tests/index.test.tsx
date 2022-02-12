@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { server, graphql } from '../jest/testServer'
-import { GetCharacters, GetCharactersVariables } from '../lib/gql-queries'
+import { GetCharactersQuery, GetCharactersQueryVariables } from '../lib/graphql-queries'
 import Home from '../pages/index'
 
 const withProvider = ({ children }: { children?: React.ReactNode }) => (
@@ -12,8 +12,8 @@ const withProvider = ({ children }: { children?: React.ReactNode }) => (
 
 it('renders and filters list', async () => {
 	server.use(
-		graphql.query<GetCharacters, GetCharactersVariables>(
-			'GetCharacters',
+		graphql.query<GetCharactersQuery, GetCharactersQueryVariables>(
+			'GetCharactersQuery',
 			(req, res, ctx) =>
 				res(
 					ctx.data({
@@ -24,7 +24,7 @@ it('renders and filters list', async () => {
 								{ id: '3', name: 'Summer Smith' },
 								{ id: '4', name: 'Birdperson' },
 							]
-								.filter((character) => character.name.includes(req.variables.name || ''))
+								.filter(character => character.name.includes(req.variables.name || ''))
 								.slice(0, 3),
 						},
 					}),

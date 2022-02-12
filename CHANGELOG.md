@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.12.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.12.0...v0.12.1) (2022-02-12)
+
+
+### Bug Fixes
+
+* better types for FetchOptions generic ([b3d359e](https://github.com/lynxtaa/awesome-graphql-client/commit/b3d359eab47264b2e606cdaf18642ed8324dd2a5))
+
+## [0.12.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.11.0...v0.12.0) (2022-02-11)
+
+
+### Bug Fixes
+
+* add request headers normalization ([53c008a](https://github.com/lynxtaa/awesome-graphql-client/commit/53c008a11c4ce0138ccfbb2ef0ccba522a7566b7))
+* hide response from error output ([cff8eea](https://github.com/lynxtaa/awesome-graphql-client/commit/cff8eea568d85426d2be5802d4e65dde8bd47beb))
+* remove undici from deps ([b152eb4](https://github.com/lynxtaa/awesome-graphql-client/commit/b152eb4a1cf6939368850ba5d406bad309e39c8c))
+
+## [0.11.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.10.0...v0.11.0) (2021-12-10)
+
+
+### Features
+
+* better typescript for custom fetch ([01ccd3e](https://github.com/lynxtaa/awesome-graphql-client/commit/01ccd3eebf00b05ac72ae46d1ff2f204f148c4f9))
+
+## [0.10.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.9.1...v0.10.0) (2021-10-22)
+
+
+### Features
+
+* add 'ok' field to safe result ([a08d20c](https://github.com/lynxtaa/awesome-graphql-client/commit/a08d20c9601b1ef61412893475638e5653b13a07))
+* support promises for file upload ([ab88336](https://github.com/lynxtaa/awesome-graphql-client/commit/ab8833650ed97619410b09a8759a452920288b22))
+
+### [0.9.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.9.0...v0.9.1) (2021-10-07)
+
+
+### Bug Fixes
+
+* support relative urls for GraphQL GET requests ([#73](https://github.com/lynxtaa/awesome-graphql-client/issues/73)) ([ee41339](https://github.com/lynxtaa/awesome-graphql-client/commit/ee41339667eba7a7626e7d3de84e29ef00ab160f))
+
+## [0.9.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.8.0...v0.9.0) (2021-04-22)
+
+
+### Features
+
+* add support for TypedDocumentNode ([#70](https://github.com/lynxtaa/awesome-graphql-client/issues/70)) ([f0bd50c](https://github.com/lynxtaa/awesome-graphql-client/commit/f0bd50c374d66ba5e0e807f3e86c163c820c1f0b))
+
 ## [0.8.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.7.0...v0.8.0) (2021-03-22)
 
 

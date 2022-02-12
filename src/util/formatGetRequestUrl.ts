@@ -11,13 +11,12 @@ export function formatGetRequestUrl({
 	query: string
 	variables?: Record<string, unknown>
 }): string {
-	const url = new URL(endpoint)
-
-	url.searchParams.append('query', query)
+	const searchParams = new URLSearchParams()
+	searchParams.set('query', query)
 
 	if (variables && Object.keys(variables).length > 0) {
-		url.searchParams.append('variables', JSON.stringify(variables))
+		searchParams.set('variables', JSON.stringify(variables))
 	}
 
-	return url.toString()
+	return `${endpoint}?${searchParams.toString()}`
 }
