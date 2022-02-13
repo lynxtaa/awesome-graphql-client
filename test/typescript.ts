@@ -2,6 +2,8 @@
  * @jest-environment node
  */
 
+/* eslint-disable no-console */
+
 import fetch, { RequestInit as RequestInitNF, Response as ResponseNF } from 'node-fetch'
 
 import { AwesomeGraphQLClient } from '../src/index'
