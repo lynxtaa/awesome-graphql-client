@@ -38,10 +38,10 @@ export class AwesomeGraphQLClient<
 		/** Custom predicate function for checking if value is a file */
 		isFileUpload?: (value: unknown) => boolean
 	}) {
-		assert(config.endpoint, 'endpoint is required')
+		assert(config.endpoint !== undefined, 'endpoint is required')
 
 		assert(
-			config.fetch || typeof fetch !== 'undefined',
+			config.fetch !== undefined || typeof fetch !== 'undefined',
 			'Fetch must be polyfilled or passed in new AwesomeGraphQLClient({ fetch })',
 		)
 
@@ -65,7 +65,11 @@ export class AwesomeGraphQLClient<
 		this.fetchOptions = config.fetchOptions
 
 		this.FormData =
-			config.FormData || (typeof FormData !== 'undefined' ? FormData : undefined)
+			config.FormData !== undefined
+				? config.FormData
+				: typeof FormData !== 'undefined'
+				? FormData
+				: undefined
 
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
@@ -83,12 +87,12 @@ export class AwesomeGraphQLClient<
 		)
 		const operationJSON = JSON.stringify(clone)
 
-		if (!files.size) {
+		if (files.size === 0) {
 			return operationJSON
 		}
 
 		assert(
-			this.FormData,
+			this.FormData !== undefined,
 			'FormData must be polyfilled or passed in new AwesomeGraphQLClient({ FormData })',
 		)
 
@@ -98,16 +102,17 @@ export class AwesomeGraphQLClient<
 
 		const map: Record<string, string[]> = {}
 		let i = 0
-		files.forEach(paths => {
+		for (const paths of files.values()) {
 			map[++i] = paths
-		})
+		}
 		form.append('map', JSON.stringify(map))
 
 		i = 0
-		files.forEach((paths, file) => {
+		for (const file of files.keys()) {
 			form.append(`${++i}`, file)
-		})
+		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return form
 	}
 
@@ -178,7 +183,9 @@ export class AwesomeGraphQLClient<
 				...this.fetchOptions,
 				...fetchOptions,
 				headers: {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 					...normalizeHeaders(this.fetchOptions?.headers),
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 					...normalizeHeaders(fetchOptions?.headers),
 				},
 			} as TFetchOptions
@@ -206,10 +213,10 @@ export class AwesomeGraphQLClient<
 			}
 
 			if (!response.ok) {
-				if (isResponseJSON(response as any)) {
+				if (isResponseJSON(response)) {
 					const { errors } = await response.json()
 
-					if (errors?.[0]?.message) {
+					if (errors?.[0]?.message !== undefined) {
 						throw new GraphQLRequestError({
 							query: queryAsString,
 							variables,
@@ -230,7 +237,7 @@ export class AwesomeGraphQLClient<
 
 			const { data, errors } = await response.json()
 
-			if (errors?.[0]) {
+			if (errors?.[0] !== undefined) {
 				throw new GraphQLRequestError({
 					query: queryAsString,
 					variables,
@@ -247,7 +254,7 @@ export class AwesomeGraphQLClient<
 			if (this.onError) {
 				try {
 					this.onError(error)
-				} catch (err) {
+				} catch {
 					return { ok: false, error }
 				}
 			}

@@ -5,7 +5,13 @@
  * It has less computational cost and makes overall smaller bundles. See:
  * https://github.com/lynxtaa/awesome-graphql-client#approach-2-use-fake-graphql-tag
  */
-export const gql = (strings: TemplateStringsArray, ...values: any[]): string =>
-	strings
-		.reduce((prev, curr, i) => prev + curr + (i in values ? values[i] : ''), '')
-		.trim()
+export const gql = (strings: TemplateStringsArray, ...values: unknown[]): string => {
+	let result = ''
+
+	for (const [index, string] of strings.entries()) {
+		// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+		result += `${string}${index in values ? values[index] : ''}`
+	}
+
+	return result.trim()
+}

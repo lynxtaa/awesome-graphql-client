@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import Fastify, { FastifyInstance } from 'fastify'
 import { createHttpTerminator } from 'http-terminator'
 import mercurius, { IResolvers, MercuriusOptions } from 'mercurius'
@@ -38,7 +39,7 @@ export async function createServer(
 
 	const address = app.server.address()
 
-	if (!address || typeof address === 'string') {
+	if (address == null || typeof address === 'string') {
 		throw new Error("Can't get server address")
 	}
 

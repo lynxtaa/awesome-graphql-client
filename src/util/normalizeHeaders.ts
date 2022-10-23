@@ -30,6 +30,7 @@ export function normalizeHeaders(
 	if (isHeaders(headers)) {
 		const newHeaders: Record<string, string> = {}
 
+		// eslint-disable-next-line unicorn/no-array-for-each
 		headers.forEach((value, key) => {
 			newHeaders[key] = value
 		})

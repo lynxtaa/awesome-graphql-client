@@ -2,9 +2,9 @@
  * @jest-environment node
  */
 
-import { createReadStream } from 'fs'
-import http from 'http'
-import { join } from 'path'
+import { createReadStream } from 'node:fs'
+import http from 'node:http'
+import { join } from 'node:path'
 
 import FormData from 'form-data'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
@@ -35,12 +35,14 @@ afterEach(async () => {
 })
 
 it('throws if no Fetch polyfill provided', () => {
+	globalThis.fetch = undefined as any
 	expect(() => new AwesomeGraphQLClient({ endpoint: '/' })).toThrow(
 		/Fetch must be polyfilled/,
 	)
 })
 
 it('throws on file upload mutation if no FormData polyfill provided', async () => {
+	globalThis.FormData = undefined as any
 	interface UploadFile {
 		uploadFile: boolean
 	}
@@ -83,7 +85,7 @@ describe('node-fetch', () => {
 			`,
 			{
 				Query: {
-					hello: (_, { name }) => `Hello, ${name}!`,
+					hello: (_, { name }: { name: string }) => `Hello, ${name}!`,
 				},
 			},
 		)
@@ -127,6 +129,7 @@ describe('node-fetch', () => {
 				Upload: GraphQLUpload as any,
 				Mutation: {
 					async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+						// eslint-disable-next-line @typescript-eslint/unbound-method
 						const { createReadStream } = await file
 						const str = await streamToString(createReadStream())
 						expect(str).toBe('test')
@@ -150,7 +153,7 @@ describe('node-fetch', () => {
 		`
 
 		const data = await client.request<UploadFile, UploadFileVariables>(query, {
-			file: Buffer.from('test', 'utf-8'),
+			file: Buffer.from('test', 'utf8'),
 		})
 
 		expect(data).toEqual({ uploadFile: true })
@@ -167,7 +170,7 @@ maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
 			`,
 			{
 				Query: {
-					hello: (_, { name }) => `Hello, ${name}!`,
+					hello: (_, { name }: { name: string }) => `Hello, ${name}!`,
 				},
 			},
 		)
@@ -210,6 +213,7 @@ maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
 				Upload: GraphQLUpload as any,
 				Mutation: {
 					async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+						// eslint-disable-next-line @typescript-eslint/unbound-method
 						const { filename, createReadStream } = await file
 						expect(filename).toBe('text.txt')
 						const str = await streamToString(createReadStream())

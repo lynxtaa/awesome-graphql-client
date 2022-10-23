@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import { IncomingHttpHeaders } from 'http'
+import { IncomingHttpHeaders } from 'node:http'
 
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { print, DocumentNode } from 'graphql'
@@ -314,6 +314,7 @@ it('send GraphQL Upload request', async () => {
 			Upload: GraphQLUpload as any,
 			Mutation: {
 				async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+					// eslint-disable-next-line @typescript-eslint/unbound-method
 					const { filename, createReadStream } = await file
 					expect(filename).toBe('text.txt')
 					const str = await streamToString(createReadStream())
@@ -476,7 +477,8 @@ it('requestSafe returns error on fail', async () => {
 })
 
 it('throw an error in no endpoint provided', () => {
-	expect(() => new AwesomeGraphQLClient({} as any)).toThrow('endpoint is required')
+	// @ts-expect-error it's okay
+	expect(() => new AwesomeGraphQLClient({})).toThrow('endpoint is required')
 })
 
 it('throws an error if response is not OK', async () => {
@@ -490,7 +492,7 @@ it('throws an error if response is not OK', async () => {
 	)
 
 	const client = new AwesomeGraphQLClient({
-		endpoint: new URL('./404', server.endpoint).toString(),
+		endpoint: new URL('404', server.endpoint).toString(),
 	})
 
 	const query = gql`
@@ -665,6 +667,7 @@ it('uses provided `isFileUpload` implementation', async () => {
 			Upload: GraphQLUpload as any,
 			Mutation: {
 				async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+					// eslint-disable-next-line @typescript-eslint/unbound-method
 					const { createReadStream } = await file
 					const data = await streamToString(createReadStream())
 					expect(data).toBe('test')

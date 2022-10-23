@@ -33,7 +33,7 @@ export async function withVariables(): Promise<void> {
 	// TODO:
 	// this should fail typechecking because no variables provided,
 	// but I'm not sure how to type it correctly
-	client.request<GetUserQuery, GetUserQueryVariables>(query)
+	await client.request<GetUserQuery, GetUserQueryVariables>(query)
 
 	const result = await client.requestSafe<GetUserQuery, GetUserQueryVariables>(query, {
 		id: 1,
@@ -66,11 +66,11 @@ export async function withOptionalVariables(): Promise<void> {
 
 	console.log(data.users)
 
-	client.request<GetUsersQuery>(query, {})
-	client.request<GetUsersQuery>(query, undefined)
+	await client.request<GetUsersQuery>(query, {})
+	await client.request<GetUsersQuery>(query, undefined)
 
 	// @ts-expect-error wrong variables
-	client.request<GetUsersQuery>(query, { id: 123 })
+	await client.request<GetUsersQuery>(query, { id: 123 })
 
 	const result = await client.requestSafe<GetUsersQuery>(query)
 
@@ -101,11 +101,11 @@ export async function withoutVariables(): Promise<void> {
 
 	console.log(data.users)
 
-	client.request<GetUsersQuery>(query, {})
-	client.request<GetUsersQuery>(query, undefined)
+	await client.request<GetUsersQuery>(query, {})
+	await client.request<GetUsersQuery>(query, undefined)
 
 	// @ts-expect-error wrong variables
-	client.request<GetUsersQuery>(query, { id: 123 })
+	await client.request<GetUsersQuery>(query, { id: 123 })
 
 	const result = await client.requestSafe<GetUsersQuery>(query)
 
