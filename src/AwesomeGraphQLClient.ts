@@ -215,6 +215,7 @@ export class AwesomeGraphQLClient<
 							variables,
 							response,
 							message: errors[0].message,
+							extensions: errors[0].extensions,
 						})
 					}
 				}
@@ -235,6 +236,7 @@ export class AwesomeGraphQLClient<
 					variables,
 					response,
 					message: errors[0].message,
+					extensions: errors[0].extensions,
 				})
 			}
 
