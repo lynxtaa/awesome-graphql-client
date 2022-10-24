@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.13.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.12.1...v0.13.0) (2022-10-24)
+
+
+### Features
+
+* add extensions to GraphQLRequestError ([#76](https://github.com/lynxtaa/awesome-graphql-client/issues/76)) ([a23cab9](https://github.com/lynxtaa/awesome-graphql-client/commit/a23cab93daf18364be2fe762072dc9f5000068ef))
+
 ### [0.12.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.12.0...v0.12.1) (2022-02-12)
 
 
