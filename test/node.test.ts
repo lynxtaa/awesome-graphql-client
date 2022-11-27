@@ -34,46 +34,51 @@ afterEach(async () => {
 	await server?.destroy()
 })
 
-it('throws if no Fetch polyfill provided', () => {
-	globalThis.fetch = undefined as any
+const itif = (condition: boolean) => (condition ? it : it.skip)
+
+const nodeMajorVersion = Number(process.versions.node.split('.')[0])
+
+itif(nodeMajorVersion < 18)('throws if no Fetch polyfill provided', () => {
 	expect(() => new AwesomeGraphQLClient({ endpoint: '/' })).toThrow(
 		/Fetch must be polyfilled/,
 	)
 })
 
-it('throws on file upload mutation if no FormData polyfill provided', async () => {
-	globalThis.FormData = undefined as any
-	interface UploadFile {
-		uploadFile: boolean
-	}
-	interface UploadFileVariables {
-		file: any
-	}
-
-	const client = new AwesomeGraphQLClient<
-		string,
-		NodeFetchRequestInit,
-		NodeFetchResponse
-	>({
-		endpoint: 'http://localhost:1234/api/graphql',
-		fetch: nodeFetch,
-		fetchOptions: {
-			agent: new http.Agent({ keepAlive: true }),
-		},
-	})
-
-	const query = gql`
-		mutation UploadFile($file: Upload!) {
-			uploadFile(file: $file)
+itif(nodeMajorVersion < 18)(
+	'throws on file upload mutation if no FormData polyfill provided',
+	async () => {
+		interface UploadFile {
+			uploadFile: boolean
 		}
-	`
+		interface UploadFileVariables {
+			file: any
+		}
 
-	await expect(
-		client.request<UploadFile, UploadFileVariables>(query, {
-			file: createReadStream(join(__filename)),
-		}),
-	).rejects.toThrow(/FormData must be polyfilled/)
-})
+		const client = new AwesomeGraphQLClient<
+			string,
+			NodeFetchRequestInit,
+			NodeFetchResponse
+		>({
+			endpoint: 'http://localhost:1234/api/graphql',
+			fetch: nodeFetch,
+			fetchOptions: {
+				agent: new http.Agent({ keepAlive: true }),
+			},
+		})
+
+		const query = gql`
+			mutation UploadFile($file: Upload!) {
+				uploadFile(file: $file)
+			}
+		`
+
+		await expect(
+			client.request<UploadFile, UploadFileVariables>(query, {
+				file: createReadStream(join(__filename)),
+			}),
+		).rejects.toThrow(/FormData must be polyfilled/)
+	},
+)
 
 describe('node-fetch', () => {
 	it('file upload', async () => {

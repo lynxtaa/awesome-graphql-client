@@ -1,5 +1,6 @@
 const isCI = process.env.CI !== undefined
 
+/** @type {import('jest').Config} */
 module.exports = {
 	resetMocks: true,
 	roots: ['<rootDir>/test', '<rootDir>/src'],
