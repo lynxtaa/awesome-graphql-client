@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import Fastify, { FastifyInstance } from 'fastify'
+import fastify, { FastifyInstance } from 'fastify'
 import { createHttpTerminator } from 'http-terminator'
 import mercurius, { IResolvers, MercuriusOptions } from 'mercurius'
 import upload from 'mercurius-upload'
@@ -14,7 +14,7 @@ export async function createServer(
 	resolvers: IResolvers,
 	options?: Omit<MercuriusOptions, 'schema' | 'resolvers'>,
 ): Promise<TestServer> {
-	const app = Fastify()
+	const app = fastify()
 
 	app.addHook('preHandler', (req, res, done) => {
 		res.header('Access-Control-Allow-Origin', '*')

@@ -22,6 +22,7 @@ afterEach(async () => {
 })
 
 if (typeof fetch === 'undefined') {
+	// eslint-disable-next-line global-require
 	require('whatwg-fetch')
 }
 
@@ -357,7 +358,7 @@ it('sends additional headers', async () => {
 		{
 			Query: {
 				hello(source, args, { reply }) {
-					headers = reply.request.headers
+					;({ headers } = reply.request)
 					return 'world!'
 				},
 			},
