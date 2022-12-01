@@ -1,0 +1,27 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"pipeline": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["build/**", "dist/**"]
+		},
+		"check-format": {
+			"inputs": [],
+			"outputs": []
+		},
+		"check-types": {
+			"dependsOn": ["^build", "^check-types"],
+			"inputs": ["**/*.{ts,tsx}", "./tsconfig.json"],
+			"outputs": []
+		},
+		"lint": {
+			"dependsOn": ["^build"],
+			"inputs": ["**/*.{js,jsx,mjs,ts,tsx}", "./.eslintrc.js"],
+			"outputs": []
+		},
+		"test:coverage": {
+			"outputs": ["coverage/**"]
+		}
+	},
+	"globalDependencies": ["./tsconfig.json"]
+}

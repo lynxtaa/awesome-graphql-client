@@ -35,10 +35,12 @@ jobs:
         run: pnpm run validate
 
       - name: Run the tests and generate coverage report
-        run: pnpm run test
+        run: pnpm run test:coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
+        with:
+          directory: ./packages/awesome-graphql-client
 
       - name: Build
         run: pnpm run build

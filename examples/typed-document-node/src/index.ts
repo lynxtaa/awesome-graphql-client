@@ -1,8 +1,8 @@
+/* eslint-disable no-console */
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 import { print } from 'graphql/language/printer'
 import fetch from 'node-fetch'
-
-import { AwesomeGraphQLClient } from '../../../src'
 
 import { GetCharactersDocument } from './gql-documents'
 
@@ -19,4 +19,5 @@ async function main() {
 	console.log(data.characters?.results?.map(result => result?.name))
 }
 
+// eslint-disable-next-line unicorn/prefer-top-level-await
 main().catch(err => console.error(err))
