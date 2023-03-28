@@ -472,7 +472,11 @@ it('requestSafe returns error on fail', async () => {
 		expect(getUsersResult.error.message).toBe(
 			'GraphQL Request Error: Cannot query field "users" on type "Query".',
 		)
-		expect(Object.keys(getUsersResult.error)).toEqual(['query'])
+		expect(Object.keys(getUsersResult.error)).toEqual([
+			'query',
+			'variables',
+			'extensions',
+		])
 		expect((getUsersResult.error as GraphQLRequestError).response.status).toBe(400)
 	}
 })
