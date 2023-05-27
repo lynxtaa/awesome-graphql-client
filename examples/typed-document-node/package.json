@@ -17,20 +17,20 @@
   "dependencies": {
     "awesome-graphql-client": "*",
     "graphql": "16.6.0",
-    "node-fetch": "2.6.9"
+    "node-fetch": "^2.6.11"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "3.3.0",
-    "@graphql-codegen/typed-document-node": "4.0.0",
-    "@graphql-codegen/typescript": "3.0.3",
-    "@graphql-codegen/typescript-operations": "3.0.3",
+    "@graphql-codegen/cli": "4.0.0",
+    "@graphql-codegen/typed-document-node": "5.0.0",
+    "@graphql-codegen/typescript": "4.0.0",
+    "@graphql-codegen/typescript-operations": "4.0.0",
     "@graphql-typed-document-node/core": "3.2.0",
     "@lynxtaa/eslint-config": "0.5.3",
     "@lynxtaa/prettier-config": "0.1.1",
-    "@types/node": "16.18.21",
+    "@types/node": "^16.18.34",
     "@types/node-fetch": "2.5.12",
     "eslint": "8.38.0",
-    "prettier": "2.8.7",
+    "prettier": "2.8.8",
     "typescript": "5.0.4"
   }
 }
