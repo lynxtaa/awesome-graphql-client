@@ -19,5 +19,4 @@ async function main() {
 	console.log(data.characters?.results?.map(result => result?.name))
 }
 
-// eslint-disable-next-line unicorn/prefer-top-level-await
 main().catch(err => console.error(err))

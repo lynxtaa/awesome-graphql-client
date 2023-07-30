@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable unicorn/prefer-top-level-await */
 // Using undici will result in better performance.
 // Notice: it's experimental and only Node 16 is supported
 

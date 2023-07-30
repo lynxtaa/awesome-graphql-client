@@ -7,17 +7,17 @@
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
     "format": "pnpm run prettier --write",
-    "lint": "eslint --ext js,ts .",
+    "lint": "eslint --max-warnings 0 --ext js,ts .",
     "prettier": "prettier ."
   },
   "dependencies": {
     "awesome-graphql-client": "*"
   },
   "devDependencies": {
-    "@lynxtaa/eslint-config": "0.5.3",
-    "@lynxtaa/prettier-config": "0.1.1",
-    "eslint": "8.28.0",
-    "prettier": "2.8.0",
-    "typescript": "4.9.3"
+    "@lynxtaa/eslint-config": "0.6.0",
+    "@lynxtaa/prettier-config": "0.2.0",
+    "eslint": "8.46.0",
+    "prettier": "3.0.0",
+    "typescript": "5.1.6"
   }
 }

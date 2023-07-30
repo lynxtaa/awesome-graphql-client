@@ -39,6 +39,7 @@ const itif = (condition: boolean) => (condition ? it : it.skip)
 const nodeMajorVersion = Number(process.versions.node.split('.')[0])
 
 itif(nodeMajorVersion < 18)('throws if no Fetch polyfill provided', () => {
+	// eslint-disable-next-line jest/no-standalone-expect
 	expect(() => new AwesomeGraphQLClient({ endpoint: '/' })).toThrow(
 		/Fetch must be polyfilled/,
 	)
@@ -72,6 +73,7 @@ itif(nodeMajorVersion < 18)(
 			}
 		`
 
+		// eslint-disable-next-line jest/no-standalone-expect
 		await expect(
 			client.request<UploadFile, UploadFileVariables>(query, {
 				file: createReadStream(join(__filename)),
@@ -81,7 +83,7 @@ itif(nodeMajorVersion < 18)(
 )
 
 describe('node-fetch', () => {
-	it('file upload', async () => {
+	it('sends GraphQL request with variables', async () => {
 		server = await createServer(
 			`
 				type Query {
