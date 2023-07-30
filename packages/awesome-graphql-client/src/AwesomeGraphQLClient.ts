@@ -116,10 +116,9 @@ export class AwesomeGraphQLClient<
 		return form
 	}
 
-
 	/**
 	 * Sets a new GraphQL endpoint
-	 * 
+	 *
 	 * @param endpoint new overrides for endpoint
 	 */
 	setEndpoint(endpoint: string): void {
@@ -127,7 +126,6 @@ export class AwesomeGraphQLClient<
 		this.endpoint = endpoint
 	}
 
-	
 	/**
 	 * Returns current GraphQL endpoint
 	 */
