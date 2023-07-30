@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.14.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.13.0...v0.14.0) (2023-07-30)
+
+
+### Features
+
+* add setEndpoint method ([#80](https://github.com/lynxtaa/awesome-graphql-client/issues/80)) ([f468e07](https://github.com/lynxtaa/awesome-graphql-client/commit/f468e070a48fabd2fe7d7737708f5aa0e8be2ca0))
+
 ## [0.13.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.12.1...v0.13.0) (2022-10-24)
 
 
