@@ -37,7 +37,7 @@
     "lint": "eslint  --max-warnings 0 --ext .js,.ts src test",
     "prepublishOnly": "pnpm run build",
     "prettier": "prettier \"{src,test}/**/*\" \"*.{js,json,md}\"",
-    "release": "standard-version",
+    "release": "standard-version --infile ../../CHANGELOG.md",
     "test": "is-ci-cli \"test:coverage\" \"test:watch\"",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
