@@ -1,6 +1,11 @@
 module.exports = {
 	root: true,
-	extends: ['@lynxtaa/eslint-config', '@lynxtaa/eslint-config/requires-typechecking'],
+	plugins: ['jest'],
+	extends: [
+		'@lynxtaa/eslint-config',
+		'@lynxtaa/eslint-config/requires-typechecking',
+		'plugin:jest/recommended',
+	],
 	parserOptions: {
 		tsconfigRootDir: __dirname,
 		project: ['./tsconfig.json'],
