@@ -14,10 +14,10 @@
     "awesome-graphql-client": "*"
   },
   "devDependencies": {
-    "@lynxtaa/eslint-config": "0.5.3",
-    "@lynxtaa/prettier-config": "0.1.1",
-    "eslint": "8.38.0",
-    "prettier": "2.8.8",
-    "typescript": "5.0.4"
+    "@lynxtaa/eslint-config": "0.6.0",
+    "@lynxtaa/prettier-config": "0.2.0",
+    "eslint": "8.46.0",
+    "prettier": "3.0.0",
+    "typescript": "5.1.6"
   }
 }
