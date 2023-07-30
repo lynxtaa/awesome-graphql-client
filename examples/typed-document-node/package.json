@@ -9,7 +9,7 @@
     "check-types": "tsc",
     "format": "pnpm run prettier --write",
     "gql-codegen": "graphql-codegen --config graphql-codegen.yml",
-    "lint": "eslint --ext js,ts src",
+    "lint": "eslint --max-warnings 0 --ext js,ts src",
     "prettier": "prettier src",
     "start": "pnpm run build && node build/index.js"
   },
