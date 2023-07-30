@@ -150,7 +150,8 @@ const client = new AwesomeGraphQLClient(config)
 
 - `client.setFetchOptions(fetchOptions: FetchOptions)`: Sets fetch options. See examples below
 - `client.getFetchOptions()`: Returns current fetch options
-- `client.getEnpoint(): string`: Returns current GraphQL endpoint
+- `client.setEndpoint(): string`: Sets a new GraphQL endpoint
+- `client.getEndpoint(): string`: Returns current GraphQL endpoint
 - `client.request(query, variables?, fetchOptions?): Promise<data>`: Sends GraphQL Request and returns data or throws an error
 - `client.requestSafe(query, variables?, fetchOptions?): Promise<{ data, response } | { error }>`: Sends GraphQL Request and returns object with 'ok: true', 'data' and 'response' or with 'ok: false' and 'error' fields. See examples below. _Notice: this function never throws_.
 

@@ -116,6 +116,18 @@ export class AwesomeGraphQLClient<
 		return form
 	}
 
+
+	/**
+	 * Sets a new GraphQL endpoint
+	 * 
+	 * @param endpoint new overrides for endpoint
+	 */
+	setEndpoint(endpoint: string): void {
+		assert(endpoint !== undefined, 'endpoint is required')
+		this.endpoint = endpoint
+	}
+
+	
 	/**
 	 * Returns current GraphQL endpoint
 	 */
