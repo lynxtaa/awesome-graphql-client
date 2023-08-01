@@ -17,15 +17,15 @@ importers:
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
+      husky:
+        specifier: 8.0.3
+        version: 8.0.3
       lint-staged:
         specifier: 13.2.3
         version: 13.2.3
       prettier:
         specifier: 3.0.0
         version: 3.0.0
-      simple-git-hooks:
-        specifier: 2.9.0
-        version: 2.9.0
       turbo:
         specifier: 1.10.12
         version: 1.10.12
@@ -6944,6 +6944,12 @@ packages:
     engines: {node: '>=14.18.0'}
     dev: true
 
+  /husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: true
+
   /iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
@@ -10460,12 +10466,6 @@ packages:
 
   /signedsource@1.0.0:
     resolution: {integrity: sha512-6+eerH9fEnNmi/hyM1DXcRK3pWdoMQtlkQ+ns0ntzunjKqp5i3sKCc80ym8Fib3iaYhdJUOPdhlJWj1tvge2Ww==}
-    dev: true
-
-  /simple-git-hooks@2.9.0:
-    resolution: {integrity: sha512-waSQ5paUQtyGC0ZxlHmcMmD9I1rRXauikBwX31bX58l5vTOhCEcBC5Bi+ZDkPXTjDnZAF8TbCqKBY+9+sVPScw==}
-    hasBin: true
-    requiresBuild: true
     dev: true
 
   /single-user-cache@0.6.0:
