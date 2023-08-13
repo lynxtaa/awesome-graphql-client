@@ -2,7 +2,6 @@
   "name": "auth-with-jwt-example",
   "private": true,
   "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
-  "prettier": "@lynxtaa/prettier-config",
   "scripts": {
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
@@ -10,6 +9,7 @@
     "lint": "eslint --max-warnings 0 --ext js,ts .",
     "prettier": "prettier ."
   },
+  "prettier": "@lynxtaa/prettier-config",
   "dependencies": {
     "awesome-graphql-client": "*"
   },

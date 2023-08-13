@@ -14,23 +14,25 @@
   "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
   "sideEffects": false,
   "exports": {
-    "require": "./dist/index.js",
-    "default": "./dist/index.modern.mjs"
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/awesome-graphql-client.d.mts",
+      "import": "./dist/awesome-graphql-client.mjs",
+      "default": "./dist/cjs/awesome-graphql-client.cjs"
+    }
   },
-  "main": "./dist/index.js",
-  "unpkg": "./dist/index.umd.js",
-  "module": "./dist/index.m.js",
+  "main": "dist/cjs/awesome-graphql-client.cjs",
+  "module": "dist/awesome-graphql-client.legacy-esm.js",
   "source": "./src/index.ts",
-  "types": "./dist/index.d.ts",
+  "types": "dist/awesome-graphql-client.d.mts",
   "files": [
     "dist",
     "src",
     "LICENSE",
     "README.md"
   ],
-  "prettier": "@lynxtaa/prettier-config",
   "scripts": {
-    "build": "rimraf dist/* && microbundle build --tsconfig tsconfig.build.json",
+    "build": "tsup",
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
     "format": "pnpm run prettier --write",
@@ -43,6 +45,7 @@
     "test:watch": "jest --watch",
     "validate": "pnpm run check-format && pnpm run check-types && pnpm run lint"
   },
+  "prettier": "@lynxtaa/prettier-config",
   "devDependencies": {
     "@graphql-typed-document-node/core": "3.2.0",
     "@lynxtaa/eslint-config": "0.6.0",
@@ -67,11 +70,10 @@
     "jest-environment-jsdom": "29.6.2",
     "mercurius": "9.8.0",
     "mercurius-upload": "3.0.1",
-    "microbundle": "0.15.1",
     "node-fetch": "2.6.11",
     "prettier": "3.0.0",
-    "rimraf": "5.0.1",
     "standard-version": "9.5.0",
+    "tsup": "7.2.0",
     "typescript": "5.1.6",
     "undici": "5.22.1",
     "whatwg-fetch": "3.6.17"
