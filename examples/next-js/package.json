@@ -1,20 +1,20 @@
 {
   "name": "next-js-example",
   "private": true,
-  "prettier": "@lynxtaa/prettier-config",
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "gql-codegen": "graphql-codegen --config graphql-codegen.yml",
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
+    "dev": "next dev",
     "format": "pnpm run prettier --write",
+    "gql-codegen": "graphql-codegen --config graphql-codegen.yml",
     "lint": "eslint --max-warnings 0 --ext js,ts,tsx jest lib pages tests",
-    "prettier": "prettier \"{lib,pages,tests}/**\" *.{js,ts,json,md}"
+    "prettier": "prettier \"{lib,pages,tests}/**\" *.{js,ts,json,md}",
+    "start": "next start",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
+  "prettier": "@lynxtaa/prettier-config",
   "dependencies": {
     "awesome-graphql-client": "*",
     "next": "13.4.12",

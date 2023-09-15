@@ -3,16 +3,16 @@
   "repository": "https://github.com/lynxtaa/awesome-graphql-client.git",
   "license": "MIT",
   "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
+  "scripts": {
+    "build": "cross-env FORCE_COLOR=1 turbo build",
+    "prepare": "husky install",
+    "test:coverage": "cross-env FORCE_COLOR=1 turbo test:coverage --concurrency=1",
+    "validate": "cross-env FORCE_COLOR=1 turbo lint check-types check-format"
+  },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
   },
   "prettier": "@lynxtaa/prettier-config",
-  "scripts": {
-    "build": "cross-env FORCE_COLOR=1 turbo build",
-    "test:coverage": "cross-env FORCE_COLOR=1 turbo test:coverage --concurrency=1",
-    "validate": "cross-env FORCE_COLOR=1 turbo lint check-types check-format",
-    "prepare": "husky install"
-  },
   "devDependencies": {
     "@lynxtaa/prettier-config": "0.2.0",
     "awesome-graphql-client": "workspace:*",
