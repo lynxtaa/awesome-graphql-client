@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.14.1...v1.0.0) (2023-09-15)
+
 ### [0.14.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.14.0...v0.14.1) (2023-08-01)
 
 ## [0.14.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.13.0...v0.14.0) (2023-07-30)

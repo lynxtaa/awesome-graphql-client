@@ -1,6 +1,6 @@
 {
   "name": "awesome-graphql-client",
-  "version": "0.14.1",
+  "version": "1.0.0",
   "description": "GraphQL Client with file upload support for NodeJS and browser",
   "keywords": [
     "graphql",
