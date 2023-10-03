@@ -12,13 +12,13 @@
 	"prettier": "@lynxtaa/prettier-config",
 	"dependencies": {
 		"awesome-graphql-client": "*",
-		"undici": "5.22.1"
+		"undici": "5.25.4"
 	},
 	"devDependencies": {
 		"@lynxtaa/eslint-config": "0.6.0",
 		"@lynxtaa/prettier-config": "0.2.0",
-		"eslint": "8.46.0",
-		"prettier": "3.0.0",
-		"typescript": "5.1.6"
+		"eslint": "8.50.0",
+		"prettier": "3.0.3",
+		"typescript": "5.2.2"
 	}
 }
