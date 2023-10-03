@@ -2,7 +2,7 @@
   "homepage": "https://github.com/lynxtaa/awesome-graphql-client#readme",
   "repository": "https://github.com/lynxtaa/awesome-graphql-client.git",
   "license": "MIT",
-  "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
+  "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
   "scripts": {
     "build": "cross-env FORCE_COLOR=1 turbo build",
     "prepare": "husky install",

@@ -1,36 +1,36 @@
 {
-  "name": "typed-document-node-example",
-  "version": "0.1.0",
-  "private": true,
-  "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
-  "scripts": {
-    "build": "tsc",
-    "check-format": "pnpm run prettier --check",
-    "check-types": "tsc",
-    "format": "pnpm run prettier --write",
-    "gql-codegen": "graphql-codegen --config graphql-codegen.yml",
-    "lint": "eslint --max-warnings 0 --ext js,ts src",
-    "prettier": "prettier src",
-    "start": "pnpm run build && node build/index.js"
-  },
-  "prettier": "@lynxtaa/prettier-config",
-  "dependencies": {
-    "awesome-graphql-client": "*",
-    "graphql": "16.7.1",
-    "node-fetch": "^2.6.11"
-  },
-  "devDependencies": {
-    "@graphql-codegen/cli": "5.0.0",
-    "@graphql-codegen/typed-document-node": "5.0.1",
-    "@graphql-codegen/typescript": "4.0.1",
-    "@graphql-codegen/typescript-operations": "4.0.1",
-    "@graphql-typed-document-node/core": "3.2.0",
-    "@lynxtaa/eslint-config": "0.6.0",
-    "@lynxtaa/prettier-config": "0.2.0",
-    "@types/node": "^16.18.39",
-    "@types/node-fetch": "2.5.12",
-    "eslint": "8.46.0",
-    "prettier": "3.0.0",
-    "typescript": "5.1.6"
-  }
+	"name": "typed-document-node-example",
+	"version": "0.1.0",
+	"private": true,
+	"author": "Alex Kondratiuk <lynxtaa@gmail.com>",
+	"scripts": {
+		"build": "tsc",
+		"check-format": "pnpm run prettier --check",
+		"check-types": "tsc",
+		"format": "pnpm run prettier --write",
+		"gql-codegen": "graphql-codegen --config graphql-codegen.yml",
+		"lint": "eslint --max-warnings 0 --ext js,ts src",
+		"prettier": "prettier src",
+		"start": "pnpm run build && node build/index.js"
+	},
+	"prettier": "@lynxtaa/prettier-config",
+	"dependencies": {
+		"awesome-graphql-client": "*",
+		"graphql": "16.7.1",
+		"node-fetch": "^2.6.11"
+	},
+	"devDependencies": {
+		"@graphql-codegen/cli": "5.0.0",
+		"@graphql-codegen/typed-document-node": "5.0.1",
+		"@graphql-codegen/typescript": "4.0.1",
+		"@graphql-codegen/typescript-operations": "4.0.1",
+		"@graphql-typed-document-node/core": "3.2.0",
+		"@lynxtaa/eslint-config": "0.6.0",
+		"@lynxtaa/prettier-config": "0.2.0",
+		"@types/node": "^16.18.39",
+		"@types/node-fetch": "2.5.12",
+		"eslint": "8.46.0",
+		"prettier": "3.0.0",
+		"typescript": "5.1.6"
+	}
 }
