@@ -25,11 +25,11 @@
 		"@graphql-codegen/typescript": "4.0.1",
 		"@graphql-codegen/typescript-operations": "4.0.1",
 		"@graphql-typed-document-node/core": "3.2.0",
-		"@lynxtaa/eslint-config": "0.6.0",
+		"@lynxtaa/eslint-config": "0.7.1",
 		"@lynxtaa/prettier-config": "0.2.0",
 		"@types/node": "^16.18.57",
 		"@types/node-fetch": "2.5.12",
-		"eslint": "8.50.0",
+		"eslint": "8.52.0",
 		"prettier": "3.0.3",
 		"typescript": "5.2.2"
 	}

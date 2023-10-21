@@ -40,7 +40,7 @@ export default function Home() {
 export const getStaticProps: GetStaticProps = async () => {
 	const queryClient = new QueryClient()
 
-	await queryClient.prefetchQuery(useGetCharactersQuery.getKey({ name: '' }), () =>
+	await queryClient.prefetchQuery(useGetCharactersQuery.getKey({ name: '' }), async () =>
 		graphQLClient.request(GetCharactersDocument, { name: '' }),
 	)
 

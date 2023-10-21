@@ -14,7 +14,7 @@ it('renders and filters list', async () => {
 	server.use(
 		graphql.query<GetCharactersQuery, GetCharactersQueryVariables>(
 			'GetCharacters',
-			(req, res, ctx) =>
+			async (req, res, ctx) =>
 				res(
 					ctx.data({
 						characters: {
