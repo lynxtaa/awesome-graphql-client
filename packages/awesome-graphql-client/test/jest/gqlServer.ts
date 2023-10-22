@@ -47,7 +47,7 @@ export async function createServer(
 
 	const httpTerminator = createHttpTerminator({ server: app.server })
 
-	testServer.destroy = () => httpTerminator.terminate()
+	testServer.destroy = async () => httpTerminator.terminate()
 
 	testServer.endpoint = `http://localhost:${address.port}/graphql`
 

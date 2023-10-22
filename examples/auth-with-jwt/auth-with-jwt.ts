@@ -71,7 +71,7 @@ class AuthContainer {
 	 * First refresh call does the actual request,
 	 * others are waiting for it to be resolved
 	 */
-	refresh() {
+	async refresh() {
 		/**
 		 * refresh mutation sets refresh-token in httpOnly cookie
 		 * and returns access-token

@@ -1,7 +1,7 @@
 {
   "name": "with-undici-example",
   "private": true,
-  "author": "Alex Kondratyuk <lynxtaa@gmail.com>",
+  "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
   "scripts": {
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
@@ -12,13 +12,13 @@
   "prettier": "@lynxtaa/prettier-config",
   "dependencies": {
     "awesome-graphql-client": "*",
-    "undici": "5.22.1"
+    "undici": "5.26.4"
   },
   "devDependencies": {
-    "@lynxtaa/eslint-config": "0.6.0",
+    "@lynxtaa/eslint-config": "0.7.1",
     "@lynxtaa/prettier-config": "0.2.0",
-    "eslint": "8.46.0",
-    "prettier": "3.0.0",
-    "typescript": "5.1.6"
+    "eslint": "8.52.0",
+    "prettier": "3.0.3",
+    "typescript": "5.2.2"
   }
 }

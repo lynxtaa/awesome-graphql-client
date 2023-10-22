@@ -5,5 +5,5 @@ export const gqlFetcher =
 		query: string,
 		variables?: TVariables,
 	): (() => Promise<TData>) =>
-	() =>
+	async () =>
 		graphQLClient.request<TData, TVariables>(query, variables)

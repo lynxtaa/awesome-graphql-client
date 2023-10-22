@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { userEvent } from '@testing-library/user-event'
 
 import { server, graphql } from '../jest/testServer'
 import { GetCharactersQuery, GetCharactersQueryVariables } from '../lib/graphql-queries'
@@ -14,7 +14,7 @@ it('renders and filters list', async () => {
 	server.use(
 		graphql.query<GetCharactersQuery, GetCharactersQueryVariables>(
 			'GetCharacters',
-			(req, res, ctx) =>
+			async (req, res, ctx) =>
 				res(
 					ctx.data({
 						characters: {
