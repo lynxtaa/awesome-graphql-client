@@ -1,24 +1,24 @@
 {
-	"name": "with-undici-example",
-	"private": true,
-	"author": "Alex Kondratiuk <lynxtaa@gmail.com>",
-	"scripts": {
-		"check-format": "pnpm run prettier --check",
-		"check-types": "tsc",
-		"format": "pnpm run prettier --write",
-		"lint": "eslint --max-warnings 0 --ext js,ts src",
-		"prettier": "prettier src"
-	},
-	"prettier": "@lynxtaa/prettier-config",
-	"dependencies": {
-		"awesome-graphql-client": "*",
-		"undici": "5.26.4"
-	},
-	"devDependencies": {
-		"@lynxtaa/eslint-config": "0.7.1",
-		"@lynxtaa/prettier-config": "0.2.0",
-		"eslint": "8.52.0",
-		"prettier": "3.0.3",
-		"typescript": "5.2.2"
-	}
+  "name": "with-undici-example",
+  "private": true,
+  "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
+  "scripts": {
+    "check-format": "pnpm run prettier --check",
+    "check-types": "tsc",
+    "format": "pnpm run prettier --write",
+    "lint": "eslint --max-warnings 0 --ext js,ts src",
+    "prettier": "prettier src"
+  },
+  "prettier": "@lynxtaa/prettier-config",
+  "dependencies": {
+    "awesome-graphql-client": "*",
+    "undici": "5.26.4"
+  },
+  "devDependencies": {
+    "@lynxtaa/eslint-config": "0.7.1",
+    "@lynxtaa/prettier-config": "0.2.0",
+    "eslint": "8.52.0",
+    "prettier": "3.0.3",
+    "typescript": "5.2.2"
+  }
 }
