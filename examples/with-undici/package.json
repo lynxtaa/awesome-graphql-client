@@ -12,7 +12,7 @@
 	"prettier": "@lynxtaa/prettier-config",
 	"dependencies": {
 		"awesome-graphql-client": "*",
-		"undici": "5.25.4"
+		"undici": "5.26.4"
 	},
 	"devDependencies": {
 		"@lynxtaa/eslint-config": "0.7.1",

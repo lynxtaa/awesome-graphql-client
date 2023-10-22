@@ -16,9 +16,14 @@
 	"exports": {
 		"./package.json": "./package.json",
 		".": {
-			"types": "./dist/awesome-graphql-client.d.mts",
-			"import": "./dist/awesome-graphql-client.mjs",
-			"default": "./dist/cjs/awesome-graphql-client.cjs"
+			"import": {
+				"types": "./dist/awesome-graphql-client.d.mts",
+				"default": "./dist/awesome-graphql-client.mjs"
+			},
+			"require": {
+				"types": "./dist/cjs/awesome-graphql-client.d.ts",
+				"default": "./dist/cjs/awesome-graphql-client.cjs"
+			}
 		}
 	},
 	"main": "dist/cjs/awesome-graphql-client.cjs",
@@ -75,7 +80,7 @@
 		"standard-version": "9.5.0",
 		"tsup": "7.2.0",
 		"typescript": "5.2.2",
-		"undici": "5.25.4",
+		"undici": "5.26.4",
 		"whatwg-fetch": "3.6.19"
 	}
 }
