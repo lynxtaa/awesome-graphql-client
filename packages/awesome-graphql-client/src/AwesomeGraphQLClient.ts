@@ -21,6 +21,7 @@ export class AwesomeGraphQLClient<
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
 	private isFileUpload: (value: unknown) => boolean
+	private getOperationName?: (query: TQuery) => string | null | undefined
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -37,6 +38,8 @@ export class AwesomeGraphQLClient<
 		onError?: (error: GraphQLRequestError | Error) => void
 		/** Custom predicate function for checking if value is a file */
 		isFileUpload?: (value: unknown) => boolean
+		/** Custom operation name getter */
+		getOperationName?: (query: TQuery) => string | null | undefined
 	}) {
 		assert(config.endpoint !== undefined, 'endpoint is required')
 
@@ -74,14 +77,16 @@ export class AwesomeGraphQLClient<
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
 		this.isFileUpload = config.isFileUpload || isFileUpload
+		this.getOperationName = config.getOperationName
 	}
 
 	private createRequestBody(
 		query: string,
 		variables?: Record<string, unknown>,
+		operationName?: string,
 	): string | FormData {
 		const { clone, files } = extractFiles(
-			{ query, variables },
+			{ query, variables, operationName },
 			'',
 			this.isFileUpload as (value: unknown) => value is FileUpload,
 		)
@@ -110,6 +115,10 @@ export class AwesomeGraphQLClient<
 		i = 0
 		for (const file of files.keys()) {
 			form.append(`${++i}`, file)
+		}
+
+		if (operationName !== undefined) {
+			form.append('operationName', operationName)
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -181,6 +190,7 @@ export class AwesomeGraphQLClient<
 		| { ok: false; error: GraphQLRequestError<TRequestResult> | Error }
 	> {
 		try {
+			const operationName = this.getOperationName?.(query as TQuery) ?? undefined
 			const queryAsString = this.formatQuery ? this.formatQuery(query as TQuery) : query
 
 			assert(
@@ -210,7 +220,7 @@ export class AwesomeGraphQLClient<
 				})
 				response = await this.fetch(url, options)
 			} else {
-				const body = this.createRequestBody(queryAsString, variables)
+				const body = this.createRequestBody(queryAsString, variables, operationName)
 
 				response = await this.fetch(this.endpoint, {
 					...options,

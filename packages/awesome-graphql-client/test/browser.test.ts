@@ -4,7 +4,7 @@
 import { IncomingHttpHeaders } from 'node:http'
 
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
-import { print, DocumentNode } from 'graphql'
+import { print, DocumentNode, Kind } from 'graphql'
 import graphqlTag from 'graphql-tag'
 import { GraphQLUpload, FileUpload } from 'graphql-upload'
 import mercurius from 'mercurius'
@@ -692,4 +692,69 @@ it('uses provided `isFileUpload` implementation', async () => {
 	})
 
 	expect(data).toEqual({ uploadFile: true })
+})
+
+it('supports custom operationName', async () => {
+	type GetUserQuery = {
+		user: { id: number; login: string } | null
+	}
+
+	type GetUserQueryVariables = { id: number }
+
+	const user = { id: 10, login: 'admin' }
+
+	let parsedOperationName: string | undefined
+	let receivedOperationName: string | undefined
+
+	server = await createServer(
+		`
+			type Query {
+				user(id: Int!): User
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: {
+				user: (_, args, cxt, operation) => {
+					receivedOperationName = operation.operation.name?.value
+					return user
+				},
+			},
+		},
+	)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: server.endpoint,
+		formatQuery: (query: TypedDocumentNode) => print(query),
+		getOperationName: (query: DocumentNode): string | undefined => {
+			for (const node of query.definitions) {
+				if (node.kind === Kind.OPERATION_DEFINITION) {
+					parsedOperationName = node.name ? node.name.value : undefined
+					return parsedOperationName
+				}
+			}
+		},
+	})
+
+	const GetUserDocument: TypedDocumentNode<
+		GetUserQuery,
+		GetUserQueryVariables
+	> = graphqlTag`
+		 query GetUser($id: Int!) {
+			 user(id: $id) {
+				 id
+				 login
+			 }
+		 }
+	 `
+
+	const data = await client.request(GetUserDocument, { id: 123 })
+
+	expect(parsedOperationName).toBe('GetUser')
+	expect(receivedOperationName).toBe('GetUser')
+
+	expect(data).toEqual({ user })
 })
