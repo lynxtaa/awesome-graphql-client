@@ -399,6 +399,53 @@ it('sends additional headers', async () => {
 	})
 })
 
+it('Custom formats operations', async () => {
+	interface GetUsers {
+		users: { id: number; login: string }[]
+	}
+
+	let extraValue: string = "";
+
+	server = await createServer(
+		`
+			type Query {
+				hello: String!
+			}
+		`,
+		{
+			Query: {
+				hello(source, args, val) {
+					const { body } = val.reply.request;
+					// const rqe = reply.request;
+					if (body !== null && typeof body ===  "object" && "otherValue" in body)
+						extraValue = body?.otherValue as string;
+					return 'world!'
+				},
+			},
+		},
+	)
+
+	const query = gql`
+		query Hello {
+			hello
+		}
+	`
+
+	const client = new AwesomeGraphQLClient<string, RequestInit>({
+		endpoint: server.endpoint,
+		formatOperation: operation => {
+			return JSON.stringify({
+				...operation,
+				otherValue: "test"
+			});
+		},
+	})
+
+	await client.request<GetUsers>(query)
+
+	expect(extraValue).toBe("test");
+})
+
 it('requestSafe returns data and response on success', async () => {
 	interface GetUsers {
 		users: { id: number; login: string }[]
