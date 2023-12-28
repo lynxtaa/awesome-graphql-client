@@ -18,6 +18,7 @@ export class AwesomeGraphQLClient<
 	private fetch: (url: string, options?: TFetchOptions) => Promise<TRequestResult>
 	private fetchOptions?: TFetchOptions
 	private formatQuery?: (query: TQuery) => string
+	private formatGetRequestUrl: (operation: any) => string
 	private formatOperation: (operation: any) => string
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
@@ -36,6 +37,8 @@ export class AwesomeGraphQLClient<
 		formatQuery?: (query: TQuery) => string
 		/** Custom operation formatter */
 		formatOperation?: (operation: any) => string
+		/** Custom request URL formatter */
+		formatGetRequestUrl?: (url: string) => string
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
 		/** Custom predicate function for checking if value is a file */
@@ -56,6 +59,11 @@ export class AwesomeGraphQLClient<
 		assert(
 			!config.formatOperation || typeof config.formatOperation === 'function',
 			'Invalid config value: `formatOperation` must be a function',
+		)
+
+		assert(
+			!config.formatGetRequestUrl || typeof config.formatGetRequestUrl === 'function',
+			'Invalid config value: `formatRequestUrl` must be a function',
 		)
 
 		assert(
@@ -81,6 +89,7 @@ export class AwesomeGraphQLClient<
 
 		this.formatQuery = config.formatQuery
 		this.formatOperation = config.formatOperation || JSON.stringify;
+		this.formatGetRequestUrl = config.formatGetRequestUrl || formatGetRequestUrl;
 		this.onError = config.onError
 		this.isFileUpload = config.isFileUpload || isFileUpload
 	}
@@ -212,7 +221,7 @@ export class AwesomeGraphQLClient<
 			let response: TRequestResult | Response
 
 			if (options.method?.toUpperCase() === 'GET') {
-				const url = formatGetRequestUrl({
+				const url = this.formatGetRequestUrl({
 					endpoint: this.endpoint,
 					query: queryAsString,
 					variables,
