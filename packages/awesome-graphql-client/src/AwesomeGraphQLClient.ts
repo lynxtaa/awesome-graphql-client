@@ -3,7 +3,10 @@ import { extractFiles } from 'extract-files'
 
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
-import { formatGetRequestUrl } from './util/formatGetRequestUrl'
+import {
+	FormatGetRequestUrlParams,
+	formatGetRequestUrl,
+} from './util/formatGetRequestUrl'
 import { isFileUpload, FileUpload } from './util/isFileUpload'
 import { isResponseJSON } from './util/isResponseJSON'
 import { normalizeHeaders } from './util/normalizeHeaders'
@@ -38,7 +41,7 @@ export class AwesomeGraphQLClient<
 		/** Custom operation formatter */
 		formatOperation?: (operation: any) => string
 		/** Custom request URL formatter */
-		formatGetRequestUrl?: (url: string) => string
+		formatGetRequestUrl?: (params: FormatGetRequestUrlParams) => string
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
 		/** Custom predicate function for checking if value is a file */
@@ -88,8 +91,8 @@ export class AwesomeGraphQLClient<
 				: undefined
 
 		this.formatQuery = config.formatQuery
-		this.formatOperation = config.formatOperation || JSON.stringify;
-		this.formatGetRequestUrl = config.formatGetRequestUrl || formatGetRequestUrl;
+		this.formatOperation = config.formatOperation || JSON.stringify
+		this.formatGetRequestUrl = config.formatGetRequestUrl || formatGetRequestUrl
 		this.onError = config.onError
 		this.isFileUpload = config.isFileUpload || isFileUpload
 	}
