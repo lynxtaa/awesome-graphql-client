@@ -2,15 +2,18 @@
  * Returns URL for GraphQL GET Requests:
  * https://graphql.org/learn/serving-over-http/#get-request
  */
+
+export type FormatGetRequestUrlParams = {
+	endpoint: string
+	query: string
+	variables?: Record<string, unknown>
+}
+
 export function formatGetRequestUrl({
 	endpoint,
 	query,
 	variables,
-}: {
-	endpoint: string
-	query: string
-	variables?: Record<string, unknown>
-}): string {
+}: FormatGetRequestUrlParams): string {
 	const searchParams = new URLSearchParams()
 	searchParams.set('query', query)
 
