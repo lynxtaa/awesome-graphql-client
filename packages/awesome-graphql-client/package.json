@@ -78,7 +78,7 @@
     "node-fetch": "2.6.11",
     "prettier": "3.2.4",
     "standard-version": "9.5.0",
-    "tsup": "7.2.0",
+    "tsup": "8.0.1",
     "typescript": "5.3.3",
     "undici": "5.26.4",
     "whatwg-fetch": "3.6.19"

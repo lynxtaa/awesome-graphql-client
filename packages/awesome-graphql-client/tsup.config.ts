@@ -14,7 +14,7 @@ export default defineConfig(options => {
 		{
 			...commonOptions,
 			format: ['esm'],
-			minify: true,
+			minify: false,
 			outExtension: () => ({ js: '.mjs' }),
 			dts: true,
 			clean: true,
