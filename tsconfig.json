@@ -15,8 +15,8 @@
 		"moduleDetection": "force",
 		"moduleResolution": "Bundler",
 		"module": "ESNext",
-		"noEmit": true
+		"noEmit": true,
 	},
 	"exclude": ["node_modules"],
-	"include": ["**/*.ts", "**/*.tsx"]
+	"include": ["**/*.ts", "**/*.tsx"],
 }

@@ -184,10 +184,8 @@ it('supports TypedDocumentNode', async () => {
 		formatQuery: (query: TypedDocumentNode) => print(query),
 	})
 
-	const GetUserDocument: TypedDocumentNode<
-		GetUserQuery,
-		GetUserQueryVariables
-	> = graphqlTag`
+	const GetUserDocument: TypedDocumentNode<GetUserQuery, GetUserQueryVariables> =
+		graphqlTag`
 		 query GetUser($id: Int!) {
 			 user(id: $id) {
 				 id

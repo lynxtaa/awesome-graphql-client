@@ -68,8 +68,8 @@ export class AwesomeGraphQLClient<
 			config.FormData !== undefined
 				? config.FormData
 				: typeof FormData !== 'undefined'
-				? FormData
-				: undefined
+					? FormData
+					: undefined
 
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
