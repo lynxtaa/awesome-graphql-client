@@ -75,13 +75,36 @@ client
 ### NodeJS
 
 ```js
+const { createReadStream, statSync } = require('node:fs')
+const { Readable } = require('node:stream')
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
-const FormData = require('form-data')
-const { createReadStream } = require('fs')
-const http = require('http')
+const { File } = require('undici')
+
+class StreamableFile extends File {
+  constructor(filePath) {
+    super([], path.parse(filePath).base)
+    this.#filePath = filePath
+
+    const { mtime, size } = statSync(filePath)
+
+    Object.defineProperty(this, 'lastModified', {
+      value: mtime.getTime(),
+      writable: false,
+    })
+    Object.defineProperty(this, 'size', {
+      value: size,
+      writable: false,
+    })
+  }
+
+  stream() {
+    return Readable.toWeb(createReadStream(this.#filePath))
+  }
+}
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
+  isFileUpload: value => value instanceof File,
 })
 
 // Also query can be an output from graphql-tag (see examples below)
@@ -94,7 +117,7 @@ const UploadUserAvatar = `
 `
 
 client
-  .request(UploadUserAvatar, { file: createReadStream('./avatar.img'), userId: 10 })
+  .request(UploadUserAvatar, { file: new StreamableFile('./avatar.png'), userId: 10 })
   .then(data => console.log(data.updateUser.id))
   .catch(error => console.log(error))
 ```

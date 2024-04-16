@@ -144,12 +144,15 @@ describe('fetch', () => {
 			constructor(filePath: string) {
 				super([], path.parse(filePath).base)
 				this.#filePath = filePath
+
+				const { mtime, size } = statSync(filePath)
+
 				Object.defineProperty(this, 'lastModified', {
-					value: statSync(filePath).mtime.getTime(),
+					value: mtime.getTime(),
 					writable: false,
 				})
 				Object.defineProperty(this, 'size', {
-					value: undefined,
+					value: size,
 					writable: false,
 				})
 			}
