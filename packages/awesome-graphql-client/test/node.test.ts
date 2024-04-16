@@ -2,10 +2,15 @@
  * @jest-environment node
  */
 
+import { createReadStream, statSync, readFileSync } from 'node:fs'
+import path from 'node:path'
+import { Readable } from 'node:stream'
+import { ReadableStream } from 'node:stream/web'
+
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
 import { File } from 'undici'
 
-import { AwesomeGraphQLClient } from '../src/index'
+import { AwesomeGraphQLClient, isFileUpload } from '../src/index'
 import { gql } from '../src/util/gql'
 
 import { createServer, TestServer } from './jest/gqlServer'
@@ -94,6 +99,80 @@ describe('fetch', () => {
 
 		const data = await client.request<UploadFile, UploadFileVariables>(query, {
 			file: new File(['test'], 'text.txt'),
+		})
+
+		expect(data).toEqual({ uploadFile: true })
+	})
+
+	it('stream file upload', async () => {
+		interface UploadFile {
+			uploadFile: boolean
+		}
+		interface UploadFileVariables {
+			file: any
+		}
+
+		server = await createServer(
+			`
+				scalar Upload
+				type Mutation {
+					uploadFile(file: Upload!): Boolean
+				}
+				type Query {
+					hello: String!
+				}
+			`,
+			{
+				Upload: GraphQLUpload as any,
+				Mutation: {
+					async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+						// eslint-disable-next-line @typescript-eslint/unbound-method
+						const { filename, createReadStream } = await file
+						expect(filename).toBe('data.txt')
+						const str = await streamToString(createReadStream())
+						expect(str).toBe(readFileSync('./test/fixtures/data.txt', 'utf8'))
+
+						return true
+					},
+				},
+			},
+		)
+
+		class StreamableFile extends File {
+			#filePath: string
+
+			constructor(filePath: string) {
+				super([], path.parse(filePath).base)
+				this.#filePath = filePath
+				Object.defineProperty(this, 'lastModified', {
+					value: statSync(filePath).mtime.getTime(),
+					writable: false,
+				})
+				Object.defineProperty(this, 'size', {
+					value: undefined,
+					writable: false,
+				})
+			}
+
+			stream(): ReadableStream<any> {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+				return Readable.toWeb(createReadStream(this.#filePath))
+			}
+		}
+
+		const client = new AwesomeGraphQLClient({
+			endpoint: server.endpoint,
+			isFileUpload: value => isFileUpload(value) || value instanceof File,
+		})
+
+		const query = gql`
+			mutation UploadFile($file: Upload!) {
+				uploadFile(file: $file)
+			}
+		`
+
+		const data = await client.request<UploadFile, UploadFileVariables>(query, {
+			file: new StreamableFile('./test/fixtures/data.txt'),
 		})
 
 		expect(data).toEqual({ uploadFile: true })
