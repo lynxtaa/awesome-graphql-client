@@ -2,13 +2,11 @@
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 import { print } from 'graphql/language/printer'
-import fetch from 'node-fetch'
 
 import { GetCharactersDocument } from './gql-documents'
 
 const gqlClient = new AwesomeGraphQLClient({
 	endpoint: 'https://rickandmortyapi.com/graphql',
-	fetch,
 	formatQuery: (query: TypedDocumentNode) => print(query),
 })
 

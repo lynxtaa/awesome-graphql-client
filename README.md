@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/lynxtaa/awesome-graphql-client">
-    <img width="180" height="180" src="logo.svg">
+    <img width="180" height="180" src="logo.svg" alt="Logo">
   </a>
   <br>
   <br>
@@ -79,17 +79,9 @@ const { AwesomeGraphQLClient } = require('awesome-graphql-client')
 const FormData = require('form-data')
 const { createReadStream } = require('fs')
 const http = require('http')
-const fetch = require('node-fetch')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  fetch,
-  FormData, // Required only if you're using file upload
-  fetchOptions: {
-    // Using HTTP Keep-Alive will make requests ~2x faster in NodeJS:
-    // https://github.com/Ethan-Arrowood/undici-fetch/blob/main/benchmarks.md#fetch
-    agent: new http.Agent({ keepAlive: true }),
-  },
 })
 
 // Also query can be an output from graphql-tag (see examples below)
@@ -106,8 +98,6 @@ client
   .then(data => console.log(data.updateUser.id))
   .catch(error => console.log(error))
 ```
-
-For even better performance check out [undici example](https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples/with-undici/src/with-undici.ts)
 
 ## Table of Contents
 
@@ -330,11 +320,11 @@ Perfect for Typescript projects. See [example above](#typescript-with-typeddocum
 
 ```js
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
-const nodeFetch = require('node-fetch')
+const fetchCookie = require('fetch-cookie')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  fetch: require('fetch-cookie')(nodeFetch),
+  fetch: fetchCookie(globalThis.fetch),
 })
 ```
 

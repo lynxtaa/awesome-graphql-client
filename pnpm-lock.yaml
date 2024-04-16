@@ -139,9 +139,6 @@ importers:
       graphql:
         specifier: 16.8.1
         version: 16.8.1
-      node-fetch:
-        specifier: ^2.6.11
-        version: 2.6.11
     devDependencies:
       '@graphql-codegen/cli':
         specifier: 5.0.0
@@ -167,9 +164,6 @@ importers:
       '@types/node':
         specifier: 18.19.31
         version: 18.19.31
-      '@types/node-fetch':
-        specifier: 2.5.12
-        version: 2.5.12
       eslint:
         specifier: 8.57.0
         version: 8.57.0
@@ -231,9 +225,6 @@ importers:
       '@types/jest':
         specifier: 29.5.12
         version: 29.5.12
-      '@types/node-fetch':
-        specifier: 2.5.12
-        version: 2.5.12
       eslint:
         specifier: 8.57.0
         version: 8.57.0
@@ -1613,9 +1604,6 @@ packages:
   '@types/ms@0.7.33':
     resolution: {integrity: sha512-AuHIyzR5Hea7ij0P9q7vx7xu4z0C28ucwjAZC0ja7JhINyCnOw8/DnvAPQQ9TfOlCtZAmCERKQX9+o1mgQhuOQ==}
 
-  '@types/node-fetch@2.5.12':
-    resolution: {integrity: sha512-MKgC4dlq4kKNa/mYrwpKfzQMB5X3ee5U6fSprkKpToBqBmX4nFZL9cW5jl6sWn+xpRJ7ypWh2yyqqr8UUCstSw==}
-
   '@types/node@18.19.31':
     resolution: {integrity: sha512-ArgCD39YpyyrtFKIqMDvjz79jto5fcI/SVUs2HwB+f0dAzq68yqOdyaSivLiLugSziTpNXLQrVb7RZFmdZzbhA==}
 
@@ -2930,10 +2918,6 @@ packages:
   form-data@2.5.1:
     resolution: {integrity: sha512-m21N3WOmEEURgk6B9GLOE4RuWOFf28Lhh9qGYeNlGq4VDXUlJy2th2slBNU8Gp8EzloYZOibZJ7t5ecIrFSjVA==}
     engines: {node: '>= 0.12'}
-
-  form-data@3.0.1:
-    resolution: {integrity: sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==}
-    engines: {node: '>= 6'}
 
   form-data@4.0.0:
     resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
@@ -7010,11 +6994,6 @@ snapshots:
 
   '@types/ms@0.7.33': {}
 
-  '@types/node-fetch@2.5.12':
-    dependencies:
-      '@types/node': 18.19.31
-      form-data: 3.0.1
-
   '@types/node@18.19.31':
     dependencies:
       undici-types: 5.26.5
@@ -8741,12 +8720,6 @@ snapshots:
       is-callable: 1.2.7
 
   form-data@2.5.1:
-    dependencies:
-      asynckit: 0.4.0
-      combined-stream: 1.0.8
-      mime-types: 2.1.35
-
-  form-data@3.0.1:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
