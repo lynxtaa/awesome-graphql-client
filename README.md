@@ -82,15 +82,14 @@ const { File } = require('undici')
 
 class StreamableFile extends File {
   constructor(filePath) {
-    super([], path.parse(filePath).base)
-    this.#filePath = filePath
-
     const { mtime, size } = statSync(filePath)
 
-    Object.defineProperty(this, 'lastModified', {
-      value: mtime.getTime(),
-      writable: false,
+    super([], path.parse(filePath).base, {
+      lastModified: mtime.getTime(),
     })
+
+    this.#filePath = filePath
+
     Object.defineProperty(this, 'size', {
       value: size,
       writable: false,
