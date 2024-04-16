@@ -2,16 +2,9 @@
  * @jest-environment node
  */
 
-import { createReadStream } from 'node:fs'
-import http from 'node:http'
-import { join } from 'node:path'
-
 import FormData from 'form-data'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
-import nodeFetch, {
-	RequestInit as NodeFetchRequestInit,
-	Response as NodeFetchResponse,
-} from 'node-fetch'
+import nodeFetch from 'node-fetch'
 import {
 	fetch as undiciFetch,
 	FormData as UndiciFormData,
@@ -33,54 +26,6 @@ let server: TestServer
 afterEach(async () => {
 	await server?.destroy()
 })
-
-const itif = (condition: boolean) => (condition ? it : it.skip)
-
-const nodeMajorVersion = Number(process.versions.node.split('.')[0])
-
-itif(nodeMajorVersion < 18)('throws if no Fetch polyfill provided', () => {
-	// eslint-disable-next-line jest/no-standalone-expect
-	expect(() => new AwesomeGraphQLClient({ endpoint: '/' })).toThrow(
-		/Fetch must be polyfilled/,
-	)
-})
-
-itif(nodeMajorVersion < 18)(
-	'throws on file upload mutation if no FormData polyfill provided',
-	async () => {
-		interface UploadFile {
-			uploadFile: boolean
-		}
-		interface UploadFileVariables {
-			file: any
-		}
-
-		const client = new AwesomeGraphQLClient<
-			string,
-			NodeFetchRequestInit,
-			NodeFetchResponse
-		>({
-			endpoint: 'http://localhost:1234/api/graphql',
-			fetch: nodeFetch,
-			fetchOptions: {
-				agent: new http.Agent({ keepAlive: true }),
-			},
-		})
-
-		const query = gql`
-			mutation UploadFile($file: Upload!) {
-				uploadFile(file: $file)
-			}
-		`
-
-		// eslint-disable-next-line jest/no-standalone-expect
-		await expect(
-			client.request<UploadFile, UploadFileVariables>(query, {
-				file: createReadStream(join(__filename)),
-			}),
-		).rejects.toThrow(/FormData must be polyfilled/)
-	},
-)
 
 describe('node-fetch', () => {
 	it('sends GraphQL request with variables', async () => {

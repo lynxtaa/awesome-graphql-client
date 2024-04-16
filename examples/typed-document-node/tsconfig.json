@@ -14,7 +14,7 @@
 		"declaration": true,
 		"declarationMap": true,
 		"noUnusedLocals": true,
-		"outDir": "build",
+		"outDir": "build"
 	},
-	"include": ["src"],
+	"include": ["src"]
 }
