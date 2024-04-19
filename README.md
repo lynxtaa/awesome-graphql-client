@@ -78,7 +78,7 @@ client
 const { createReadStream, statSync } = require('node:fs')
 const { Readable } = require('node:stream')
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
-const { File } = require('undici')
+const { File } = require('undici') // Only needed for NodeJS 18
 
 class StreamableFile extends File {
   constructor(filePath) {
