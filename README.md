@@ -103,7 +103,7 @@ class StreamableFile extends File {
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  isFileUpload: value => value instanceof File,
+  isFileUpload: value => value instanceof File, // Only needed for NodeJS 18
 })
 
 // Also query can be an output from graphql-tag (see examples below)
