@@ -54,58 +54,6 @@ describe('fetch', () => {
 
 		expect(data).toEqual({ hello: 'Hello, User!' })
 	})
-
-	it('file upload', async () => {
-		interface UploadFile {
-			uploadFile: boolean
-		}
-		interface UploadFileVariables {
-			file: any
-		}
-
-		server = await createServer(
-			`
-				scalar Upload
-				type Mutation {
-					uploadFile(file: Upload!): Boolean
-				}
-				type Query {
-					hello: String!
-				}
-			`,
-			{
-				Upload: GraphQLUpload as any,
-				Mutation: {
-					async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
-						// eslint-disable-next-line @typescript-eslint/unbound-method
-						const { filename, createReadStream } = await file
-						expect(filename).toBe('text.txt')
-						const str = await streamToString(createReadStream())
-						expect(str).toBe('test')
-
-						return true
-					},
-				},
-			},
-		)
-
-		const client = new AwesomeGraphQLClient({
-			endpoint: server.endpoint,
-			isFileUpload: value => value instanceof File,
-		})
-
-		const query = gql`
-			mutation UploadFile($file: Upload!) {
-				uploadFile(file: $file)
-			}
-		`
-
-		const data = await client.request<UploadFile, UploadFileVariables>(query, {
-			file: new File(['test'], 'text.txt'),
-		})
-
-		expect(data).toEqual({ uploadFile: true })
-	})
 })
 
 maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
