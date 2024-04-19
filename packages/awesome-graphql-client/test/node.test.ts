@@ -8,13 +8,16 @@ import { Readable } from 'node:stream'
 import { ReadableStream } from 'node:stream/web'
 
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
-import { File } from 'undici'
 
 import { AwesomeGraphQLClient, isFileUpload } from '../src/index'
 import { gql } from '../src/util/gql'
 
 import { createServer, TestServer } from './jest/gqlServer'
 import { streamToString } from './streamToString'
+
+const maybeDescribe = (condition: boolean) => (condition ? describe : describe.skip)
+
+const nodeMajorVersion = Number(process.versions.node.split('.')[0])
 
 let server: TestServer
 
@@ -103,8 +106,12 @@ describe('fetch', () => {
 
 		expect(data).toEqual({ uploadFile: true })
 	})
+})
 
-	it('stream file upload', async () => {
+maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
+	it('streams a file', async () => {
+		const { File } = await import('undici')
+
 		interface UploadFile {
 			uploadFile: boolean
 		}
@@ -175,6 +182,64 @@ describe('fetch', () => {
 
 		const data = await client.request<UploadFile, UploadFileVariables>(query, {
 			file: new StreamableFile('./test/fixtures/data.txt'),
+		})
+
+		expect(data).toEqual({ uploadFile: true })
+	})
+})
+
+maybeDescribe(nodeMajorVersion >= 20)('node >= 20', () => {
+	it('streams a file using openAsBlob', async () => {
+		const { openAsBlob } = await import('node:fs')
+
+		interface UploadFile {
+			uploadFile: boolean
+		}
+		interface UploadFileVariables {
+			file: any
+		}
+
+		server = await createServer(
+			`
+				scalar Upload
+				type Mutation {
+					uploadFile(file: Upload!): Boolean
+				}
+				type Query {
+					hello: String!
+				}
+			`,
+			{
+				Upload: GraphQLUpload as any,
+				Mutation: {
+					async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+						// eslint-disable-next-line @typescript-eslint/unbound-method
+						const { filename, createReadStream } = await file
+						expect(filename).toBe('data.txt')
+						const str = await streamToString(createReadStream())
+						expect(str).toBe(readFileSync('./test/fixtures/data.txt', 'utf8'))
+
+						return true
+					},
+				},
+			},
+		)
+
+		const client = new AwesomeGraphQLClient({
+			endpoint: server.endpoint,
+		})
+
+		const query = gql`
+			mutation UploadFile($file: Upload!) {
+				uploadFile(file: $file)
+			}
+		`
+
+		const blob = await openAsBlob('./test/fixtures/data.txt')
+		const file = new File([blob as BlobPart], 'data.txt')
+
+		const data = await client.request<UploadFile, UploadFileVariables>(query, {
+			file,
 		})
 
 		expect(data).toEqual({ uploadFile: true })

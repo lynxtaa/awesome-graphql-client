@@ -142,8 +142,10 @@ const UploadUserAvatar = `
   }
 `
 
+const blob = await openAsBlob('./avatar.png')
+
 client
-  .request(UploadUserAvatar, { file: await openAsBlob('./avatar.png'), userId: 10 })
+  .request(UploadUserAvatar, { file: new File([blob], 'avatar.png'), userId: 10 })
   .then(data => console.log(data.updateUser.id))
   .catch(error => console.log(error))
 ```
