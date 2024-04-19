@@ -138,6 +138,7 @@ describe('fetch', () => {
 			},
 		)
 
+		// https://github.com/nodejs/undici/issues/2202#issuecomment-1664134203
 		class StreamableFile extends File {
 			#filePath: string
 
