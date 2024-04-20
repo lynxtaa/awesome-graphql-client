@@ -107,20 +107,21 @@ client
 const { createReadStream, statSync } = require('node:fs')
 const { Readable } = require('node:stream')
 const { AwesomeGraphQLClient, isFileUpload } = require('awesome-graphql-client')
-const { File } = require('undici')
 
-class StreamableFile extends File {
+class StreamableFile {
   constructor(filePath) {
     const { mtime, size } = statSync(filePath)
 
-    super([], path.parse(filePath).base, {
-      lastModified: mtime.getTime(),
-    })
-
+    this.name = path.parse(filePath).base
+    this.lastModified = mtime.getTime()
     this.#filePath = filePath
 
     Object.defineProperty(this, 'size', {
       value: size,
+      writable: false,
+    })
+    Object.defineProperty(this, Symbol.toStringTag, {
+      value: 'File',
       writable: false,
     })
   }
@@ -132,7 +133,7 @@ class StreamableFile extends File {
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  isFileUpload: value => isFileUpload(value) || value instanceof File,
+  isFileUpload: value => isFileUpload(value) || value instanceof StreamableFile,
 })
 
 // Also query can be an output from graphql-tag (see examples below)

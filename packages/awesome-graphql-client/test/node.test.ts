@@ -58,8 +58,6 @@ describe('fetch', () => {
 
 maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 	it('streams a file', async () => {
-		const { File } = await import('undici')
-
 		interface UploadFile {
 			uploadFile: boolean
 		}
@@ -94,20 +92,24 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 		)
 
 		// https://github.com/nodejs/undici/issues/2202#issuecomment-1664134203
-		class StreamableFile extends File {
+		class StreamableFile {
 			#filePath: string
+			name: string
+			lastModified: number
 
 			constructor(filePath: string) {
 				const { mtime, size } = statSync(filePath)
 
-				super([], path.parse(filePath).base, {
-					lastModified: mtime.getTime(),
-				})
-
+				this.name = path.parse(filePath).base
+				this.lastModified = mtime.getTime()
 				this.#filePath = filePath
 
 				Object.defineProperty(this, 'size', {
 					value: size,
+					writable: false,
+				})
+				Object.defineProperty(this, Symbol.toStringTag, {
+					value: 'File',
 					writable: false,
 				})
 			}
@@ -119,7 +121,7 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 
 		const client = new AwesomeGraphQLClient({
 			endpoint: server.endpoint,
-			isFileUpload: value => isFileUpload(value) || value instanceof File,
+			isFileUpload: value => isFileUpload(value) || value instanceof StreamableFile,
 		})
 
 		const query = gql`
