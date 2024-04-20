@@ -6,6 +6,7 @@
   "scripts": {
     "build": "turbo build",
     "prepare": "husky",
+    "release": "pnpm -F awesome-graphql-client run release",
     "test:coverage": "turbo test:coverage --concurrency=1",
     "validate": "turbo lint check-types check-format"
   },

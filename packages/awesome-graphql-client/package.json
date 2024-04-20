@@ -44,7 +44,7 @@
     "lint": "eslint  --max-warnings 0 --ext .js,.ts src test",
     "prepublishOnly": "pnpm run build && cp ../../README.md .",
     "prettier": "prettier \"{src,test}/**/*\" \"*.{js,json,md}\"",
-    "release": "standard-version --infile ../../CHANGELOG.md",
+    "release": "np --no-cleanup --test-script lint",
     "test": "is-ci-cli \"test:coverage\" \"test:watch\"",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
@@ -74,11 +74,17 @@
     "jest-environment-jsdom": "29.7.0",
     "mercurius": "9.8.0",
     "mercurius-upload": "3.0.1",
+    "np": "10.0.5",
     "prettier": "3.2.5",
-    "standard-version": "9.5.0",
     "tsup": "8.0.2",
     "typescript": "5.4.5",
     "undici": "6.13.0",
     "whatwg-fetch": "3.6.20"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "np": {
+    "yarn": false
   }
 }
