@@ -79,7 +79,7 @@ client
 ```js
 const { createReadStream, statSync } = require('node:fs')
 const { Readable } = require('node:stream')
-const { AwesomeGraphQLClient } = require('awesome-graphql-client')
+const { AwesomeGraphQLClient, isFileUpload } = require('awesome-graphql-client')
 const { File } = require('undici')
 
 class StreamableFile extends File {
@@ -105,7 +105,7 @@ class StreamableFile extends File {
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  isFileUpload: value => value instanceof File,
+  isFileUpload: value => isFileUpload(value) || value instanceof File,
 })
 
 // Also query can be an output from graphql-tag (see examples below)
