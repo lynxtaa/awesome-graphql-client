@@ -4,10 +4,10 @@
   "license": "MIT",
   "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
   "scripts": {
-    "build": "cross-env FORCE_COLOR=1 turbo build",
-    "prepare": "husky install",
-    "test:coverage": "cross-env FORCE_COLOR=1 turbo test:coverage --concurrency=1",
-    "validate": "cross-env FORCE_COLOR=1 turbo lint check-types check-format"
+    "build": "turbo build",
+    "prepare": "husky",
+    "test:coverage": "turbo test:coverage --concurrency=1",
+    "validate": "turbo lint check-types check-format"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown"
@@ -16,12 +16,14 @@
   "devDependencies": {
     "@lynxtaa/prettier-config": "0.2.0",
     "awesome-graphql-client": "workspace:*",
-    "cross-env": "7.0.3",
-    "husky": "8.0.3",
-    "lint-staged": "14.0.1",
-    "prettier": "3.0.3",
-    "turbo": "1.10.14",
-    "typescript": "5.2.2"
+    "husky": "9.0.11",
+    "lint-staged": "15.2.2",
+    "prettier": "3.2.5",
+    "turbo": "1.13.2",
+    "typescript": "5.4.5"
   },
-  "packageManager": "pnpm@8.8.0"
+  "packageManager": "pnpm@9.0.1",
+  "engines": {
+    "node": ">=18.18.0"
+  }
 }

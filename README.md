@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/lynxtaa/awesome-graphql-client">
-    <img width="180" height="180" src="logo.svg">
+    <img width="180" height="180" src="logo.svg" alt="Logo">
   </a>
   <br>
   <br>
@@ -74,22 +74,38 @@ client
 
 ### NodeJS
 
+#### NodeJS 18
+
 ```js
-const { AwesomeGraphQLClient } = require('awesome-graphql-client')
-const FormData = require('form-data')
-const { createReadStream } = require('fs')
-const http = require('http')
-const fetch = require('node-fetch')
+const { createReadStream, statSync } = require('node:fs')
+const { Readable } = require('node:stream')
+const { AwesomeGraphQLClient, isFileUpload } = require('awesome-graphql-client')
+const { File } = require('undici')
+
+class StreamableFile extends File {
+  constructor(filePath) {
+    const { mtime, size } = statSync(filePath)
+
+    super([], path.parse(filePath).base, {
+      lastModified: mtime.getTime(),
+    })
+
+    this.#filePath = filePath
+
+    Object.defineProperty(this, 'size', {
+      value: size,
+      writable: false,
+    })
+  }
+
+  stream() {
+    return Readable.toWeb(createReadStream(this.#filePath))
+  }
+}
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  fetch,
-  FormData, // Required only if you're using file upload
-  fetchOptions: {
-    // Using HTTP Keep-Alive will make requests ~2x faster in NodeJS:
-    // https://github.com/Ethan-Arrowood/undici-fetch/blob/main/benchmarks.md#fetch
-    agent: new http.Agent({ keepAlive: true }),
-  },
+  isFileUpload: value => isFileUpload(value) || value instanceof File,
 })
 
 // Also query can be an output from graphql-tag (see examples below)
@@ -102,12 +118,37 @@ const UploadUserAvatar = `
 `
 
 client
-  .request(UploadUserAvatar, { file: createReadStream('./avatar.img'), userId: 10 })
+  .request(UploadUserAvatar, { file: new StreamableFile('./avatar.png'), userId: 10 })
   .then(data => console.log(data.updateUser.id))
   .catch(error => console.log(error))
 ```
 
-For even better performance check out [undici example](https://github.com/lynxtaa/awesome-graphql-client/tree/master/examples/with-undici/src/with-undici.ts)
+#### NodeJS 20
+
+```js
+const { createReadStream, statSync, openAsBlob } = require('node:fs')
+const { AwesomeGraphQLClient } = require('awesome-graphql-client')
+
+const client = new AwesomeGraphQLClient({
+  endpoint: 'http://localhost:8080/graphql',
+})
+
+// Also query can be an output from graphql-tag (see examples below)
+const UploadUserAvatar = `
+  mutation uploadUserAvatar($userId: Int!, $file: Upload!) {
+    updateUser(id: $userId, input: { avatar: $file }) {
+      id
+    }
+  }
+`
+
+const blob = await openAsBlob('./avatar.png')
+
+client
+  .request(UploadUserAvatar, { file: new File([blob], 'avatar.png'), userId: 10 })
+  .then(data => console.log(data.updateUser.id))
+  .catch(error => console.log(error))
+```
 
 ## Table of Contents
 
@@ -330,11 +371,11 @@ Perfect for Typescript projects. See [example above](#typescript-with-typeddocum
 
 ```js
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
-const nodeFetch = require('node-fetch')
+const fetchCookie = require('fetch-cookie')
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  fetch: require('fetch-cookie')(nodeFetch),
+  fetch: fetchCookie(globalThis.fetch),
 })
 ```
 

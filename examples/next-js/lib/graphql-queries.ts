@@ -213,11 +213,12 @@ export const GetCharactersDocument = `
   }
 }
     `
+
 export const useGetCharactersQuery = <TData = GetCharactersQuery, TError = Error>(
 	variables?: GetCharactersQueryVariables,
 	options?: UseQueryOptions<GetCharactersQuery, TError, TData>,
-) =>
-	useQuery<GetCharactersQuery, TError, TData>(
+) => {
+	return useQuery<GetCharactersQuery, TError, TData>(
 		variables === undefined ? ['GetCharacters'] : ['GetCharacters', variables],
 		gqlFetcher<GetCharactersQuery, GetCharactersQueryVariables>(
 			GetCharactersDocument,
@@ -225,6 +226,7 @@ export const useGetCharactersQuery = <TData = GetCharactersQuery, TError = Error
 		),
 		options,
 	)
+}
 
 useGetCharactersQuery.getKey = (variables?: GetCharactersQueryVariables) =>
 	variables === undefined ? ['GetCharacters'] : ['GetCharacters', variables]

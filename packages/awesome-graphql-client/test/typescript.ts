@@ -4,7 +4,7 @@
 
 /* eslint-disable no-console */
 
-import fetch, { RequestInit as RequestInitNF, Response as ResponseNF } from 'node-fetch'
+import { fetch, RequestInit as RequestInitNF, Response as ResponseNF } from 'undici'
 
 import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'
@@ -132,6 +132,6 @@ export async function withCustomHeaders(): Promise<void> {
 
 	const result = await client2.requestSafe('', {}, { headers: { authorization: '123' } })
 	if (result.ok) {
-		console.log(result.response.headers.raw())
+		console.log(result.response.headers.get('Content-Type'))
 	}
 }

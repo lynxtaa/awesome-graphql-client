@@ -2,25 +2,14 @@
  * @jest-environment node
  */
 
-import { createReadStream } from 'node:fs'
-import http from 'node:http'
-import { join } from 'node:path'
+import { createReadStream, statSync, readFileSync } from 'node:fs'
+import path from 'node:path'
+import { Readable } from 'node:stream'
+import { ReadableStream } from 'node:stream/web'
 
-import FormData from 'form-data'
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
-import nodeFetch, {
-	RequestInit as NodeFetchRequestInit,
-	Response as NodeFetchResponse,
-} from 'node-fetch'
-import {
-	fetch as undiciFetch,
-	FormData as UndiciFormData,
-	File as UndiciFile,
-	RequestInit as UndiciRequestInit,
-	Response as UndiciResponse,
-} from 'undici'
 
-import { AwesomeGraphQLClient } from '../src/index'
+import { AwesomeGraphQLClient, isFileUpload } from '../src/index'
 import { gql } from '../src/util/gql'
 
 import { createServer, TestServer } from './jest/gqlServer'
@@ -28,146 +17,15 @@ import { streamToString } from './streamToString'
 
 const maybeDescribe = (condition: boolean) => (condition ? describe : describe.skip)
 
+const nodeMajorVersion = Number(process.versions.node.split('.')[0])
+
 let server: TestServer
 
 afterEach(async () => {
 	await server?.destroy()
 })
 
-const itif = (condition: boolean) => (condition ? it : it.skip)
-
-const nodeMajorVersion = Number(process.versions.node.split('.')[0])
-
-itif(nodeMajorVersion < 18)('throws if no Fetch polyfill provided', () => {
-	// eslint-disable-next-line jest/no-standalone-expect
-	expect(() => new AwesomeGraphQLClient({ endpoint: '/' })).toThrow(
-		/Fetch must be polyfilled/,
-	)
-})
-
-itif(nodeMajorVersion < 18)(
-	'throws on file upload mutation if no FormData polyfill provided',
-	async () => {
-		interface UploadFile {
-			uploadFile: boolean
-		}
-		interface UploadFileVariables {
-			file: any
-		}
-
-		const client = new AwesomeGraphQLClient<
-			string,
-			NodeFetchRequestInit,
-			NodeFetchResponse
-		>({
-			endpoint: 'http://localhost:1234/api/graphql',
-			fetch: nodeFetch,
-			fetchOptions: {
-				agent: new http.Agent({ keepAlive: true }),
-			},
-		})
-
-		const query = gql`
-			mutation UploadFile($file: Upload!) {
-				uploadFile(file: $file)
-			}
-		`
-
-		// eslint-disable-next-line jest/no-standalone-expect
-		await expect(
-			client.request<UploadFile, UploadFileVariables>(query, {
-				file: createReadStream(join(__filename)),
-			}),
-		).rejects.toThrow(/FormData must be polyfilled/)
-	},
-)
-
-describe('node-fetch', () => {
-	it('sends GraphQL request with variables', async () => {
-		server = await createServer(
-			`
-				type Query {
-					hello(name: String!): String!
-				}
-			`,
-			{
-				Query: {
-					hello: (_, { name }: { name: string }) => `Hello, ${name}!`,
-				},
-			},
-		)
-
-		const client = new AwesomeGraphQLClient({
-			endpoint: server.endpoint,
-			fetch: nodeFetch,
-			FormData,
-		})
-
-		const query = gql`
-			query Hello($name: String!) {
-				hello(name: $name)
-			}
-		`
-
-		const data = await client.request(query, { name: 'User' })
-
-		expect(data).toEqual({ hello: 'Hello, User!' })
-	})
-
-	it('file upload', async () => {
-		interface UploadFile {
-			uploadFile: boolean
-		}
-		interface UploadFileVariables {
-			file: any
-		}
-
-		server = await createServer(
-			`
-				scalar Upload
-				type Mutation {
-					uploadFile(file: Upload!): Boolean
-				}
-				type Query {
-					hello: String!
-				}
-			`,
-			{
-				Upload: GraphQLUpload as any,
-				Mutation: {
-					async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
-						// eslint-disable-next-line @typescript-eslint/unbound-method
-						const { createReadStream } = await file
-						const str = await streamToString(createReadStream())
-						expect(str).toBe('test')
-
-						return true
-					},
-				},
-			},
-		)
-
-		const client = new AwesomeGraphQLClient({
-			endpoint: server.endpoint,
-			fetch: nodeFetch,
-			FormData,
-		})
-
-		const query = gql`
-			mutation UploadFile($file: Upload!) {
-				uploadFile(file: $file)
-			}
-		`
-
-		const data = await client.request<UploadFile, UploadFileVariables>(query, {
-			file: Buffer.from('test', 'utf8'),
-		})
-
-		expect(data).toEqual({ uploadFile: true })
-	})
-})
-
-maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
+describe('fetch', () => {
 	it('regular request', async () => {
 		server = await createServer(
 			`
@@ -182,9 +40,8 @@ maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
 			},
 		)
 
-		const client = new AwesomeGraphQLClient<string, UndiciRequestInit, UndiciResponse>({
+		const client = new AwesomeGraphQLClient<string, RequestInit, Response>({
 			endpoint: server.endpoint,
-			fetch: undiciFetch,
 		})
 
 		const query = gql`
@@ -197,8 +54,12 @@ maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
 
 		expect(data).toEqual({ hello: 'Hello, User!' })
 	})
+})
 
-	it('file upload', async () => {
+maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
+	it('streams a file', async () => {
+		const { File } = await import('undici')
+
 		interface UploadFile {
 			uploadFile: boolean
 		}
@@ -222,9 +83,9 @@ maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
 					async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
 						// eslint-disable-next-line @typescript-eslint/unbound-method
 						const { filename, createReadStream } = await file
-						expect(filename).toBe('text.txt')
+						expect(filename).toBe('data.txt')
 						const str = await streamToString(createReadStream())
-						expect(str).toBe('test')
+						expect(str).toBe(readFileSync('./test/fixtures/data.txt', 'utf8'))
 
 						return true
 					},
@@ -232,11 +93,33 @@ maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
 			},
 		)
 
+		// https://github.com/nodejs/undici/issues/2202#issuecomment-1664134203
+		class StreamableFile extends File {
+			#filePath: string
+
+			constructor(filePath: string) {
+				const { mtime, size } = statSync(filePath)
+
+				super([], path.parse(filePath).base, {
+					lastModified: mtime.getTime(),
+				})
+
+				this.#filePath = filePath
+
+				Object.defineProperty(this, 'size', {
+					value: size,
+					writable: false,
+				})
+			}
+
+			stream(): ReadableStream<any> {
+				return Readable.toWeb(createReadStream(this.#filePath))
+			}
+		}
+
 		const client = new AwesomeGraphQLClient({
 			endpoint: server.endpoint,
-			fetch: undiciFetch,
-			FormData: UndiciFormData,
-			isFileUpload: value => value instanceof UndiciFile,
+			isFileUpload: value => isFileUpload(value) || value instanceof File,
 		})
 
 		const query = gql`
@@ -246,7 +129,65 @@ maybeDescribe(process.version.startsWith('v16.'))('undici', () => {
 		`
 
 		const data = await client.request<UploadFile, UploadFileVariables>(query, {
-			file: new UndiciFile(['test'], 'text.txt'),
+			file: new StreamableFile('./test/fixtures/data.txt'),
+		})
+
+		expect(data).toEqual({ uploadFile: true })
+	})
+})
+
+maybeDescribe(nodeMajorVersion >= 20)('node >= 20', () => {
+	it('streams a file using openAsBlob', async () => {
+		const { openAsBlob } = await import('node:fs')
+
+		interface UploadFile {
+			uploadFile: boolean
+		}
+		interface UploadFileVariables {
+			file: any
+		}
+
+		server = await createServer(
+			`
+				scalar Upload
+				type Mutation {
+					uploadFile(file: Upload!): Boolean
+				}
+				type Query {
+					hello: String!
+				}
+			`,
+			{
+				Upload: GraphQLUpload as any,
+				Mutation: {
+					async uploadFile(_, { file }: { file: Promise<FileUpload> }) {
+						// eslint-disable-next-line @typescript-eslint/unbound-method
+						const { filename, createReadStream } = await file
+						expect(filename).toBe('data.txt')
+						const str = await streamToString(createReadStream())
+						expect(str).toBe(readFileSync('./test/fixtures/data.txt', 'utf8'))
+
+						return true
+					},
+				},
+			},
+		)
+
+		const client = new AwesomeGraphQLClient({
+			endpoint: server.endpoint,
+		})
+
+		const query = gql`
+			mutation UploadFile($file: Upload!) {
+				uploadFile(file: $file)
+			}
+		`
+
+		const blob = await openAsBlob('./test/fixtures/data.txt')
+		const file = new File([blob as BlobPart], 'data.txt')
+
+		const data = await client.request<UploadFile, UploadFileVariables>(query, {
+			file,
 		})
 
 		expect(data).toEqual({ uploadFile: true })
