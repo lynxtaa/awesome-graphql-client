@@ -5,11 +5,10 @@
 import { createReadStream, statSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { Readable } from 'node:stream'
-import { ReadableStream } from 'node:stream/web'
 
 import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
-import { AwesomeGraphQLClient, isFileUpload } from '../src/index'
+import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'
 
 import { createServer, TestServer } from './jest/gqlServer'
@@ -92,17 +91,21 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 		)
 
 		// https://github.com/nodejs/undici/issues/2202#issuecomment-1664134203
-		class StreamableFile {
+		class StreamableFile extends Blob {
 			#filePath: string
 			name: string
 			lastModified: number
+			type: string
 
 			constructor(filePath: string) {
 				const { mtime, size } = statSync(filePath)
 
+				super([])
+
 				this.name = path.parse(filePath).base
 				this.lastModified = mtime.getTime()
 				this.#filePath = filePath
+				this.type = ''
 
 				Object.defineProperty(this, 'size', {
 					value: size,
@@ -115,13 +118,12 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 			}
 
 			stream(): ReadableStream<any> {
-				return Readable.toWeb(createReadStream(this.#filePath))
+				return Readable.toWeb(createReadStream(this.#filePath)) as ReadableStream
 			}
 		}
 
 		const client = new AwesomeGraphQLClient({
 			endpoint: server.endpoint,
-			isFileUpload: value => isFileUpload(value) || value instanceof StreamableFile,
 		})
 
 		const query = gql`

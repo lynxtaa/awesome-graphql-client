@@ -77,7 +77,7 @@ client
 #### NodeJS 20
 
 ```js
-const { createReadStream, statSync, openAsBlob } = require('node:fs')
+const { openAsBlob } = require('node:fs')
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
 
 const client = new AwesomeGraphQLClient({
@@ -106,11 +106,13 @@ client
 ```js
 const { createReadStream, statSync } = require('node:fs')
 const { Readable } = require('node:stream')
-const { AwesomeGraphQLClient, isFileUpload } = require('awesome-graphql-client')
+const { AwesomeGraphQLClient } = require('awesome-graphql-client')
 
-class StreamableFile {
+class StreamableFile extends Blob {
   constructor(filePath) {
     const { mtime, size } = statSync(filePath)
+
+    super([])
 
     this.name = path.parse(filePath).base
     this.lastModified = mtime.getTime()
@@ -133,7 +135,6 @@ class StreamableFile {
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
-  isFileUpload: value => isFileUpload(value) || value instanceof StreamableFile,
 })
 
 // Also query can be an output from graphql-tag (see examples below)
