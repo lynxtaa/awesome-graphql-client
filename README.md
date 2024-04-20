@@ -74,6 +74,33 @@ client
 
 ### NodeJS
 
+#### NodeJS 20
+
+```js
+const { createReadStream, statSync, openAsBlob } = require('node:fs')
+const { AwesomeGraphQLClient } = require('awesome-graphql-client')
+
+const client = new AwesomeGraphQLClient({
+  endpoint: 'http://localhost:8080/graphql',
+})
+
+// Also query can be an output from graphql-tag (see examples below)
+const UploadUserAvatar = `
+  mutation uploadUserAvatar($userId: Int!, $file: Upload!) {
+    updateUser(id: $userId, input: { avatar: $file }) {
+      id
+    }
+  }
+`
+
+const blob = await openAsBlob('./avatar.png')
+
+client
+  .request(UploadUserAvatar, { file: new File([blob], 'avatar.png'), userId: 10 })
+  .then(data => console.log(data.updateUser.id))
+  .catch(error => console.log(error))
+```
+
 #### NodeJS 18
 
 ```js
@@ -119,33 +146,6 @@ const UploadUserAvatar = `
 
 client
   .request(UploadUserAvatar, { file: new StreamableFile('./avatar.png'), userId: 10 })
-  .then(data => console.log(data.updateUser.id))
-  .catch(error => console.log(error))
-```
-
-#### NodeJS 20
-
-```js
-const { createReadStream, statSync, openAsBlob } = require('node:fs')
-const { AwesomeGraphQLClient } = require('awesome-graphql-client')
-
-const client = new AwesomeGraphQLClient({
-  endpoint: 'http://localhost:8080/graphql',
-})
-
-// Also query can be an output from graphql-tag (see examples below)
-const UploadUserAvatar = `
-  mutation uploadUserAvatar($userId: Int!, $file: Upload!) {
-    updateUser(id: $userId, input: { avatar: $file }) {
-      id
-    }
-  }
-`
-
-const blob = await openAsBlob('./avatar.png')
-
-client
-  .request(UploadUserAvatar, { file: new File([blob], 'avatar.png'), userId: 10 })
   .then(data => console.log(data.updateUser.id))
   .catch(error => console.log(error))
 ```
