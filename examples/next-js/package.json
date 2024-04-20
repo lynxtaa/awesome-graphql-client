@@ -7,7 +7,7 @@
     "check-types": "tsc",
     "dev": "next dev",
     "format": "pnpm run prettier --write",
-    "gql-codegen": "graphql-codegen --config graphql-codegen.yml",
+    "gql-codegen": "graphql-codegen --config graphql-codegen.ts",
     "lint": "eslint --max-warnings 0 --ext js,ts,tsx jest lib pages tests",
     "prettier": "prettier \"{lib,pages,tests}/**\" *.{js,ts,json,md}",
     "start": "next start",
