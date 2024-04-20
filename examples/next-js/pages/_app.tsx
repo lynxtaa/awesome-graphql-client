@@ -1,4 +1,8 @@
-import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query'
+import {
+	QueryClient,
+	QueryClientProvider,
+	HydrationBoundary,
+} from '@tanstack/react-query'
 import { AppProps } from 'next/app'
 import { StrictMode } from 'react'
 
@@ -10,9 +14,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<StrictMode>
 			<QueryClientProvider client={queryClient}>
-				<Hydrate state={pageProps.dehydratedState}>
+				<HydrationBoundary state={pageProps.dehydratedState}>
 					<Component {...pageProps} />
-				</Hydrate>
+				</HydrationBoundary>
 			</QueryClientProvider>
 		</StrictMode>
 	)
