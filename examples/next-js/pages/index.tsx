@@ -1,4 +1,4 @@
-import { QueryClient, dehydrate } from '@tanstack/react-query'
+import { QueryClient, dehydrate, keepPreviousData } from '@tanstack/react-query'
 import { GetStaticProps } from 'next'
 import { useState } from 'react'
 
@@ -10,7 +10,7 @@ export default function Home() {
 
 	const { data, error } = useGetCharactersQuery(
 		{ name: filter },
-		{ staleTime: 60 * 1000, keepPreviousData: true },
+		{ staleTime: 60 * 1000, placeholderData: keepPreviousData },
 	)
 
 	return (
@@ -40,9 +40,10 @@ export default function Home() {
 export const getStaticProps: GetStaticProps = async () => {
 	const queryClient = new QueryClient()
 
-	await queryClient.prefetchQuery(useGetCharactersQuery.getKey({ name: '' }), async () =>
-		graphQLClient.request(GetCharactersDocument, { name: '' }),
-	)
+	await queryClient.prefetchQuery({
+		queryKey: useGetCharactersQuery.getKey({ name: '' }),
+		queryFn: async () => graphQLClient.request(GetCharactersDocument, { name: '' }),
+	})
 
 	return {
 		props: { dehydratedState: dehydrate(queryClient) },

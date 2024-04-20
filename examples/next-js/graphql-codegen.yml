@@ -11,6 +11,7 @@ generates:
       errorType: Error
       skipTypename: true
       exposeQueryKeys: true
+      reactQueryVersion: 5
       avoidOptionals:
         field: true
         inputValue: false
