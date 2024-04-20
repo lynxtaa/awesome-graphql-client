@@ -180,9 +180,9 @@ const client = new AwesomeGraphQLClient(config)
 ### `config` properties
 
 - `endpoint`: _string_ - The URL to your GraphQL endpoint (required)
-- `fetch`: _Function_ - Fetch polyfill (necessary in NodeJS, see [example](#nodejs))
+- `fetch`: _Function_ - Fetch polyfill
 - `fetchOptions`: _object_ - Overrides for fetch options
-- `FormData`: _object_ - FormData polyfill (necessary in NodeJS if you are using file upload, see [example](#nodejs))
+- `FormData`: _object_ - FormData polyfill
 - `formatQuery`: _function(query: any): string_ - Custom query formatter (see [example](#graphql-tag))
 - `onError`: _function(error: GraphQLRequestError | Error): void_ - Provided callback will be called before throwing an error (see [example](#error-logging))
 - `isFileUpload`: _function(value: unknown): boolean_ - Custom predicate function for checking if value is a file (see [example](#custom-isfileupload-predicate))
