@@ -105,6 +105,7 @@ client
 
 ```js
 const { createReadStream, statSync } = require('node:fs')
+const path = require('node:path')
 const { Readable } = require('node:stream')
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
 

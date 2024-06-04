@@ -75,7 +75,7 @@
     "mercurius": "9.8.0",
     "mercurius-upload": "3.0.1",
     "np": "10.0.5",
-    "prettier": "3.2.5",
+    "prettier": "3.3.2",
     "tsup": "8.0.2",
     "typescript": "5.4.5",
     "undici": "6.13.0",
