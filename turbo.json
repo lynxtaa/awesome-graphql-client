@@ -1,6 +1,7 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"pipeline": {
+	"globalDependencies": ["./tsconfig.json"],
+	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": ["build/**", "dist/**"]
@@ -22,6 +23,5 @@
 		"test:coverage": {
 			"outputs": ["coverage/**"]
 		}
-	},
-	"globalDependencies": ["./tsconfig.json"]
+	}
 }
