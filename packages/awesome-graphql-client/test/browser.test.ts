@@ -242,6 +242,69 @@ it('sends GraphQL GET request without variables', async () => {
 	expect(data).toEqual({ users })
 })
 
+it('sends GraphQL GET request with custom args', async () => {
+	interface GetUsers {
+		users: { id: number; login: string }[]
+	}
+
+	const users = [{ id: 10, login: 'admin' }]
+
+	let referenceValue: string = ''
+
+	server = await createServer(
+		`
+			type Query {
+				users: [User!]!
+			}
+			type User {
+				id: Int!
+				login: String!
+			}
+		`,
+		{
+			Query: {
+				users: (source, args, val) => {
+					const urlString = val.reply.request.url
+					const searchParams = new URLSearchParams(urlString)
+					referenceValue = searchParams.get('reference') as string
+					return users
+				},
+			},
+		},
+	)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: server.endpoint,
+		fetchOptions: { method: 'GET' },
+		formatGetRequestUrl: ({ endpoint, query, variables }) => {
+			const searchParams = new URLSearchParams()
+			searchParams.set('query', query)
+			if (variables && Object.keys(variables).length > 0) {
+				searchParams.set('variables', JSON.stringify(variables))
+			}
+			searchParams.set('reference', '418aa9adde3d4ad6bbdbfac63d7dfb8e')
+			return `${endpoint}?${searchParams.toString()}`
+		},
+	})
+
+	const query = gql`
+		query GetUsers {
+			users {
+				id
+				login
+			}
+		}
+	`
+
+	expect(referenceValue).toBe('')
+
+	const data = await client.request<GetUsers>(query)
+
+	expect(referenceValue).toBe('418aa9adde3d4ad6bbdbfac63d7dfb8e')
+
+	expect(data).toEqual({ users })
+})
+
 it('sends GraphQL GET request with variables', async () => {
 	interface GetUser {
 		user: { id: number; login: string } | null
@@ -395,6 +458,53 @@ it('sends additional headers', async () => {
 	expect(client.getFetchOptions()).toEqual({
 		headers: { 'X-Secret': 'secret-2' },
 	})
+})
+
+it('Custom formats operations', async () => {
+	interface GetUsers {
+		users: { id: number; login: string }[]
+	}
+
+	let extraValue: string = ''
+
+	server = await createServer(
+		`
+			type Query {
+				hello: String!
+			}
+		`,
+		{
+			Query: {
+				hello(source, args, val) {
+					const { body } = val.reply.request
+					// const rqe = reply.request;
+					if (body !== null && typeof body === 'object' && 'otherValue' in body)
+						extraValue = body?.otherValue as string
+					return 'world!'
+				},
+			},
+		},
+	)
+
+	const query = gql`
+		query Hello {
+			hello
+		}
+	`
+
+	const client = new AwesomeGraphQLClient<string, RequestInit>({
+		endpoint: server.endpoint,
+		formatOperation: operation => {
+			return JSON.stringify({
+				...operation,
+				otherValue: 'test',
+			})
+		},
+	})
+
+	await client.request<GetUsers>(query)
+
+	expect(extraValue).toBe('test')
 })
 
 it('requestSafe returns data and response on success', async () => {
