@@ -4,7 +4,11 @@
 
 /* eslint-disable no-console */
 
-import { fetch, RequestInit as RequestInitNF, Response as ResponseNF } from 'undici'
+import {
+	fetch,
+	type RequestInit as RequestInitNF,
+	type Response as ResponseNF,
+} from 'undici'
 
 import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'

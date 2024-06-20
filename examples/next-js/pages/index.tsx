@@ -1,5 +1,5 @@
 import { QueryClient, dehydrate, keepPreviousData } from '@tanstack/react-query'
-import { GetStaticProps } from 'next'
+import { type GetStaticProps } from 'next'
 import { useState } from 'react'
 
 import { graphQLClient } from '../lib/graphQLClient'

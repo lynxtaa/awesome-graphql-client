@@ -1,5 +1,5 @@
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 
-export const graphQLClient = new AwesomeGraphQLClient({
+export const graphQLClient: AwesomeGraphQLClient = new AwesomeGraphQLClient({
 	endpoint: 'https://rickandmortyapi.com/graphql',
 })

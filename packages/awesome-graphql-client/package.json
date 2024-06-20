@@ -76,8 +76,8 @@
     "mercurius-upload": "3.0.1",
     "np": "10.0.5",
     "prettier": "3.3.2",
-    "tsup": "8.0.2",
-    "typescript": "5.4.5",
+    "tsup": "8.1.0",
+    "typescript": "5.5.2",
     "undici": "6.13.0",
     "whatwg-fetch": "3.6.20"
   },

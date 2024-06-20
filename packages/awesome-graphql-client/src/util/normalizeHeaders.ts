@@ -1,4 +1,4 @@
-import { Headers } from './types'
+import { type Headers } from './types'
 
 type HeadersInit =
 	| Iterable<[string, string]>

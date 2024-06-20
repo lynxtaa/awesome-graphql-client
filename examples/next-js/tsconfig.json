@@ -6,8 +6,10 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
-		"allowJs": true,
+		"allowJs": false,
 		"incremental": true,
+		"verbatimModuleSyntax": false,
+		"isolatedDeclarations": false,
 		"plugins": [{ "name": "next" }]
 	},
 	"exclude": ["node_modules"],

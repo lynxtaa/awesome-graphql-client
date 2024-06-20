@@ -1,13 +1,13 @@
-import { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { extractFiles } from 'extract-files'
 
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
 import { formatGetRequestUrl } from './util/formatGetRequestUrl'
-import { isFileUpload, FileUpload } from './util/isFileUpload'
+import { isFileUpload, type FileUpload } from './util/isFileUpload'
 import { isResponseJSON } from './util/isResponseJSON'
 import { normalizeHeaders } from './util/normalizeHeaders'
-import { FetchOptions, RequestResult } from './util/types'
+import { type FetchOptions, type RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
 	TQuery = string,

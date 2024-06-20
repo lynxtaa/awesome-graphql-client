@@ -1,4 +1,7 @@
 {
 	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"verbatimModuleSyntax": false
+	},
 	"exclude": ["**/test/*", "**/*.test.ts"]
 }

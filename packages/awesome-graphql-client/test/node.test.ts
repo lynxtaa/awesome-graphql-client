@@ -6,12 +6,12 @@ import { createReadStream, statSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { Readable } from 'node:stream'
 
-import { FileUpload, GraphQLUpload } from 'graphql-upload'
+import { type FileUpload, GraphQLUpload } from 'graphql-upload'
 
 import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'
 
-import { createServer, TestServer } from './jest/gqlServer'
+import { createServer, type TestServer } from './jest/gqlServer'
 import { streamToString } from './streamToString'
 
 const maybeDescribe = (condition: boolean) => (condition ? describe : describe.skip)

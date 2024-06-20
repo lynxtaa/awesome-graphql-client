@@ -14,8 +14,11 @@
 		"noUnusedLocals": true,
 		"moduleDetection": "force",
 		"moduleResolution": "Bundler",
+		"isolatedDeclarations": true,
+		"isolatedModules": true,
 		"module": "ESNext",
-		"noEmit": true
+		"noEmit": true,
+		"verbatimModuleSyntax": true
 	},
 	"exclude": ["node_modules"],
 	"include": ["**/*.ts", "**/*.tsx"]

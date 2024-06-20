@@ -3,7 +3,10 @@ import { render, screen } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
 
 import { server, graphql } from '../jest/testServer'
-import { GetCharactersQuery, GetCharactersQueryVariables } from '../lib/graphql-queries'
+import {
+	type GetCharactersQuery,
+	type GetCharactersQueryVariables,
+} from '../lib/graphql-queries'
 import Home from '../pages/index'
 
 const withProvider = ({ children }: { children?: React.ReactNode }) => (

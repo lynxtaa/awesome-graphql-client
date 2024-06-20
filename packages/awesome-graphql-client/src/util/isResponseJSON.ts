@@ -1,4 +1,4 @@
-import { RequestResult } from './types'
+import { type RequestResult } from './types'
 
 export const isResponseJSON = (response: {
 	headers: RequestResult['headers']
