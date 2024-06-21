@@ -15,7 +15,7 @@
     "undici": "6.13.0"
   },
   "devDependencies": {
-    "@lynxtaa/eslint-config": "0.9.0",
+    "@lynxtaa/eslint-config": "0.10.0",
     "@lynxtaa/prettier-config": "0.2.0",
     "eslint": "8.57.0",
     "prettier": "3.3.2",

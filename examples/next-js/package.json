@@ -26,7 +26,7 @@
     "@graphql-codegen/typescript": "4.0.6",
     "@graphql-codegen/typescript-operations": "4.2.0",
     "@graphql-codegen/typescript-react-query": "6.1.0",
-    "@lynxtaa/eslint-config": "0.9.0",
+    "@lynxtaa/eslint-config": "0.10.0",
     "@lynxtaa/prettier-config": "0.2.0",
     "@tanstack/react-query": "5.29.2",
     "@testing-library/jest-dom": "6.4.2",
