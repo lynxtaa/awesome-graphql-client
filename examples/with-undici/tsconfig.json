@@ -1,4 +1,7 @@
 {
-	"extends": "../../tsconfig.json",
-	"include": ["src/**/*.ts"]
+	"extends": "@total-typescript/tsconfig/bundler/no-dom/app",
+	"compilerOptions": {
+		"outDir": "build"
+	},
+	"include": ["src"]
 }

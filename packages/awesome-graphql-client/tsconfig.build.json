@@ -3,5 +3,5 @@
 	"compilerOptions": {
 		"verbatimModuleSyntax": false
 	},
-	"exclude": ["**/test/*", "**/*.test.ts"]
+	"exclude": ["**/test/*", "**/*.test.ts", "tsup.config.ts"]
 }

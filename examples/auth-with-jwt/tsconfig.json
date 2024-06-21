@@ -1,4 +1,5 @@
 {
-	"extends": "../../tsconfig.json",
+	"extends": "@total-typescript/tsconfig/bundler/dom/app",
+	"exclude": ["node_modules"],
 	"include": ["**/*.ts"]
 }

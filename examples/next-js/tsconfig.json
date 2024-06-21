@@ -1,15 +1,9 @@
 {
-	"extends": "../../tsconfig.json",
+	"extends": "@total-typescript/tsconfig/bundler/dom/app",
 	"compilerOptions": {
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"allowJs": false,
 		"incremental": true,
 		"verbatimModuleSyntax": false,
-		"isolatedDeclarations": false,
+		"jsx": "preserve",
 		"plugins": [{ "name": "next" }]
 	},
 	"exclude": ["node_modules"],

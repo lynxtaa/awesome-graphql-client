@@ -17,6 +17,7 @@
   "prettier": "@lynxtaa/prettier-config",
   "devDependencies": {
     "@lynxtaa/prettier-config": "0.2.0",
+    "@total-typescript/tsconfig": "1.0.4",
     "awesome-graphql-client": "workspace:*",
     "husky": "9.0.11",
     "lint-staged": "15.2.7",

@@ -95,7 +95,7 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 			#filePath: string
 			name: string
 			lastModified: number
-			type: string
+			override type: string
 
 			constructor(filePath: string) {
 				const { mtime, size } = statSync(filePath)
@@ -117,7 +117,7 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 				})
 			}
 
-			stream(): ReadableStream<any> {
+			override stream(): ReadableStream<any> {
 				return Readable.toWeb(createReadStream(this.#filePath)) as ReadableStream
 			}
 		}

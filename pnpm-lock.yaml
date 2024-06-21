@@ -11,6 +11,9 @@ importers:
       '@lynxtaa/prettier-config':
         specifier: 0.2.0
         version: 0.2.0(prettier@3.3.2)
+      '@total-typescript/tsconfig':
+        specifier: 1.0.4
+        version: 1.0.4
       awesome-graphql-client:
         specifier: workspace:*
         version: link:packages/awesome-graphql-client
@@ -1553,6 +1556,9 @@ packages:
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
+
+  '@total-typescript/tsconfig@1.0.4':
+    resolution: {integrity: sha512-fO4ctMPGz1kOFOQ4RCPBRBfMy3gDn+pegUfrGyUFRMv/Rd0ZM3/SHH3hFCYG4u6bPLG8OlmOGcBLDexvyr3A5w==}
 
   '@types/accepts@1.3.6':
     resolution: {integrity: sha512-6+qlUg57yfE9OO63wnsJXLeq9cG3gSHBBIxNMOjNrbDRlDnm/NaR7RctfYcVCPq+j7d+MwOxqVEludH5+FKrlg==}
@@ -7350,6 +7356,8 @@ snapshots:
       '@testing-library/dom': 10.0.0
 
   '@tootallnate/once@2.0.0': {}
+
+  '@total-typescript/tsconfig@1.0.4': {}
 
   '@types/accepts@1.3.6':
     dependencies:

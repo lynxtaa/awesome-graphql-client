@@ -1,19 +1,7 @@
 {
+	"extends": "@total-typescript/tsconfig/tsc/no-dom/app",
 	"compilerOptions": {
-		"target": "ESNext",
-		"lib": ["ESNext"],
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noUncheckedIndexedAccess": true,
-		"module": "CommonJS",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"declaration": true,
-		"declarationMap": true,
-		"noUnusedLocals": true,
+		"verbatimModuleSyntax": false,
 		"outDir": "build"
 	},
 	"include": ["src"]

@@ -1,25 +1,5 @@
 {
-	"compilerOptions": {
-		"target": "ES2022",
-		"lib": ["es2022", "dom", "dom.iterable"],
-		"skipLibCheck": true,
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noUncheckedIndexedAccess": true,
-		"resolveJsonModule": true,
-		"declaration": true,
-		"declarationMap": true,
-		"noUnusedLocals": true,
-		"moduleDetection": "force",
-		"moduleResolution": "Bundler",
-		"isolatedDeclarations": true,
-		"isolatedModules": true,
-		"module": "ESNext",
-		"noEmit": true,
-		"verbatimModuleSyntax": true
-	},
+	"extends": "@total-typescript/tsconfig/bundler/no-dom/app",
 	"exclude": ["node_modules"],
 	"include": ["**/*.ts", "**/*.tsx"]
 }
