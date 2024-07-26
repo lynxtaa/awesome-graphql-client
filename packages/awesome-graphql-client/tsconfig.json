@@ -1,4 +1,8 @@
 {
-	"extends": "@total-typescript/tsconfig/bundler/dom/library",
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"isolatedDeclarations": true,
+		"declaration": true
+	},
 	"include": ["src", "test", "./tsup.config.ts"]
 }

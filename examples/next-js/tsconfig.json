@@ -1,10 +1,11 @@
 {
-	"extends": "@total-typescript/tsconfig/bundler/dom/app",
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"incremental": true,
 		"verbatimModuleSyntax": false,
 		"jsx": "preserve",
-		"plugins": [{ "name": "next" }]
+		"plugins": [{ "name": "next" }],
+		"lib": ["es2022", "dom", "dom.iterable"]
 	},
 	"exclude": ["node_modules"],
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]

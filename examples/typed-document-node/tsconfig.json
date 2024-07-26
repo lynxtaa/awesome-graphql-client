@@ -1,5 +1,5 @@
 {
-	"extends": "@total-typescript/tsconfig/tsc/no-dom/app",
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"verbatimModuleSyntax": false,
 		"outDir": "build"

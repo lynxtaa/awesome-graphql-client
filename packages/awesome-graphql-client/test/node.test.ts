@@ -5,6 +5,7 @@
 import { createReadStream, statSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { Readable } from 'node:stream'
+import { ReadableStream as WebReadableStream } from 'node:stream/web'
 
 import { type FileUpload, GraphQLUpload } from 'graphql-upload'
 
@@ -117,8 +118,8 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 				})
 			}
 
-			override stream(): ReadableStream<any> {
-				return Readable.toWeb(createReadStream(this.#filePath)) as ReadableStream
+			override stream(): WebReadableStream<any> {
+				return Readable.toWeb(createReadStream(this.#filePath))
 			}
 		}
 
@@ -188,7 +189,7 @@ maybeDescribe(nodeMajorVersion >= 20)('node >= 20', () => {
 		`
 
 		const blob = await openAsBlob('./test/fixtures/data.txt')
-		const file = new File([blob as BlobPart], 'data.txt')
+		const file = new File([blob], 'data.txt')
 
 		const data = await client.request<UploadFile, UploadFileVariables>(query, {
 			file,
