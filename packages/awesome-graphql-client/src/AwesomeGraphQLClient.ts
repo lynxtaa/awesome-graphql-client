@@ -9,6 +9,8 @@ import { isResponseJSON } from './util/isResponseJSON'
 import { normalizeHeaders } from './util/normalizeHeaders'
 import { FetchOptions, RequestResult } from './util/types'
 
+type AppendFile = (form: any, key: string, file: any) => void
+
 export class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends FetchOptions = RequestInit,
@@ -21,6 +23,7 @@ export class AwesomeGraphQLClient<
 	private FormData: any
 	private onError?: (error: GraphQLRequestError | Error) => void
 	private isFileUpload: (value: unknown) => boolean
+	private appendFile: AppendFile
 
 	constructor(config: {
 		/** GraphQL endpoint */
@@ -36,7 +39,9 @@ export class AwesomeGraphQLClient<
 		/** Callback will be called on error  */
 		onError?: (error: GraphQLRequestError | Error) => void
 		/** Custom predicate function for checking if value is a file */
-		isFileUpload?: (value: unknown) => boolean
+		isFileUpload?: (value: unknown) => boolean,
+		/** Custom function for appending a file FormData */
+		appendFile?:AppendFile
 	}) {
 		assert(config.endpoint !== undefined, 'endpoint is required')
 
@@ -74,6 +79,7 @@ export class AwesomeGraphQLClient<
 		this.formatQuery = config.formatQuery
 		this.onError = config.onError
 		this.isFileUpload = config.isFileUpload || isFileUpload
+		this.appendFile = config.appendFile || ((form: typeof this.FormData, key: string, file: any) => form.append(key, file))
 	}
 
 	private createRequestBody(
@@ -109,7 +115,7 @@ export class AwesomeGraphQLClient<
 
 		i = 0
 		for (const file of files.keys()) {
-			form.append(`${++i}`, file)
+			this.appendFile(form,`${++i}`, file)
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
