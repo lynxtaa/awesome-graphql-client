@@ -16,4 +16,5 @@ export interface FetchOptions {
 	method?: string
 	headers?: any
 	body?: any
+	allowPartialResponse?: boolean
 }

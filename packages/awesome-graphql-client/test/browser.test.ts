@@ -579,6 +579,93 @@ it('throws an error if response is OK but has errors', async () => {
 	)
 })
 
+it('returns no error if allowPartialData is true and response is OK but has errors', async () => {
+	const schema = `
+    type Query {
+      error: String
+      successful: String
+    }
+  `
+
+	const resolvers = {
+		Query: {
+			error() {
+				throw new mercurius.ErrorWithProps('Error', {})
+			},
+			successful() {
+				return 'Runs OK'
+			},
+		},
+	}
+
+	server = await createServer(schema, resolvers)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: server.endpoint,
+		fetchOptions: { allowPartialResponse: true },
+	})
+
+	expect(client.getEndpoint()).toBe(server.endpoint)
+
+	const query = `
+		 query Test {
+			 error
+			 successful
+		 }
+	 `
+
+	const { data } = (await client.requestSafe(query)) as {
+		ok: false
+		data: Record<string, any>
+		error: Error | GraphQLRequestError<Response>
+	}
+
+	expect(data).toEqual({ error: null, successful: 'Runs OK' })
+})
+
+it('returns error if allowPartialData is false and response is OK but has errors', async () => {
+	const schema = `
+    type Query {
+      error: String
+      successful: String
+    }
+  `
+
+	const resolvers = {
+		Query: {
+			error() {
+				throw new mercurius.ErrorWithProps('testError', {})
+			},
+			successful() {
+				return 'Runs OK'
+			},
+		},
+	}
+
+	server = await createServer(schema, resolvers)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: server.endpoint,
+		fetchOptions: { allowPartialResponse: false },
+	})
+
+	expect(client.getEndpoint()).toBe(server.endpoint)
+
+	const query = `
+		 query Test {
+			 error
+			 successful
+		 }
+	 `
+
+	const result = (await client.requestSafe(query)) as {
+		ok: false
+		error: Error | GraphQLRequestError<Response>
+	}
+
+	expect(result.error.message).toEqual('GraphQL Request Error: testError')
+})
+
 it('calls onError hook if provided', async () => {
 	server = await createServer(
 		`

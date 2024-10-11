@@ -11,7 +11,7 @@ import { FetchOptions, RequestResult } from './util/types'
 
 export class AwesomeGraphQLClient<
 	TQuery = string,
-	TFetchOptions extends FetchOptions = RequestInit,
+	TFetchOptions extends FetchOptions = RequestInit & { allowPartialData?: boolean },
 	TRequestResult extends RequestResult = Response,
 > {
 	private endpoint: string
@@ -247,7 +247,10 @@ export class AwesomeGraphQLClient<
 
 			const { data, errors } = await response.json()
 
-			if (errors?.[0] !== undefined) {
+			const partialDataAllowed =
+				options.allowPartialResponse !== null && options.allowPartialResponse === true
+
+			if (!partialDataAllowed && errors?.[0] !== undefined) {
 				throw new GraphQLRequestError({
 					query: queryAsString,
 					variables,
