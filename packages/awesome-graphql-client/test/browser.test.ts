@@ -613,14 +613,21 @@ it('returns no error if allowPartialData is true and response is OK but has erro
 			 successful
 		 }
 	 `
-
-	const { data } = (await client.requestSafe(query)) as {
-		ok: false
-		data: Record<string, any>
-		error: Error | GraphQLRequestError<Response>
-	}
-
-	expect(data).toEqual({ error: null, successful: 'Runs OK' })
+	const result = await client.requestSafe(query)
+	expect(result.ok).toBeTruthy()
+	expect(result.ok && result.data).toEqual({ error: null, successful: 'Runs OK' })
+	expect(result.ok && result.errors).toEqual([
+		{
+			locations: [
+				{
+					column: 5,
+					line: 3,
+				},
+			],
+			message: 'Error',
+			path: ['error'],
+		},
+	])
 })
 
 it('returns error if allowPartialData is false and response is OK but has errors', async () => {
@@ -658,12 +665,9 @@ it('returns error if allowPartialData is false and response is OK but has errors
 		 }
 	 `
 
-	const result = (await client.requestSafe(query)) as {
-		ok: false
-		error: Error | GraphQLRequestError<Response>
-	}
+	const result = await client.requestSafe(query)
 
-	expect(result.error.message).toEqual('GraphQL Request Error: testError')
+	expect(!result.ok && result.error.message).toEqual('GraphQL Request Error: testError')
 })
 
 it('calls onError hook if provided', async () => {

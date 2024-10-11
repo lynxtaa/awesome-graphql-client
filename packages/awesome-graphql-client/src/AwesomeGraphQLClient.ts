@@ -1,7 +1,7 @@
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { extractFiles } from 'extract-files'
 
-import { GraphQLRequestError } from './GraphQLRequestError'
+import { GraphQLFieldError, GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
 import { formatGetRequestUrl } from './util/formatGetRequestUrl'
 import { isFileUpload, FileUpload } from './util/isFileUpload'
@@ -177,7 +177,12 @@ export class AwesomeGraphQLClient<
 		variables?: TVariables,
 		fetchOptions?: TFetchOptions,
 	): Promise<
-		| { ok: true; data: TData; response: TRequestResult }
+		| {
+				ok: true
+				data: TData
+				response: TRequestResult
+				errors?: GraphQLFieldError[]
+		  }
 		| { ok: false; error: GraphQLRequestError<TRequestResult> | Error }
 	> {
 		try {
@@ -260,7 +265,7 @@ export class AwesomeGraphQLClient<
 				})
 			}
 
-			return { ok: true, data, response }
+			return { ok: true, data, response, errors }
 		} catch (err) {
 			const error = err instanceof Error ? err : new Error(String(err))
 

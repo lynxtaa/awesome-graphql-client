@@ -401,6 +401,7 @@ const client = new AwesomeGraphQLClient({
 See also
 
 - https://spec.graphql.org/October2021/#sec-Errors.Field-errors
+- https://spec.graphql.org/October2021/#sec-Errors.Error-result-format
 
 ```js
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')

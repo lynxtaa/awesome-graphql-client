@@ -36,3 +36,15 @@ export class GraphQLRequestError<
 		})
 	}
 }
+
+export type GraphQLFieldError = {
+	message: string
+	locations: GraphQLErrorLocation[]
+	extensions?: { [key: string]: unknown }
+	path: string[]
+}
+
+export type GraphQLErrorLocation = {
+	line: number
+	column: number
+}
