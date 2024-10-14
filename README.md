@@ -197,7 +197,7 @@ const client = new AwesomeGraphQLClient(config)
 - `client.setEndpoint(): string`: Sets a new GraphQL endpoint
 - `client.getEndpoint(): string`: Returns current GraphQL endpoint
 - `client.request(query, variables?, fetchOptions?): Promise<data>`: Sends GraphQL Request and returns data or throws an error
-- `client.requestSafe(query, variables?, fetchOptions?): Promise<{ data, response } | { error }>`: Sends GraphQL Request and returns object with 'ok: true', 'data' and 'response' or with 'ok: false' and 'error' fields. See examples below. _Notice: this function never throws_.
+- `client.requestSafe(query, variables?, fetchOptions?): Promise<{ ok: true, data, response } | { ok: false, error, partialData }>`: Sends GraphQL Request and returns object with 'ok: true', 'data' and 'response' or with 'ok: false', 'error' and 'partialData' fields. See examples below. _Notice: this function never throws_.
 
 ## `GraphQLRequestError`
 
@@ -207,6 +207,7 @@ const client = new AwesomeGraphQLClient(config)
 - `query`: _string_ - GraphQL query
 - `variables`: _string | undefined_ - GraphQL variables
 - `response`: _Response_ - response returned from fetch
+- `fieldErrors`: _GraphQLFieldError[]_ - GraphQL field errors
 
 ## Examples
 

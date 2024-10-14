@@ -185,7 +185,7 @@ export class AwesomeGraphQLClient<
 		| { ok: true; data: TData; response: TRequestResult }
 		| {
 				ok: false
-				data?: DeepNullable<TData>
+				partialData?: DeepNullable<TData>
 				error: GraphQLRequestError<TRequestResult> | Error
 		  }
 	> {
@@ -290,11 +290,11 @@ export class AwesomeGraphQLClient<
 				try {
 					this.onError(error)
 				} catch {
-					return { ok: false, error, data: partialData }
+					return { ok: false, error, partialData }
 				}
 			}
 
-			return { ok: false, error, data: partialData }
+			return { ok: false, error, partialData }
 		}
 	}
 
