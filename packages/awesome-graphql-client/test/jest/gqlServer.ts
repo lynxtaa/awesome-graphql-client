@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import fastify, { FastifyInstance } from 'fastify'
+import fastify, { type FastifyInstance } from 'fastify'
 import { createHttpTerminator } from 'http-terminator'
-import mercurius, { IResolvers, MercuriusOptions } from 'mercurius'
+import mercurius, { type IResolvers, type MercuriusOptions } from 'mercurius'
 import upload from 'mercurius-upload'
 
 export type TestServer = FastifyInstance & {

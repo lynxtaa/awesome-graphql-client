@@ -1,18 +1,18 @@
 /**
  * @jest-environment jsdom
  */
-import { IncomingHttpHeaders } from 'node:http'
+import { type IncomingHttpHeaders } from 'node:http'
 
-import { TypedDocumentNode } from '@graphql-typed-document-node/core'
-import { print, DocumentNode } from 'graphql'
+import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { print, type DocumentNode } from 'graphql'
 import graphqlTag from 'graphql-tag'
-import { GraphQLUpload, FileUpload } from 'graphql-upload'
+import { GraphQLUpload, type FileUpload } from 'graphql-upload'
 import mercurius from 'mercurius'
 
 import { AwesomeGraphQLClient, GraphQLRequestError } from '../src/index'
 import { gql } from '../src/util/gql'
 
-import { createServer, TestServer } from './jest/gqlServer'
+import { createServer, type TestServer } from './jest/gqlServer'
 import { streamToString } from './streamToString'
 
 let server: TestServer

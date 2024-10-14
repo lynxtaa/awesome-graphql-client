@@ -3,7 +3,7 @@ import {
 	QueryClientProvider,
 	HydrationBoundary,
 } from '@tanstack/react-query'
-import { AppProps } from 'next/app'
+import { type AppProps } from 'next/app'
 import { StrictMode } from 'react'
 
 // https://react-query.tanstack.com/guides/ssr

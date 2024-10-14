@@ -5,13 +5,14 @@
 import { createReadStream, statSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { Readable } from 'node:stream'
+import { ReadableStream as WebReadableStream } from 'node:stream/web'
 
-import { FileUpload, GraphQLUpload } from 'graphql-upload'
+import { type FileUpload, GraphQLUpload } from 'graphql-upload'
 
 import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'
 
-import { createServer, TestServer } from './jest/gqlServer'
+import { createServer, type TestServer } from './jest/gqlServer'
 import { streamToString } from './streamToString'
 
 const maybeDescribe = (condition: boolean) => (condition ? describe : describe.skip)
@@ -95,7 +96,7 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 			#filePath: string
 			name: string
 			lastModified: number
-			type: string
+			override type: string
 
 			constructor(filePath: string) {
 				const { mtime, size } = statSync(filePath)
@@ -117,8 +118,8 @@ maybeDescribe(nodeMajorVersion < 20)('node < 20', () => {
 				})
 			}
 
-			stream(): ReadableStream<any> {
-				return Readable.toWeb(createReadStream(this.#filePath)) as ReadableStream
+			override stream(): WebReadableStream<any> {
+				return Readable.toWeb(createReadStream(this.#filePath))
 			}
 		}
 
@@ -188,7 +189,7 @@ maybeDescribe(nodeMajorVersion >= 20)('node >= 20', () => {
 		`
 
 		const blob = await openAsBlob('./test/fixtures/data.txt')
-		const file = new File([blob as BlobPart], 'data.txt')
+		const file = new File([blob], 'data.txt')
 
 		const data = await client.request<UploadFile, UploadFileVariables>(query, {
 			file,

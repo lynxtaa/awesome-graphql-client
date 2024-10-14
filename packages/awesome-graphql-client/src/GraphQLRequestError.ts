@@ -1,4 +1,4 @@
-import { RequestResult } from './util/types'
+import { type RequestResult } from './util/types'
 
 export class GraphQLRequestError<
 	TResponse extends RequestResult = Response,

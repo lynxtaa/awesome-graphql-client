@@ -1,12 +1,13 @@
 import { copyFile } from 'node:fs/promises'
 
-import { defineConfig, Options } from 'tsup'
+import { defineConfig, type Options } from 'tsup'
 
 export default defineConfig(options => {
 	const commonOptions: Partial<Options> = {
 		entry: {
 			'awesome-graphql-client': 'src/index.ts',
 		},
+		tsconfig: './tsconfig.build.json',
 		...options,
 	}
 
@@ -35,4 +36,4 @@ export default defineConfig(options => {
 			outExtension: () => ({ js: '.cjs' }),
 		},
 	]
-})
+}) as Options

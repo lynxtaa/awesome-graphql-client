@@ -1,21 +1,25 @@
 {
 	"compilerOptions": {
-		"target": "ES2022",
-		"lib": ["es2022", "dom", "dom.iterable"],
-		"skipLibCheck": true,
+		/* Base Options: */
 		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noUncheckedIndexedAccess": true,
+		"skipLibCheck": true,
+		"target": "es2022",
 		"resolveJsonModule": true,
-		"declaration": true,
-		"declarationMap": true,
-		"noUnusedLocals": true,
 		"moduleDetection": "force",
-		"moduleResolution": "Bundler",
-		"module": "ESNext",
-		"noEmit": true
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+
+		/* Strictness */
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+
+		/* If NOT transpiling with TypeScript: */
+		"module": "preserve",
+		"noEmit": true,
+
+		/* If your code doesn't run in the DOM: */
+		"lib": ["es2022"]
 	},
 	"exclude": ["node_modules"],
 	"include": ["**/*.ts", "**/*.tsx"]

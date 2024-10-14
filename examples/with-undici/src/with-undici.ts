@@ -3,7 +3,7 @@
 // Notice: it's experimental and only Node 16 is supported
 
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
-import { fetch, RequestInit, Response, FormData, File } from 'undici'
+import { fetch, type RequestInit, type Response, FormData, File } from 'undici'
 
 const client = new AwesomeGraphQLClient<string, RequestInit, Response>({
 	endpoint: 'http://localhost:8080/graphql',
