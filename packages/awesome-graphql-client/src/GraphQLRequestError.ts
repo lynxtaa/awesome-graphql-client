@@ -26,9 +26,16 @@ export class GraphQLRequestError<
 	}) {
 		super(`GraphQL Request Error: ${message}`)
 		this.query = query
-		this.variables = variables
-		this.extensions = extensions
-		this.fieldErrors = fieldErrors
+
+		if (variables) {
+			this.variables = variables
+		}
+		if (extensions) {
+			this.extensions = extensions
+		}
+		if (fieldErrors) {
+			this.fieldErrors = fieldErrors
+		}
 		// Hide Response from `console.log(error)`
 		Object.defineProperty(this, 'response', {
 			enumerable: false,
