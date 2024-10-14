@@ -14,6 +14,13 @@ import {
 	type RequestResult,
 } from './util/types'
 
+type GraphQLResponse<TData extends Record<string, any>> =
+	| { data: TData; errors: undefined }
+	| {
+			data?: DeepNullable<TData>
+			errors: GraphQLFieldError[]
+	  }
+
 export class AwesomeGraphQLClient<
 	TQuery = string,
 	TFetchOptions extends FetchOptions = RequestInit,
@@ -235,13 +242,10 @@ export class AwesomeGraphQLClient<
 
 			if (!response.ok) {
 				if (isResponseJSON(response)) {
-					const { data, errors } = (await response.json()) as {
-						data?: DeepNullable<TData>
-						errors?: GraphQLFieldError[]
-					}
+					const { data, errors } = (await response.json()) as GraphQLResponse<TData>
 
 					if (errors?.[0] !== undefined) {
-						partialData = data
+						partialData = data as DeepNullable<TData>
 
 						throw new GraphQLRequestError({
 							query: queryAsString,
@@ -262,12 +266,7 @@ export class AwesomeGraphQLClient<
 				})
 			}
 
-			const result = (await response.json()) as
-				| { data: TData; errors: undefined }
-				| {
-						data?: DeepNullable<TData>
-						errors: [GraphQLFieldError, ...GraphQLFieldError[]]
-				  }
+			const result = (await response.json()) as GraphQLResponse<TData>
 
 			if (result.errors?.[0] !== undefined) {
 				partialData = result.data as DeepNullable<TData>
