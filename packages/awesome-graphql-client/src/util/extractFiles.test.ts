@@ -47,7 +47,7 @@ it('works with FileList', () => {
 			[file1, ['variables.d.a.0']],
 			[file2, ['variables.d.a.1']],
 			[file3, ['variables.d.a.2']],
-		] as any),
+		] as any[]),
 	)
 })
 
@@ -95,7 +95,7 @@ it.each([
 			],
 			[file2, ['variables.d.b', 'variables.e.1', 'variables.g.0.b', 'variables.h.0.0']],
 			[file3, ['variables.f', 'variables.h.0.1']],
-		] as any),
+		] as any[]),
 	)
 })
 
@@ -106,7 +106,7 @@ describe('handles circular dependencies', () => {
 		a.b = b
 		b.a = a
 
-		expect(() => extractFiles({ a, b }, isFileUpload)).toThrowError(
+		expect(() => extractFiles({ a, b }, isFileUpload)).toThrow(
 			'Circular dependency detected in a.b.a',
 		)
 	})
@@ -116,10 +116,9 @@ describe('handles circular dependencies', () => {
 			c: [{ d: '', e: {} }],
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		b.c[0]!.e = b
 
-		expect(() => extractFiles({ b }, isFileUpload)).toThrowError(
+		expect(() => extractFiles({ b }, isFileUpload)).toThrow(
 			'Circular dependency detected in b.c.0.e',
 		)
 	})

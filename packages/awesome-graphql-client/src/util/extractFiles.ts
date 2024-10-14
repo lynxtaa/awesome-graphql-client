@@ -30,8 +30,7 @@ export function extractFiles<TUpload>(
 	const stackSet = new Set<any>()
 
 	function extract(paths: string[], value: unknown, target: any): void {
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		const currentPath = paths[paths.length - 1]!
+		const currentPath = paths.at(-1)!
 
 		if (isUpload(value)) {
 			let saved = files.get(value)
@@ -51,6 +50,7 @@ export function extractFiles<TUpload>(
 
 			if (isArray(value)) {
 				newObj = []
+				// eslint-disable-next-line unicorn/no-for-loop
 				for (let i = 0; i < value.length; i++) {
 					extract([...paths, String(i)], value[i], newObj)
 				}
