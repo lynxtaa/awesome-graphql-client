@@ -29,4 +29,4 @@ export type DeepNullable<T> = T extends (infer R)[]
 	? (DeepNullable<R> | null)[]
 	: T extends Record<string, any>
 		? { [P in keyof T]: DeepNullable<T[P]> | null }
-		: T
+		: T | null
