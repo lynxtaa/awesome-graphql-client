@@ -12,28 +12,33 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [18.x, 20.x]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
 
       - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Check code
-        run: npm run validate
+        run: pnpm run validate
 
       - name: Run the tests and generate coverage report
-        run: npm test
+        run: pnpm run test:coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./packages/awesome-graphql-client
 
       - name: Build
-        run: npm run build
+        run: pnpm run build

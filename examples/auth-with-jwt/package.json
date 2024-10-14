@@ -1,0 +1,23 @@
+{
+  "name": "auth-with-jwt-example",
+  "private": true,
+  "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
+  "scripts": {
+    "check-format": "pnpm run prettier --check",
+    "check-types": "tsc",
+    "format": "pnpm run prettier --write",
+    "lint": "eslint --max-warnings 0 --ext js,ts .",
+    "prettier": "prettier ."
+  },
+  "prettier": "@lynxtaa/prettier-config",
+  "dependencies": {
+    "awesome-graphql-client": "*"
+  },
+  "devDependencies": {
+    "@lynxtaa/eslint-config": "0.10.0",
+    "@lynxtaa/prettier-config": "0.2.0",
+    "eslint": "8.57.0",
+    "prettier": "3.3.3",
+    "typescript": "5.6.3"
+  }
+}

@@ -1,4 +1,5 @@
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
+import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { gqlFetcher } from './gqlFetcher'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
@@ -202,61 +203,32 @@ export type GetCharactersQuery = {
 	} | null
 }
 
-export const GetCharactersDocument = {
-	kind: 'Document',
-	definitions: [
-		{
-			kind: 'OperationDefinition',
-			operation: 'query',
-			name: { kind: 'Name', value: 'GetCharacters' },
-			variableDefinitions: [
-				{
-					kind: 'VariableDefinition',
-					variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
-					type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-				},
-			],
-			selectionSet: {
-				kind: 'SelectionSet',
-				selections: [
-					{
-						kind: 'Field',
-						name: { kind: 'Name', value: 'characters' },
-						arguments: [
-							{
-								kind: 'Argument',
-								name: { kind: 'Name', value: 'filter' },
-								value: {
-									kind: 'ObjectValue',
-									fields: [
-										{
-											kind: 'ObjectField',
-											name: { kind: 'Name', value: 'name' },
-											value: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
-										},
-									],
-								},
-							},
-						],
-						selectionSet: {
-							kind: 'SelectionSet',
-							selections: [
-								{
-									kind: 'Field',
-									name: { kind: 'Name', value: 'results' },
-									selectionSet: {
-										kind: 'SelectionSet',
-										selections: [
-											{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
-											{ kind: 'Field', name: { kind: 'Name', value: 'name' } },
-										],
-									},
-								},
-							],
-						},
-					},
-				],
-			},
-		},
-	],
-} as unknown as DocumentNode<GetCharactersQuery, GetCharactersQueryVariables>
+export const GetCharactersDocument = `
+    query GetCharacters($name: String) {
+  characters(filter: {name: $name}) {
+    results {
+      id
+      name
+    }
+  }
+}
+    `
+
+export const useGetCharactersQuery = <TData = GetCharactersQuery, TError = Error>(
+	variables?: GetCharactersQueryVariables,
+	options?: Omit<UseQueryOptions<GetCharactersQuery, TError, TData>, 'queryKey'> & {
+		queryKey?: UseQueryOptions<GetCharactersQuery, TError, TData>['queryKey']
+	},
+) => {
+	return useQuery<GetCharactersQuery, TError, TData>({
+		queryKey: variables === undefined ? ['GetCharacters'] : ['GetCharacters', variables],
+		queryFn: gqlFetcher<GetCharactersQuery, GetCharactersQueryVariables>(
+			GetCharactersDocument,
+			variables,
+		),
+		...options,
+	})
+}
+
+useGetCharactersQuery.getKey = (variables?: GetCharactersQueryVariables) =>
+	variables === undefined ? ['GetCharacters'] : ['GetCharacters', variables]

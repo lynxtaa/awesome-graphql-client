@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v1.0.0...v1.0.1) (2023-10-22)
+
+## [1.0.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.14.1...v1.0.0) (2023-09-15)
+
+### [0.14.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.14.0...v0.14.1) (2023-08-01)
+
+## [0.14.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.13.0...v0.14.0) (2023-07-30)
+
+
+### Features
+
+* add setEndpoint method ([#80](https://github.com/lynxtaa/awesome-graphql-client/issues/80)) ([f468e07](https://github.com/lynxtaa/awesome-graphql-client/commit/f468e070a48fabd2fe7d7737708f5aa0e8be2ca0))
+
+## [0.13.0](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.12.1...v0.13.0) (2022-10-24)
+
+
+### Features
+
+* add extensions to GraphQLRequestError ([#76](https://github.com/lynxtaa/awesome-graphql-client/issues/76)) ([a23cab9](https://github.com/lynxtaa/awesome-graphql-client/commit/a23cab93daf18364be2fe762072dc9f5000068ef))
+
 ### [0.12.1](https://github.com/lynxtaa/awesome-graphql-client/compare/v0.12.0...v0.12.1) (2022-02-12)
 
 

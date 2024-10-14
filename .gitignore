@@ -1,3 +1,6 @@
 dist
 node_modules
 coverage
+.turbo
+tsconfig.tsbuildinfo
+/packages/awesome-graphql-client/README.md
