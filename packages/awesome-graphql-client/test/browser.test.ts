@@ -470,7 +470,7 @@ it('requestSafe returns error on fail', async () => {
 		partialData: null,
 	})
 
-	const { error } = getUsersResult as Exclude<typeof getUsersResult, { ok: true }>
+	const { error } = getUsersResult as Extract<typeof getUsersResult, { ok: false }>
 
 	expect(error.message).toBe(
 		'GraphQL Request Error: Cannot query field "users" on type "Query".',
@@ -519,7 +519,7 @@ it('requestSafe returns partial data on fail', async () => {
 		}
 	`)
 
-	const { error } = result as Exclude<typeof result, { ok: true }>
+	const { error } = result as Extract<typeof result, { ok: false }>
 
 	expect(error.message).toBe('GraphQL Request Error: Oops')
 	expect(Object.keys(error)).toEqual(['query', 'variables', 'extensions', 'fieldErrors'])

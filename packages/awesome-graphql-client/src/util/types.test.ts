@@ -22,7 +22,7 @@ describe('DeepNullable', () => {
 						b: number | null
 						c: (string | null)[] | null
 					} | null
-				}
+				} | null
 			>
 		>
 
