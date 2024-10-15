@@ -8,7 +8,7 @@ export interface Headers {
 export interface RequestResult {
 	ok: boolean
 	headers: Headers
-	json: () => Promise<any>
+	json: () => Promise<unknown>
 	status: number
 }
 
@@ -17,3 +17,16 @@ export interface FetchOptions {
 	headers?: any
 	body?: any
 }
+
+export type GraphQLFieldError = {
+	message: string
+	locations: { line: number; column: number }[]
+	path?: (string | number)[]
+	extensions?: Record<string, unknown>
+}
+
+export type DeepNullable<T> = T extends (infer R)[]
+	? (DeepNullable<R> | null)[]
+	: T extends Record<string, any>
+		? { [P in keyof T]: DeepNullable<T[P]> | null } | null
+		: T | null

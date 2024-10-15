@@ -464,18 +464,72 @@ it('requestSafe returns error on fail', async () => {
 		}
 	`)
 
-	expect(getUsersResult).toEqual({ ok: false, error: expect.any(GraphQLRequestError) })
+	expect(getUsersResult).toEqual({
+		ok: false,
+		error: expect.any(GraphQLRequestError),
+		partialData: null,
+	})
 
-	const { error } = getUsersResult as {
-		ok: false
-		error: Error | GraphQLRequestError<Response>
-	}
+	const { error } = getUsersResult as Extract<typeof getUsersResult, { ok: false }>
 
 	expect(error.message).toBe(
 		'GraphQL Request Error: Cannot query field "users" on type "Query".',
 	)
-	expect(Object.keys(error)).toEqual(['query', 'variables', 'extensions'])
+	expect(Object.keys(error)).toEqual(['query', 'variables', 'extensions', 'fieldErrors'])
+	expect((error as GraphQLRequestError).fieldErrors).toEqual([
+		{
+			locations: [{ column: 4, line: 2 }],
+			message: 'Cannot query field "users" on type "Query".',
+		},
+	])
 	expect((error as GraphQLRequestError).response.status).toBe(400)
+})
+
+it('requestSafe returns partial data on fail', async () => {
+	server = await createServer(
+		`
+			type Query {
+				error: String!
+				successful: String!
+			}
+		`,
+		{
+			Query: {
+				error() {
+					throw new Error('Oops')
+				},
+				successful() {
+					return 'Runs OK'
+				},
+			},
+		},
+	)
+
+	const client = new AwesomeGraphQLClient({
+		endpoint: server.endpoint,
+	})
+
+	const result = await client.requestSafe<{
+		error: string
+		successful: string
+	}>(`
+		query Test {
+			error
+			successful
+		}
+	`)
+
+	const { error } = result as Extract<typeof result, { ok: false }>
+
+	expect(error.message).toBe('GraphQL Request Error: Oops')
+	expect(Object.keys(error)).toEqual(['query', 'variables', 'extensions', 'fieldErrors'])
+	expect((error as GraphQLRequestError).fieldErrors).toEqual([
+		{
+			locations: [{ column: 4, line: 3 }],
+			message: 'Oops',
+			path: ['error'],
+		},
+	])
 })
 
 it('throw an error in no endpoint provided', () => {

@@ -7,7 +7,19 @@ import { formatGetRequestUrl } from './util/formatGetRequestUrl'
 import { isFileUpload, type FileUpload } from './util/isFileUpload'
 import { isResponseJSON } from './util/isResponseJSON'
 import { normalizeHeaders } from './util/normalizeHeaders'
-import { type FetchOptions, type RequestResult } from './util/types'
+import {
+	type DeepNullable,
+	type FetchOptions,
+	type GraphQLFieldError,
+	type RequestResult,
+} from './util/types'
+
+type GraphQLResponse<TData extends Record<string, any>> =
+	| { data: TData; errors: undefined }
+	| {
+			data?: DeepNullable<TData>
+			errors: GraphQLFieldError[]
+	  }
 
 export class AwesomeGraphQLClient<
 	TQuery = string,
@@ -178,8 +190,14 @@ export class AwesomeGraphQLClient<
 		fetchOptions?: TFetchOptions,
 	): Promise<
 		| { ok: true; data: TData; response: TRequestResult }
-		| { ok: false; error: GraphQLRequestError<TRequestResult> | Error }
+		| {
+				ok: false
+				partialData?: DeepNullable<TData>
+				error: GraphQLRequestError<TRequestResult> | Error
+		  }
 	> {
+		let partialData: DeepNullable<TData> | undefined = undefined
+
 		try {
 			const queryAsString = this.formatQuery ? this.formatQuery(query as TQuery) : query
 
@@ -224,15 +242,18 @@ export class AwesomeGraphQLClient<
 
 			if (!response.ok) {
 				if (isResponseJSON(response)) {
-					const { errors } = await response.json()
+					const { data, errors } = (await response.json()) as GraphQLResponse<TData>
 
-					if (errors?.[0]?.message !== undefined) {
+					if (errors?.[0] !== undefined) {
+						partialData = data as DeepNullable<TData>
+
 						throw new GraphQLRequestError({
 							query: queryAsString,
 							variables,
 							response,
 							message: errors[0].message,
 							extensions: errors[0].extensions,
+							fieldErrors: errors,
 						})
 					}
 				}
@@ -245,19 +266,22 @@ export class AwesomeGraphQLClient<
 				})
 			}
 
-			const { data, errors } = await response.json()
+			const result = (await response.json()) as GraphQLResponse<TData>
 
-			if (errors?.[0] !== undefined) {
+			if (result.errors?.[0] !== undefined) {
+				partialData = result.data as DeepNullable<TData>
+
 				throw new GraphQLRequestError({
 					query: queryAsString,
 					variables,
 					response,
-					message: errors[0].message,
-					extensions: errors[0].extensions,
+					message: result.errors[0].message,
+					extensions: result.errors[0].extensions,
+					fieldErrors: result.errors,
 				})
 			}
 
-			return { ok: true, data, response }
+			return { ok: true, data: result.data as TData, response }
 		} catch (err) {
 			const error = err instanceof Error ? err : new Error(String(err))
 
@@ -265,11 +289,11 @@ export class AwesomeGraphQLClient<
 				try {
 					this.onError(error)
 				} catch {
-					return { ok: false, error }
+					return { ok: false, error, partialData }
 				}
 			}
 
-			return { ok: false, error }
+			return { ok: false, error, partialData }
 		}
 	}
 
