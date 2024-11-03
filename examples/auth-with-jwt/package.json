@@ -6,7 +6,7 @@
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
     "format": "pnpm run prettier --write",
-    "lint": "eslint --max-warnings 0 --ext js,ts .",
+    "lint": "eslint --max-warnings 0 .",
     "prettier": "prettier ."
   },
   "prettier": "@lynxtaa/prettier-config",

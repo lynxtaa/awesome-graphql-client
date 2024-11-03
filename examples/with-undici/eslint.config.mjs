@@ -1,11 +1,10 @@
 import eslintConfig from '@lynxtaa/eslint-config'
 import requiresTypechecking from '@lynxtaa/eslint-config/requires-typechecking'
-import jest from 'eslint-plugin-jest'
 
+// TODO: add jest
 export default [
 	...eslintConfig,
 	...requiresTypechecking,
-	jest.configs['flat/recommended'],
 	{
 		languageOptions: {
 			parserOptions: {

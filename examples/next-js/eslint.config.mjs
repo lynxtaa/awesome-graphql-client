@@ -2,6 +2,7 @@ import eslintConfig from '@lynxtaa/eslint-config'
 import requiresTypechecking from '@lynxtaa/eslint-config/requires-typechecking'
 import jest from 'eslint-plugin-jest'
 
+// TODO: add 	...compat.extends('next/core-web-vitals'),
 export default [
 	...eslintConfig,
 	...requiresTypechecking,
@@ -15,5 +16,8 @@ export default [
 				tsconfigRootDir: import.meta.dirname,
 			},
 		},
+	},
+	{
+		ignores: ['lib/graphql-queries.ts'],
 	},
 ]
