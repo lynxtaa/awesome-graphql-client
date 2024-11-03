@@ -18,6 +18,6 @@ export default [
 		},
 	},
 	{
-		ignores: ['lib/graphql-queries.ts'],
+		ignores: ['.next', 'lib/graphql-queries.ts'],
 	},
 ]
