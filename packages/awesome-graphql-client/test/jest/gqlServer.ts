@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import fastify, { type FastifyInstance } from 'fastify'
 import { createHttpTerminator } from 'http-terminator'
 import mercurius, { type IResolvers, type MercuriusOptions } from 'mercurius'

@@ -9,7 +9,7 @@
     "check-types": "tsc",
     "format": "pnpm run prettier --write",
     "gql-codegen": "graphql-codegen --config graphql-codegen.yml",
-    "lint": "eslint --max-warnings 0 --ext js,ts src",
+    "lint": "eslint --max-warnings 0 src",
     "prettier": "prettier src",
     "start": "pnpm run build && node build/index.js"
   },
@@ -24,10 +24,10 @@
     "@graphql-codegen/typescript": "4.0.9",
     "@graphql-codegen/typescript-operations": "4.2.3",
     "@graphql-typed-document-node/core": "3.2.0",
-    "@lynxtaa/eslint-config": "0.10.0",
+    "@lynxtaa/eslint-config": "0.11.0",
     "@lynxtaa/prettier-config": "0.2.0",
     "@types/node": "20.14.12",
-    "eslint": "8.57.0",
+    "eslint": "9.14.0",
     "prettier": "3.3.3",
     "typescript": "5.6.3"
   }

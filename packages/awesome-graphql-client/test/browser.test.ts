@@ -22,7 +22,7 @@ afterEach(async () => {
 })
 
 if (typeof fetch === 'undefined') {
-	// eslint-disable-next-line global-require
+	// eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
 	require('whatwg-fetch')
 }
 
