@@ -10,7 +10,7 @@ export default [
 		languageOptions: {
 			parserOptions: {
 				projectService: {
-					allowDefaultProject: ['eslint.config.mjs'],
+					allowDefaultProject: ['*.js', '*.mjs'],
 				},
 				tsconfigRootDir: import.meta.dirname,
 			},
