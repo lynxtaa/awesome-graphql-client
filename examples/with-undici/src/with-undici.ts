@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 // Using undici will result in better performance.
-// Notice: it's experimental and only Node 16 is supported
+
+import { File } from 'node:buffer'
 
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
-import { fetch, type RequestInit, type Response, FormData, File } from 'undici'
+import { fetch, type RequestInit, type Response, FormData } from 'undici'
 
 const client = new AwesomeGraphQLClient<string, RequestInit, Response>({
 	endpoint: 'http://localhost:8080/graphql',
