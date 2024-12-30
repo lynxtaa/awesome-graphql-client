@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@lynxtaa/eslint-config':
-      specifier: 0.12.0
-      version: 0.12.0
+      specifier: 0.13.0
+      version: 0.13.0
     '@lynxtaa/prettier-config':
       specifier: 0.2.0
       version: 0.2.0
@@ -65,7 +65,7 @@ importers:
     devDependencies:
       '@lynxtaa/eslint-config':
         specifier: 'catalog:'
-        version: 0.12.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
+        version: 0.13.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
       '@lynxtaa/prettier-config':
         specifier: 'catalog:'
         version: 0.2.0(prettier@3.4.2)
@@ -108,7 +108,7 @@ importers:
         version: 6.1.0(graphql@16.10.0)
       '@lynxtaa/eslint-config':
         specifier: 'catalog:'
-        version: 0.12.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
+        version: 0.13.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
       '@lynxtaa/prettier-config':
         specifier: 'catalog:'
         version: 0.2.0(prettier@3.4.2)
@@ -193,7 +193,7 @@ importers:
         version: 3.2.0(graphql@16.10.0)
       '@lynxtaa/eslint-config':
         specifier: 'catalog:'
-        version: 0.12.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
+        version: 0.13.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
       '@lynxtaa/prettier-config':
         specifier: 'catalog:'
         version: 0.2.0(prettier@3.4.2)
@@ -221,7 +221,7 @@ importers:
     devDependencies:
       '@lynxtaa/eslint-config':
         specifier: 'catalog:'
-        version: 0.12.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
+        version: 0.13.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
       '@lynxtaa/prettier-config':
         specifier: 'catalog:'
         version: 0.2.0(prettier@3.4.2)
@@ -242,7 +242,7 @@ importers:
         version: 3.2.0(graphql@16.10.0)
       '@lynxtaa/eslint-config':
         specifier: 'catalog:'
-        version: 0.12.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
+        version: 0.13.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)
       '@lynxtaa/prettier-config':
         specifier: 'catalog:'
         version: 0.2.0(prettier@3.4.2)
@@ -1372,8 +1372,8 @@ packages:
   '@kamilkisiela/fast-url-parser@1.1.4':
     resolution: {integrity: sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==}
 
-  '@lynxtaa/eslint-config@0.12.0':
-    resolution: {integrity: sha512-gOVJRwhc4PJwiEHFasf6q5vZQHixk5JzCpQYIqJ/oatbFkXvEVdSlQrFtJlbmQaPPn2xJCpL9WAVnkDauBg8YQ==}
+  '@lynxtaa/eslint-config@0.13.0':
+    resolution: {integrity: sha512-7LIeKkSdPpjF8FDJviTCecrKARtDdhUNw83Ir5e6Rodb1nEjrF9tAsoIcPWmSn4poLCcgBOZIsjKKqSiQkEyoQ==}
     engines: {node: '>=18.18.0'}
 
   '@lynxtaa/prettier-config@0.2.0':
@@ -7130,7 +7130,7 @@ snapshots:
 
   '@kamilkisiela/fast-url-parser@1.1.4': {}
 
-  '@lynxtaa/eslint-config@0.12.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)':
+  '@lynxtaa/eslint-config@0.13.0(@typescript-eslint/parser@8.18.2(eslint@9.17.0(jiti@2.4.0))(typescript@5.7.2))(jiti@2.4.0)(typescript@5.7.2)':
     dependencies:
       '@eslint/js': 9.17.0
       eslint: 9.17.0(jiti@2.4.0)
