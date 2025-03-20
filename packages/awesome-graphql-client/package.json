@@ -13,20 +13,15 @@
   "license": "MIT",
   "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
   "sideEffects": false,
+  "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./dist/awesome-graphql-client.d.mts",
-        "default": "./dist/awesome-graphql-client.mjs"
-      },
-      "require": {
-        "types": "./dist/cjs/awesome-graphql-client.d.ts",
-        "default": "./dist/cjs/awesome-graphql-client.cjs"
-      }
+      "types": "./dist/awesome-graphql-client.d.mts",
+      "default": "./dist/awesome-graphql-client.mjs"
     }
   },
-  "main": "dist/cjs/awesome-graphql-client.cjs",
+  "main": "dist/awesome-graphql-client.mjs",
   "module": "dist/awesome-graphql-client.legacy-esm.js",
   "source": "./src/index.ts",
   "types": "dist/awesome-graphql-client.d.mts",
