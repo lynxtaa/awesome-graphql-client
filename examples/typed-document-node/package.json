@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "check-format": "pnpm run prettier --check",

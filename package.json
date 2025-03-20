@@ -4,6 +4,7 @@
   "repository": "https://github.com/lynxtaa/awesome-graphql-client.git",
   "license": "MIT",
   "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
+  "type": "module",
   "scripts": {
     "build": "turbo build",
     "prepare": "husky",

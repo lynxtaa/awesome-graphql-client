@@ -21,7 +21,9 @@ const UploadUserAvatar = `
   }
 `
 
-client
-	.request(UploadUserAvatar, { file: new File(['test'], 'image.png'), userId: 10 })
-	.then(data => console.log(data.updateUser.id))
-	.catch(error => console.log(error))
+const data = await client.request(UploadUserAvatar, {
+	file: new File(['test'], 'image.png'),
+	userId: 10,
+})
+
+console.log(data.updateUser.id)

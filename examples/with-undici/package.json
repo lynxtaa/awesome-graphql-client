@@ -2,6 +2,7 @@
   "name": "with-undici-example",
   "private": true,
   "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
+  "type": "module",
   "scripts": {
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
@@ -17,6 +18,7 @@
   "devDependencies": {
     "@lynxtaa/eslint-config": "catalog:",
     "@lynxtaa/prettier-config": "catalog:",
+    "@types/node": "catalog:",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

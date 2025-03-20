@@ -225,6 +225,9 @@ importers:
       '@lynxtaa/prettier-config':
         specifier: 'catalog:'
         version: 0.2.0(prettier@3.4.2)
+      '@types/node':
+        specifier: 'catalog:'
+        version: 20.17.10
       eslint:
         specifier: 'catalog:'
         version: 9.17.0(jiti@2.4.0)

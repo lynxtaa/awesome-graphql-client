@@ -1,4 +1,4 @@
-const nextJest = require('next/jest')
+import nextJest from 'next/jest.js'
 
 const createJestConfig = nextJest({
 	// Provide the path to your Next.js app to load next.config.js and .env files in your test environment
@@ -7,7 +7,7 @@ const createJestConfig = nextJest({
 
 const isCI = process.env.CI !== undefined
 
-module.exports = createJestConfig({
+export default createJestConfig({
 	resetMocks: true,
 	testEnvironment: 'jsdom',
 	roots: ['<rootDir>/tests'],

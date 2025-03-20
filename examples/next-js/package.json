@@ -1,6 +1,7 @@
 {
   "name": "next-js-example",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "next build",
     "check-format": "pnpm run prettier --check",

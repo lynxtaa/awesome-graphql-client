@@ -9,7 +9,10 @@
     "apollo"
   ],
   "homepage": "https://github.com/lynxtaa/awesome-graphql-client#readme",
-  "repository": "https://github.com/lynxtaa/awesome-graphql-client.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lynxtaa/awesome-graphql-client.git"
+  },
   "license": "MIT",
   "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
   "sideEffects": false,
