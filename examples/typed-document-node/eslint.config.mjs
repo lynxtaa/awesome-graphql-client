@@ -9,9 +9,8 @@ export default [
 		languageOptions: {
 			parserOptions: {
 				projectService: {
-					allowDefaultProject: ['eslint.config.mjs'],
+					allowDefaultProject: ['eslint.config.mjs', 'graphql-codegen.ts'],
 				},
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				tsconfigRootDir: import.meta.dirname,
 			},
 		},

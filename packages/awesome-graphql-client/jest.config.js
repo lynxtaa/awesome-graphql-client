@@ -8,7 +8,7 @@ export default {
 	coveragePathIgnorePatterns: ['<rootDir>/test'],
 	setupFilesAfterEnv: ['<rootDir>/test/setupTests.ts'],
 	transform: {
-		'^.+\\.(t|j)sx?$': ['@swc-node/jest'],
+		'^.+\\.(t|j)sx?$': '@swc/jest',
 	},
 	extensionsToTreatAsEsm: ['.ts'],
 }

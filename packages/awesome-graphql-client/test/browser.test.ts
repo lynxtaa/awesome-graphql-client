@@ -4,10 +4,11 @@
 import { type IncomingHttpHeaders } from 'node:http'
 
 import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { jest } from '@jest/globals'
 import { print, type DocumentNode } from 'graphql'
 import graphqlTag from 'graphql-tag'
-import { GraphQLUpload, type FileUpload } from 'graphql-upload'
-import mercurius from 'mercurius'
+import { GraphQLUpload, type FileUpload } from 'graphql-upload-minimal'
+import { mercurius } from 'mercurius'
 
 import { AwesomeGraphQLClient, GraphQLRequestError } from '../src/index'
 import { gql } from '../src/util/gql'
@@ -22,8 +23,8 @@ afterEach(async () => {
 })
 
 if (typeof fetch === 'undefined') {
-	// eslint-disable-next-line global-require, @typescript-eslint/no-require-imports
-	require('whatwg-fetch')
+	// @ts-expect-error Just a polyfill, no need types
+	await import('whatwg-fetch')
 }
 
 it('sends GraphQL request without variables', async () => {
