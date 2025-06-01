@@ -4,7 +4,7 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
-			"outputs": ["build/**", "dist/**"]
+			"outputs": ["build/**", "dist/**", ".next/**"]
 		},
 		"check-format": {
 			"inputs": [],

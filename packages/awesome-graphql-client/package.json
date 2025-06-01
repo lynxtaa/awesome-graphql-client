@@ -9,24 +9,22 @@
     "apollo"
   ],
   "homepage": "https://github.com/lynxtaa/awesome-graphql-client#readme",
-  "repository": "https://github.com/lynxtaa/awesome-graphql-client.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lynxtaa/awesome-graphql-client.git"
+  },
   "license": "MIT",
   "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
   "sideEffects": false,
+  "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./dist/awesome-graphql-client.d.mts",
-        "default": "./dist/awesome-graphql-client.mjs"
-      },
-      "require": {
-        "types": "./dist/cjs/awesome-graphql-client.d.ts",
-        "default": "./dist/cjs/awesome-graphql-client.cjs"
-      }
+      "types": "./dist/awesome-graphql-client.d.mts",
+      "default": "./dist/awesome-graphql-client.mjs"
     }
   },
-  "main": "dist/cjs/awesome-graphql-client.cjs",
+  "main": "dist/awesome-graphql-client.mjs",
   "module": "dist/awesome-graphql-client.legacy-esm.js",
   "source": "./src/index.ts",
   "types": "dist/awesome-graphql-client.d.mts",
@@ -55,17 +53,17 @@
     "@graphql-typed-document-node/core": "3.2.0",
     "@lynxtaa/eslint-config": "catalog:",
     "@lynxtaa/prettier-config": "catalog:",
-    "@swc/core": "1.10.3",
-    "@swc/jest": "0.2.37",
+    "@swc-node/jest": "1.8.13",
+    "@swc/core": "1.11.29",
     "@types/extract-files": "8.1.1",
     "@types/graphql-upload": "8.0.12",
     "@types/jest": "29.5.14",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "eslint-plugin-jest": "28.10.0",
+    "eslint-plugin-jest": "28.11.1",
     "extract-files": "9.0.0",
     "fastify": "3.29.5",
-    "graphql": "16.10.0",
+    "graphql": "16.11.0",
     "graphql-tag": "2.12.6",
     "graphql-upload": "13.0.0",
     "http-terminator": "3.2.0",
@@ -74,15 +72,15 @@
     "jest-environment-jsdom": "catalog:",
     "mercurius": "9.8.0",
     "mercurius-upload": "3.0.1",
-    "np": "10.1.0",
+    "np": "10.2.0",
     "prettier": "catalog:",
-    "tsup": "8.3.5",
+    "tsup": "8.5.0",
     "typescript": "catalog:",
-    "undici": "7.2.0",
+    "undici": "7.10.0",
     "whatwg-fetch": "3.6.20"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": "^20.19.0 || ^22.12.0 || >=23"
   },
   "np": {
     "yarn": false
