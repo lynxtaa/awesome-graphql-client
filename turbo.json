@@ -22,6 +22,9 @@
 		},
 		"test:coverage": {
 			"outputs": ["coverage/**"]
+		},
+		"gql-codegen": {
+			"cache": false
 		}
 	}
 }

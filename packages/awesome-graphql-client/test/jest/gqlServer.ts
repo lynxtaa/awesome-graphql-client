@@ -1,6 +1,6 @@
 import fastify, { type FastifyInstance } from 'fastify'
 import { createHttpTerminator } from 'http-terminator'
-import mercurius, { type IResolvers, type MercuriusOptions } from 'mercurius'
+import { mercurius, type IResolvers, type MercuriusOptions } from 'mercurius'
 import upload from 'mercurius-upload'
 
 export type TestServer = FastifyInstance & {
@@ -34,7 +34,7 @@ export async function createServer(
 		res.status(404).send('Not Found')
 	})
 
-	await app.listen(0)
+	await app.listen({ port: 0 })
 
 	const address = app.server.address()
 

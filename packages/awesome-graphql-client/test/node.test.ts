@@ -4,7 +4,7 @@
 
 import { readFileSync } from 'node:fs'
 
-import { type FileUpload, GraphQLUpload } from 'graphql-upload'
+import { GraphQLUpload, type FileUpload } from 'graphql-upload-minimal'
 
 import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'
