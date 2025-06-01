@@ -74,8 +74,6 @@ client
 
 ### NodeJS
 
-#### NodeJS 20
-
 ```js
 const { openAsBlob } = require('node:fs')
 const { AwesomeGraphQLClient } = require('awesome-graphql-client')
@@ -97,58 +95,6 @@ const blob = await openAsBlob('./avatar.png')
 
 client
   .request(UploadUserAvatar, { file: new File([blob], 'avatar.png'), userId: 10 })
-  .then(data => console.log(data.updateUser.id))
-  .catch(error => console.log(error))
-```
-
-#### NodeJS 18
-
-```js
-const { createReadStream, statSync } = require('node:fs')
-const path = require('node:path')
-const { Readable } = require('node:stream')
-const { AwesomeGraphQLClient } = require('awesome-graphql-client')
-
-class StreamableFile extends Blob {
-  constructor(filePath) {
-    const { mtime, size } = statSync(filePath)
-
-    super([])
-
-    this.name = path.parse(filePath).base
-    this.lastModified = mtime.getTime()
-    this.#filePath = filePath
-
-    Object.defineProperty(this, 'size', {
-      value: size,
-      writable: false,
-    })
-    Object.defineProperty(this, Symbol.toStringTag, {
-      value: 'File',
-      writable: false,
-    })
-  }
-
-  stream() {
-    return Readable.toWeb(createReadStream(this.#filePath))
-  }
-}
-
-const client = new AwesomeGraphQLClient({
-  endpoint: 'http://localhost:8080/graphql',
-})
-
-// Also query can be an output from graphql-tag (see examples below)
-const UploadUserAvatar = `
-  mutation uploadUserAvatar($userId: Int!, $file: Upload!) {
-    updateUser(id: $userId, input: { avatar: $file }) {
-      id
-    }
-  }
-`
-
-client
-  .request(UploadUserAvatar, { file: new StreamableFile('./avatar.png'), userId: 10 })
   .then(data => console.log(data.updateUser.id))
   .catch(error => console.log(error))
 ```

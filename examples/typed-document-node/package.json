@@ -3,32 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "author": "Alex Kondratiuk <lynxtaa@gmail.com>",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
     "format": "pnpm run prettier --write",
     "gql-codegen": "graphql-codegen --config graphql-codegen.yml",
-    "lint": "eslint --max-warnings 0 --ext js,ts src",
+    "lint": "eslint --max-warnings 0 src",
     "prettier": "prettier src",
     "start": "pnpm run build && node build/index.js"
   },
   "prettier": "@lynxtaa/prettier-config",
   "dependencies": {
     "awesome-graphql-client": "*",
-    "graphql": "16.9.0"
+    "graphql": "16.11.0"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "5.0.2",
-    "@graphql-codegen/typed-document-node": "5.0.9",
-    "@graphql-codegen/typescript": "4.0.9",
-    "@graphql-codegen/typescript-operations": "4.2.3",
+    "@graphql-codegen/cli": "5.0.6",
+    "@graphql-codegen/typed-document-node": "5.1.1",
+    "@graphql-codegen/typescript": "4.1.6",
+    "@graphql-codegen/typescript-operations": "4.6.1",
     "@graphql-typed-document-node/core": "3.2.0",
-    "@lynxtaa/eslint-config": "0.10.0",
-    "@lynxtaa/prettier-config": "0.2.0",
-    "@types/node": "20.14.12",
-    "eslint": "8.57.0",
-    "prettier": "3.3.3",
-    "typescript": "5.6.3"
+    "@lynxtaa/eslint-config": "catalog:",
+    "@lynxtaa/prettier-config": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   }
 }

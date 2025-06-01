@@ -1,5 +1,5 @@
 import { TextEncoder, TextDecoder } from 'node:util'
 
-global.TextEncoder = TextEncoder
+globalThis.TextEncoder = TextEncoder
 
-global.TextDecoder = TextDecoder as any
+globalThis.TextDecoder = TextDecoder as any

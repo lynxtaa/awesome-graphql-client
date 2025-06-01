@@ -1,3 +1,17 @@
 packages:
-  - 'examples/*'
-  - 'packages/*'
+  - examples/*
+  - packages/*
+catalog:
+  '@types/node': 20.17.52
+  '@lynxtaa/eslint-config': 0.15.0
+  '@lynxtaa/prettier-config': 0.2.0
+  eslint: 9.27.0
+  jest: 29.7.0
+  jest-environment-jsdom: 29.7.0
+  prettier: 3.5.3
+  typescript: 5.8.3
+onlyBuiltDependencies:
+  - '@swc/core'
+  - esbuild
+  - msw
+  - sharp
