@@ -1,6 +1,6 @@
 import { copyFile } from 'node:fs/promises'
 
-import { defineConfig, type Options } from 'tsup'
+import { defineConfig, type Options } from 'tsdown'
 
 export default defineConfig(options => {
 	const commonOptions: Partial<Options> = {
@@ -16,6 +16,7 @@ export default defineConfig(options => {
 			...commonOptions,
 			format: ['esm'],
 			minify: false,
+			fixedExtension: true,
 			outExtension: () => ({ js: '.mjs' }),
 			dts: true,
 			clean: true,
