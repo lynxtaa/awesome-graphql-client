@@ -35,7 +35,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "check-format": "pnpm run prettier --check",
     "check-types": "tsc",
     "format": "pnpm run prettier --write",
@@ -72,7 +72,7 @@
     "mercurius-upload": "8.0.0",
     "np": "10.2.0",
     "prettier": "catalog:",
-    "tsup": "8.5.0",
+    "tsdown": "0.13.0",
     "typescript": "catalog:",
     "undici": "7.10.0",
     "whatwg-fetch": "3.6.20"
