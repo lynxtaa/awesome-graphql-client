@@ -75,8 +75,8 @@ client
 ### NodeJS
 
 ```js
-const { openAsBlob } = require('node:fs')
-const { AwesomeGraphQLClient } = require('awesome-graphql-client')
+import { openAsBlob } from 'node:fs'
+import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
@@ -320,8 +320,8 @@ Perfect for Typescript projects. See [example above](#typescript-with-typeddocum
 ## Cookies in NodeJS
 
 ```js
-const { AwesomeGraphQLClient } = require('awesome-graphql-client')
-const fetchCookie = require('fetch-cookie')
+import { AwesomeGraphQLClient } from 'awesome-graphql-client'
+import fetchCookie from 'fetch-cookie'
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
@@ -332,7 +332,7 @@ const client = new AwesomeGraphQLClient({
 ## Custom _isFileUpload_ Predicate
 
 ```js
-const { AwesomeGraphQLClient, isFileUpload } = require('awesome-graphql-client')
+import { AwesomeGraphQLClient, isFileUpload } from 'awesome-graphql-client'
 
 const client = new AwesomeGraphQLClient({
   endpoint: 'http://localhost:8080/graphql',
