@@ -42,3 +42,9 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+      - name: Check published types
+        run: >
+          pnpm dlx @arethetypeswrong/cli
+          --pack ./packages/awesome-graphql-client
+          --ignore-rules cjs-resolves-to-esm
