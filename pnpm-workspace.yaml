@@ -4,9 +4,9 @@ packages:
 catalog:
   '@types/jest': 30.0.0
   '@types/node': 20.19.9
-  '@lynxtaa/eslint-config': 0.15.0
+  '@lynxtaa/eslint-config': 0.16.0
   '@lynxtaa/prettier-config': 0.2.0
-  eslint: 9.32.0
+  eslint: 9.34.0
   jest: 30.0.5
   jest-environment-jsdom: 30.0.5
   prettier: 3.6.2

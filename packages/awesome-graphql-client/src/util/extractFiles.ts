@@ -15,6 +15,7 @@ declare global {
 }
 
 const isIterable = (value: unknown): value is unknown[] | FileList =>
+	// eslint-disable-next-line unicorn/no-typeof-undefined
 	Array.isArray(value) || (typeof FileList !== 'undefined' && value instanceof FileList)
 
 // https://github.com/sindresorhus/is-plain-obj/blob/main/index.js
