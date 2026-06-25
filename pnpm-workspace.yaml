@@ -9,7 +9,7 @@ allowBuilds:
 catalog:
   '@types/jest': 30.0.0
   '@types/node': 22.20.0
-  '@lynxtaa/eslint-config': 0.17.1
+  '@lynxtaa/eslint-config': 0.17.2
   '@lynxtaa/prettier-config': 0.2.0
   eslint: 10.5.0
   jest: 30.4.2
@@ -17,8 +17,21 @@ catalog:
   prettier: 3.8.4
   typescript: 6.0.3
 minimumReleaseAgeExclude:
-  - '@lynxtaa/eslint-config@0.17.0 || 0.17.1'
+  - '@lynxtaa/eslint-config@0.17.0 || 0.17.1 || 0.17.2'
   - eslint-plugin-unicorn@69.0.0
+  - '@eslint-react/ast@5.9.3'
+  - '@eslint-react/core@5.9.3'
+  - '@eslint-react/eslint-plugin@5.9.3'
+  - '@eslint-react/eslint@5.9.3'
+  - '@eslint-react/jsx@5.9.3'
+  - '@eslint-react/shared@5.9.3'
+  - '@eslint-react/var@5.9.3'
+  - eslint-plugin-react-dom@5.9.3
+  - eslint-plugin-react-jsx@5.9.3
+  - eslint-plugin-react-naming-convention@5.9.3
+  - eslint-plugin-react-rsc@5.9.3
+  - eslint-plugin-react-web-api@5.9.3
+  - eslint-plugin-react-x@5.9.3
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild

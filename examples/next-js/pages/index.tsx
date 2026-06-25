@@ -25,6 +25,7 @@ export default function Home() {
 			{data ? (
 				<ul>
 					{data.characters!.results!.map((character, i) => (
+						// eslint-disable-next-line @eslint-react/no-array-index-key
 						<li key={character!.id ?? i}>{character!.name}</li>
 					))}
 				</ul>

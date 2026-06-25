@@ -1,8 +1,8 @@
+import eslintReact from '@eslint-react/eslint-plugin'
 import eslintConfig from '@lynxtaa/eslint-config'
 import requiresTypechecking from '@lynxtaa/eslint-config/requires-typechecking'
 import nextPlugin from '@next/eslint-plugin-next'
 import jest from 'eslint-plugin-jest'
-import reactPlugin from 'eslint-plugin-react'
 import hooksPlugin from 'eslint-plugin-react-hooks'
 
 export default [
@@ -10,24 +10,21 @@ export default [
 	...requiresTypechecking,
 	jest.configs['flat/recommended'],
 	{
+		files: ['**/*.ts', '**/*.tsx'],
+		plugins: {
+			'@eslint-react': eslintReact,
+		},
+		rules: {
+			...eslintReact.configs.recommended.rules,
+		},
+	},
+	{
 		languageOptions: {
 			parserOptions: {
 				projectService: {
 					allowDefaultProject: ['*.js', '*.mjs'],
 				},
 				tsconfigRootDir: import.meta.dirname,
-			},
-		},
-	},
-	{
-		...reactPlugin.configs.flat.recommended,
-		rules: {
-			...reactPlugin.configs.flat.recommended.rules,
-			'react/react-in-jsx-scope': 'off',
-		},
-		settings: {
-			react: {
-				version: 'detect',
 			},
 		},
 	},
@@ -44,6 +41,11 @@ export default [
 		rules: {
 			...nextPlugin.configs.recommended.rules,
 			...nextPlugin.configs['core-web-vitals'].rules,
+		},
+	},
+	{
+		rules: {
+			'unicorn/name-replacements': 'off',
 		},
 	},
 	{

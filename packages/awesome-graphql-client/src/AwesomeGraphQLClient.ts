@@ -121,7 +121,7 @@ export class AwesomeGraphQLClient<
 
 		i = 0
 		for (const file of files.keys()) {
-			form.append(`${++i}`, file)
+			form.append(String(++i), file)
 		}
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-return

@@ -9,7 +9,7 @@ export const gql = (strings: TemplateStringsArray, ...values: unknown[]): string
 	let result = ''
 
 	for (const [index, string] of strings.entries()) {
-		// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+		// eslint-disable-next-line @typescript-eslint/restrict-template-expressions, unicorn/no-computed-property-existence-check
 		result += `${string}${index in values ? values[index] : ''}`
 	}
 

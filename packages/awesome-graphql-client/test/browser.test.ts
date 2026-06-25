@@ -549,7 +549,7 @@ it('throws an error if response is not OK', async () => {
 	)
 
 	const client = new AwesomeGraphQLClient({
-		endpoint: new URL('404', server.endpoint).toString(),
+		endpoint: new URL('404', server.endpoint).href,
 	})
 
 	const query = gql`
