@@ -17,4 +17,4 @@ async function main() {
 	console.log(data.characters?.results?.map(result => result?.name))
 }
 
-main().catch(err => console.error(err))
+main().catch(error => console.error(error))

@@ -1,16 +1,24 @@
 packages:
   - examples/*
   - packages/*
+allowBuilds:
+  '@swc/core': true
+  msw: true
+  sharp: true
+  unrs-resolver: true
 catalog:
   '@types/jest': 30.0.0
-  '@types/node': 20.19.9
-  '@lynxtaa/eslint-config': 0.16.0
+  '@types/node': 22.20.0
+  '@lynxtaa/eslint-config': 0.17.1
   '@lynxtaa/prettier-config': 0.2.0
-  eslint: 9.34.0
-  jest: 30.0.5
-  jest-environment-jsdom: 30.0.5
-  prettier: 3.6.2
-  typescript: 5.8.3
+  eslint: 10.5.0
+  jest: 30.4.2
+  jest-environment-jsdom: 30.4.1
+  prettier: 3.8.4
+  typescript: 6.0.3
+minimumReleaseAgeExclude:
+  - '@lynxtaa/eslint-config@0.17.0 || 0.17.1'
+  - eslint-plugin-unicorn@69.0.0
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild
