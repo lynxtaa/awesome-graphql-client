@@ -2,7 +2,8 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"verbatimModuleSyntax": false,
-		"outDir": "build"
+		"outDir": "build",
+		"types": ["node"]
 	},
 	"include": ["src"]
 }

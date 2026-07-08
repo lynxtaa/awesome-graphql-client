@@ -8,13 +8,13 @@ import { AwesomeGraphQLClient, gql } from 'awesome-graphql-client'
 type FetchOptions = RequestInit & { skipRefresh?: boolean }
 
 class AuthContainer {
+	private refreshTokenPromise: Promise<void> | null
+
 	client: AwesomeGraphQLClient<string, FetchOptions>
 
 	accessToken: string
 	tokenType: string
 	expiresAt: number
-
-	private refreshTokenPromise: Promise<void> | null
 
 	constructor({
 		endpoint,

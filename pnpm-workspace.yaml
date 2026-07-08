@@ -1,16 +1,59 @@
 packages:
   - examples/*
   - packages/*
+allowBuilds:
+  '@swc/core': true
+  msw: true
+  sharp: true
+  unrs-resolver: true
 catalog:
   '@types/jest': 30.0.0
-  '@types/node': 20.19.9
-  '@lynxtaa/eslint-config': 0.16.0
+  '@types/node': 22.20.0
+  '@lynxtaa/eslint-config': 0.17.2
   '@lynxtaa/prettier-config': 0.2.0
-  eslint: 9.34.0
-  jest: 30.0.5
-  jest-environment-jsdom: 30.0.5
-  prettier: 3.6.2
-  typescript: 5.8.3
+  eslint: 10.5.0
+  jest: 30.4.2
+  jest-environment-jsdom: 30.4.1
+  prettier: 3.8.4
+  typescript: 'npm:@typescript/typescript6@^6.0.2'
+  typescript-7: 'npm:typescript@^7.0.2'
+minimumReleaseAgeExclude:
+  - '@lynxtaa/eslint-config@0.17.0 || 0.17.1 || 0.17.2'
+  - eslint-plugin-unicorn@69.0.0
+  - '@eslint-react/ast@5.9.3'
+  - '@eslint-react/core@5.9.3'
+  - '@eslint-react/eslint-plugin@5.9.3'
+  - '@eslint-react/eslint@5.9.3'
+  - '@eslint-react/jsx@5.9.3'
+  - '@eslint-react/shared@5.9.3'
+  - '@eslint-react/var@5.9.3'
+  - eslint-plugin-react-dom@5.9.3
+  - eslint-plugin-react-jsx@5.9.3
+  - eslint-plugin-react-naming-convention@5.9.3
+  - eslint-plugin-react-rsc@5.9.3
+  - eslint-plugin-react-web-api@5.9.3
+  - eslint-plugin-react-x@5.9.3
+  - '@typescript/typescript-aix-ppc64@7.0.2'
+  - '@typescript/typescript-darwin-arm64@7.0.2'
+  - '@typescript/typescript-darwin-x64@7.0.2'
+  - '@typescript/typescript-freebsd-arm64@7.0.2'
+  - '@typescript/typescript-freebsd-x64@7.0.2'
+  - '@typescript/typescript-linux-arm64@7.0.2'
+  - '@typescript/typescript-linux-arm@7.0.2'
+  - '@typescript/typescript-linux-loong64@7.0.2'
+  - '@typescript/typescript-linux-mips64el@7.0.2'
+  - '@typescript/typescript-linux-ppc64@7.0.2'
+  - '@typescript/typescript-linux-riscv64@7.0.2'
+  - '@typescript/typescript-linux-s390x@7.0.2'
+  - '@typescript/typescript-linux-x64@7.0.2'
+  - '@typescript/typescript-netbsd-arm64@7.0.2'
+  - '@typescript/typescript-netbsd-x64@7.0.2'
+  - '@typescript/typescript-openbsd-arm64@7.0.2'
+  - '@typescript/typescript-openbsd-x64@7.0.2'
+  - '@typescript/typescript-sunos-x64@7.0.2'
+  - '@typescript/typescript-win32-arm64@7.0.2'
+  - '@typescript/typescript-win32-x64@7.0.2'
+  - typescript@7.0.2
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild
