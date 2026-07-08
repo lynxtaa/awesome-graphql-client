@@ -1,4 +1,4 @@
-export { graphql, rest } from 'msw'
-import { SetupServer, setupServer } from 'msw/node'
+export { graphql, http, HttpResponse } from 'msw'
+import { setupServer, type SetupServer } from 'msw/node'
 
 export const server: SetupServer = setupServer()
