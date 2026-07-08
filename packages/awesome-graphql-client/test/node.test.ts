@@ -1,6 +1,4 @@
-/**
- * @jest-environment node
- */
+// @vitest-environment node
 
 import { readFileSync } from 'node:fs'
 
@@ -9,7 +7,7 @@ import { GraphQLUpload, type FileUpload } from 'graphql-upload-minimal'
 import { AwesomeGraphQLClient } from '../src/index'
 import { gql } from '../src/util/gql'
 
-import { createServer, type TestServer } from './jest/gqlServer'
+import { createServer, type TestServer } from './helpers/gqlServer'
 import { streamToString } from './streamToString'
 
 let server: TestServer

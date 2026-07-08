@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"isolatedDeclarations": true,
 		"declaration": true,
-		"types": ["node", "jest"]
+		"types": ["node", "vitest/globals"]
 	},
 	"include": ["src", "test", "./tsup.config.ts"]
 }
