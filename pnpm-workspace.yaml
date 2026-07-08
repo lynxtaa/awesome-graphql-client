@@ -15,7 +15,8 @@ catalog:
   jest: 30.4.2
   jest-environment-jsdom: 30.4.1
   prettier: 3.8.4
-  typescript: 6.0.3
+  typescript: 'npm:@typescript/typescript6@^6.0.2'
+  typescript-7: 'npm:typescript@^7.0.2'
 minimumReleaseAgeExclude:
   - '@lynxtaa/eslint-config@0.17.0 || 0.17.1 || 0.17.2'
   - eslint-plugin-unicorn@69.0.0
@@ -32,6 +33,27 @@ minimumReleaseAgeExclude:
   - eslint-plugin-react-rsc@5.9.3
   - eslint-plugin-react-web-api@5.9.3
   - eslint-plugin-react-x@5.9.3
+  - '@typescript/typescript-aix-ppc64@7.0.2'
+  - '@typescript/typescript-darwin-arm64@7.0.2'
+  - '@typescript/typescript-darwin-x64@7.0.2'
+  - '@typescript/typescript-freebsd-arm64@7.0.2'
+  - '@typescript/typescript-freebsd-x64@7.0.2'
+  - '@typescript/typescript-linux-arm64@7.0.2'
+  - '@typescript/typescript-linux-arm@7.0.2'
+  - '@typescript/typescript-linux-loong64@7.0.2'
+  - '@typescript/typescript-linux-mips64el@7.0.2'
+  - '@typescript/typescript-linux-ppc64@7.0.2'
+  - '@typescript/typescript-linux-riscv64@7.0.2'
+  - '@typescript/typescript-linux-s390x@7.0.2'
+  - '@typescript/typescript-linux-x64@7.0.2'
+  - '@typescript/typescript-netbsd-arm64@7.0.2'
+  - '@typescript/typescript-netbsd-x64@7.0.2'
+  - '@typescript/typescript-openbsd-arm64@7.0.2'
+  - '@typescript/typescript-openbsd-x64@7.0.2'
+  - '@typescript/typescript-sunos-x64@7.0.2'
+  - '@typescript/typescript-win32-arm64@7.0.2'
+  - '@typescript/typescript-win32-x64@7.0.2'
+  - typescript@7.0.2
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild

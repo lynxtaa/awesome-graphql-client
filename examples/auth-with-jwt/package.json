@@ -19,6 +19,7 @@
     "@lynxtaa/prettier-config": "catalog:",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "typescript-7": "catalog:"
   }
 }

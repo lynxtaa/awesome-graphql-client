@@ -20,7 +20,8 @@
     "prettier": "catalog:",
     "pretty-quick": "4.2.2",
     "turbo": "2.10.0",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "typescript-7": "catalog:"
   },
   "packageManager": "pnpm@11.9.0",
   "engines": {

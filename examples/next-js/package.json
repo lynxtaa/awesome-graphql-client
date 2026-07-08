@@ -46,6 +46,7 @@
     "msw": "1.3.5",
     "prettier": "catalog:",
     "typescript": "catalog:",
+    "typescript-7": "catalog:",
     "whatwg-fetch": "3.6.20"
   }
 }
