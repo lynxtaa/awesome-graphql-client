@@ -1,11 +1,17 @@
 import eslintConfig from '@lynxtaa/eslint-config'
 import requiresTypechecking from '@lynxtaa/eslint-config/requires-typechecking'
-import jest from 'eslint-plugin-jest'
+import vitest from '@vitest/eslint-plugin'
 
 export default [
 	...eslintConfig,
 	...requiresTypechecking,
-	jest.configs['flat/recommended'],
+	vitest.configs.recommended,
+	{
+		rules: {
+			// false positive on `expect.any()` asymmetric matchers (collides with chai `.any` chain)
+			'vitest/valid-expect': 'off',
+		},
+	},
 	{
 		languageOptions: {
 			parserOptions: {

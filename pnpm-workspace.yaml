@@ -7,14 +7,15 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 catalog:
-  '@types/jest': 30.0.0
   '@types/node': 22.20.0
   '@lynxtaa/eslint-config': 0.17.2
   '@lynxtaa/prettier-config': 0.2.0
+  '@vitest/coverage-v8': 4.1.10
+  '@vitest/eslint-plugin': 1.6.21
   eslint: 10.5.0
-  jest: 30.4.2
-  jest-environment-jsdom: 30.4.1
+  jsdom: 29.1.1
   prettier: 3.8.4
+  vitest: 4.1.10
   typescript: 'npm:@typescript/typescript6@^6.0.2'
   typescript-7: 'npm:typescript@^7.0.2'
 minimumReleaseAgeExclude:

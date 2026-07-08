@@ -2,13 +2,13 @@ import eslintReact from '@eslint-react/eslint-plugin'
 import eslintConfig from '@lynxtaa/eslint-config'
 import requiresTypechecking from '@lynxtaa/eslint-config/requires-typechecking'
 import nextPlugin from '@next/eslint-plugin-next'
-import jest from 'eslint-plugin-jest'
+import vitest from '@vitest/eslint-plugin'
 import hooksPlugin from 'eslint-plugin-react-hooks'
 
 export default [
 	...eslintConfig,
 	...requiresTypechecking,
-	jest.configs['flat/recommended'],
+	vitest.configs.recommended,
 	{
 		files: ['**/*.ts', '**/*.tsx'],
 		plugins: {

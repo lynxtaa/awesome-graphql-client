@@ -2,12 +2,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
 
-import { server, graphql } from '../jest/testServer'
 import {
 	type GetCharactersQuery,
 	type GetCharactersQueryVariables,
 } from '../lib/graphql-queries'
 import Home from '../pages/index'
+import { server, graphql } from '../test-utils/testServer'
 
 const withProvider = ({ children }: { children?: React.ReactNode }) => (
 	<QueryClientProvider client={new QueryClient()}>{children}</QueryClientProvider>

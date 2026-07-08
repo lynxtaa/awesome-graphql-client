@@ -1,4 +1,4 @@
-import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'

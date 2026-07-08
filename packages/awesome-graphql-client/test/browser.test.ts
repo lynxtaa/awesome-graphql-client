@@ -1,19 +1,18 @@
-/**
- * @jest-environment jsdom
- */
+// @vitest-environment jsdom
+
 import { type IncomingHttpHeaders } from 'node:http'
 
-import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
-import { jest } from '@jest/globals'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { print, type DocumentNode } from 'graphql'
 import graphqlTag from 'graphql-tag'
 import { GraphQLUpload, type FileUpload } from 'graphql-upload-minimal'
 import { mercurius } from 'mercurius'
+import { vi } from 'vitest'
 
 import { AwesomeGraphQLClient, GraphQLRequestError } from '../src/index'
 import { gql } from '../src/util/gql'
 
-import { createServer, type TestServer } from './jest/gqlServer'
+import { createServer, type TestServer } from './helpers/gqlServer'
 import { streamToString } from './streamToString'
 
 let server: TestServer
@@ -22,10 +21,12 @@ afterEach(async () => {
 	await server?.destroy()
 })
 
-if (typeof fetch === 'undefined') {
-	// @ts-expect-error Just a polyfill, no need types
-	await import('whatwg-fetch')
-}
+// vitest's jsdom exposes Node's undici fetch, which can't stream a jsdom File
+// upload. Drop it so the XHR-based whatwg-fetch polyfill installs, matching a browser.
+// @ts-expect-error deleting global fetch
+delete globalThis.fetch
+// @ts-expect-error Just a polyfill, no need types
+await import('whatwg-fetch')
 
 it('sends GraphQL request without variables', async () => {
 	interface GetUsers {
@@ -650,7 +651,7 @@ it('calls onError hook if provided', async () => {
 		},
 	)
 
-	const onError = jest.fn()
+	const onError = vi.fn()
 
 	const client = new AwesomeGraphQLClient({ endpoint: server.endpoint, onError })
 
@@ -684,7 +685,7 @@ it('ignores errors thrown inside onError hook', async () => {
 		},
 	)
 
-	const onError = jest.fn().mockImplementation(() => {
+	const onError = vi.fn().mockImplementation(() => {
 		throw new Error('💣')
 	})
 
