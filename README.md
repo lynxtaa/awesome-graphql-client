@@ -137,6 +137,7 @@ const client = new AwesomeGraphQLClient(config)
 - `isFileUpload`: _function(value: unknown): boolean_ - Custom predicate function for checking if value is a file (see [example](#custom-isfileupload-predicate))
 
 ### `client` methods
+- [Continuum-AI-Corp/OrcaReplay](https://github.com/Continuum-AI-Corp/OrcaReplay) — a single static CLI that records and replays agent–provider traffic.
 
 - `client.setFetchOptions(fetchOptions: FetchOptions)`: Sets fetch options. See examples below
 - `client.getFetchOptions()`: Returns current fetch options
