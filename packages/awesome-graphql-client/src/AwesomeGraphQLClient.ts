@@ -1,4 +1,4 @@
-import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import type { DocumentTypeDecoration } from '@graphql-typed-document-node/core'
 
 import { GraphQLRequestError } from './GraphQLRequestError'
 import { assert } from './util/assert'
@@ -183,8 +183,8 @@ export class AwesomeGraphQLClient<
 		TData extends Record<string, any>,
 		TVariables extends Record<string, any> = Record<string, never>,
 	>(
-		query: TQuery extends TypedDocumentNode
-			? TypedDocumentNode<TData, TVariables>
+		query: TQuery extends DocumentTypeDecoration<any, any>
+			? DocumentTypeDecoration<TData, TVariables>
 			: TQuery,
 		variables?: TVariables,
 		fetchOptions?: TFetchOptions,
@@ -311,8 +311,8 @@ export class AwesomeGraphQLClient<
 		TData extends Record<string, any>,
 		TVariables extends Record<string, any> = Record<string, never>,
 	>(
-		query: TQuery extends TypedDocumentNode
-			? TypedDocumentNode<TData, TVariables>
+		query: TQuery extends DocumentTypeDecoration<any, any>
+			? DocumentTypeDecoration<TData, TVariables>
 			: TQuery,
 		variables?: TVariables,
 		fetchOptions?: TFetchOptions,
