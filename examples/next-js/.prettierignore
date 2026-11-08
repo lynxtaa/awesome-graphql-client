@@ -1,2 +1,3 @@
 lib/graphql-queries.ts
 package.json
+next-env.d.ts
