@@ -19,11 +19,11 @@
     "husky": "9.1.7",
     "prettier": "catalog:",
     "pretty-quick": "4.2.2",
-    "turbo": "2.10.0",
+    "turbo": "2.11.10",
     "typescript": "catalog:",
     "typescript-7": "catalog:"
   },
-  "packageManager": "pnpm@11.9.0",
+  "packageManager": "pnpm@12.18.0",
   "engines": {
     "node": "^22.12.0 || >=24"
   }

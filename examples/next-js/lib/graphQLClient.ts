@@ -1,5 +1,8 @@
 import { AwesomeGraphQLClient } from 'awesome-graphql-client'
 
-export const graphQLClient: AwesomeGraphQLClient = new AwesomeGraphQLClient({
+import { TypedDocumentString } from './graphql-queries'
+
+export const graphQLClient = new AwesomeGraphQLClient({
 	endpoint: 'https://rickandmortyapi.com/graphql',
+	formatQuery: (query: TypedDocumentString<unknown, unknown>) => query.toString(),
 })

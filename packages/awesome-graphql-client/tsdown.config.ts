@@ -1,9 +1,9 @@
 import { copyFile } from 'node:fs/promises'
 
-import { defineConfig, type Options } from 'tsdown'
+import { defineConfig, type UserConfig } from 'tsdown'
 
 export default defineConfig(options => {
-	const commonOptions: Partial<Options> = {
+	const commonOptions: Partial<UserConfig> = {
 		entry: {
 			'awesome-graphql-client': 'src/index.ts',
 		},
@@ -29,4 +29,4 @@ export default defineConfig(options => {
 			},
 		},
 	]
-}) as Options
+})
