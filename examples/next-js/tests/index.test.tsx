@@ -13,9 +13,11 @@ const withProvider = ({ children }: { children?: React.ReactNode }) => (
 	<QueryClientProvider client={new QueryClient()}>{children}</QueryClientProvider>
 )
 
+const rickAndMortyApi = graphql.link('https://rickandmortyapi.com/graphql')
+
 it('renders and filters list', async () => {
 	server.use(
-		graphql.query<GetCharactersQuery, GetCharactersQueryVariables>(
+		rickAndMortyApi.query<GetCharactersQuery, GetCharactersQueryVariables>(
 			'GetCharacters',
 			({ variables }) =>
 				HttpResponse.json({

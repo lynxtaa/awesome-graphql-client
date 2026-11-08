@@ -1,10 +1,7 @@
 import { type Headers } from './types'
 
 type HeadersInit =
-	| Iterable<[string, string]>
-	| Headers
-	| string[][]
-	| Record<string, string>
+	Iterable<[string, string]> | Headers | string[][] | Record<string, string>
 
 const isHeaders = (headers: HeadersInit): headers is Headers =>
 	typeof (headers as any).get === 'function'
